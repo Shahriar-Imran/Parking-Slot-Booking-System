@@ -1,0 +1,107 @@
+﻿@{
+    ViewData["Title"] = "Home";
+}
+
+<!-- HERO HEADER -->
+<div class="hero-header d-flex align-items-center justify-content-center text-center">
+    <div class="text-white">
+        <h1 class="display-3 fw-bold">Parking Slot Booking System</h1>
+        <h3 class="fw-bold">Smart, Easy & Secure Parking Management</h3>
+
+        <a asp-controller="Slot" asp-action="Availability" class="btn btn-outline-light btn-lg mt-3">
+            Check Availability
+        </a>
+
+        <a asp-controller="Account" asp-action="Login" class="btn btn-outline-light btn-lg mt-3">
+            Get Started
+        </a>
+    </div>
+</div>
+
+<!-- FEATURES SECTION -->
+<div class="container mt-5">
+    <div class="text-center mb-4">
+        <h2 class="fw-bold">Our Features</h2>
+        <p class="text-muted">Efficient and user-friendly parking system</p>
+    </div>
+
+    <div class="row text-center">
+
+        <div class="col-md-4 mb-4">
+            <div class="card shadow h-100">
+                <div class="card-body">
+                    <h2>🅿️</h2>
+                    <h5 class="card-title">Real-Time Availability</h5>
+                    <p class="card-text">
+                        Instantly check available parking slots and avoid unnecessary waiting time.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <div class="card shadow h-100">
+                <div class="card-body">
+                    <h2>💳</h2>
+                    <h5 class="card-title">Online Payment</h5>
+                    <p class="card-text">
+                        Securely pay for parking using integrated payment gateway with instant confirmation.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <div class="card shadow h-100">
+                <div class="card-body">
+                    <h2>📅</h2>
+                    <h5 class="card-title">Advance Booking</h5>
+                    <p class="card-text">
+                        Reserve parking slots in advance and avoid last-minute inconvenience.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- HOW IT WORKS -->
+<div class="bg-light mt-5 p-5">
+    <div class="container text-center">
+        <h2 class="fw-bold mb-4">How It Works</h2>
+
+        <div class="row">
+
+            <div class="col-md-3">
+                <h4>1️⃣</h4>
+                <p>Register an account</p>
+            </div>
+
+            <div class="col-md-3">
+                <h4>2️⃣</h4>
+                <p>Select parking area</p>
+            </div>
+
+            <div class="col-md-3">
+                <h4>3️⃣</h4>
+                <p>Choose slots & time</p>
+            </div>
+
+            <div class="col-md-3">
+                <h4>4️⃣</h4>
+                <p>Make payment & confirm</p>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- CALL TO ACTION -->
+<div class="text-center p-5">
+    <h3 class="fw-bold">Start Booking Your Parking Now!</h3>
+
+    <a asp-controller="Slot" asp-action="Availability" class="btn btn-warning btn-lg mt-3">
+        Book Now
+    </a>
+</div>

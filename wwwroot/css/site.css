@@ -1,0 +1,75 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+    margin-bottom: 60px;
+    padding-bottom: 70px;
+}
+
+.form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
+  color: var(--bs-secondary-color);
+  text-align: end;
+}
+
+.form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
+  text-align: start;
+}
+
+.fixed-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+}
+
+
+.hero-header {
+    height: 350px;
+    background: linear-gradient(rgba(0, 51, 102, 0.50), rgba(0, 51, 102, 0.5)), url('../images/parking-bg.jpg');
+    background-size: cover;
+    background-position: center;
+    color: white;
+    border-bottom-left-radius: 30px;
+    border-bottom-right-radius: 30px;
+}
+
+    .hero-header h1 {
+        font-size: 3.5rem;
+        text-shadow: 2px 2px 8px rgba(0,0,0,0.5);
+    }
+
+.card {
+    border-radius: 15px;
+    transition: transform 0.3s ease;
+}
+
+    .card:hover {
+        transform: translateY(-5px);
+    }
+
+.btn {
+    transition: all 0.3s ease;
+    border-radius: 30px;
+    padding: 10px 25px;
+}
+
+    .btn:hover {
+        transform: scale(1.05);
+    }
