@@ -1,0 +1,22 @@
+﻿@model ParkingSystem.Models.ParkingSlot
+
+<div class="container mt-4">
+    <h2>Edit Slot</h2>
+
+    <form asp-action="EditSlot" method="post">
+
+        <input type="hidden" asp-for="SlotId" />
+
+        <div class="mb-3">
+            <label>Slot Number</label>
+            <input asp-for="SlotNumber" class="form-control" />
+        </div>
+
+        <div class="mb-3">
+            <label>Hourly Rate</label>
+            <input asp-for="HourlyRate" class="form-control" />
+        </div>
+
+        <button class="btn btn-primary">Update</button>
+    </form>
+</div>

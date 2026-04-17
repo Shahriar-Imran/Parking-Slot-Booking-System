@@ -1,0 +1,46 @@
+﻿@model ParkingSystem.ViewModels.AdminDashboardViewModel
+
+<div class="container mt-4">
+
+    <h2 class="mb-4">Admin Dashboard</h2>
+
+    <div class="row">
+        <a asp-controller="Admin" asp-action="Users" class="btn btn-primary mt-3">
+            Manage Users
+        </a>
+
+        <a asp-controller="Admin" asp-action="Slots" class="btn btn-warning mt-3 ms-2">
+            Manage Slots
+        </a>
+
+        <div class="col-md-3">
+            <div class="card text-center bg-primary text-white p-3">
+                <h4>@Model.TotalUsers</h4>
+                <p>Users</p>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card text-center bg-success text-white p-3">
+                <h4>@Model.TotalBookings</h4>
+                <p>Bookings</p>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card text-center bg-warning text-dark p-3">
+                <h4>@Model.TotalSlots</h4>
+                <p>Slots</p>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card text-center bg-dark text-white p-3">
+                <h4>@Model.TotalRevenue</h4>
+                <p>Revenue</p>
+            </div>
+        </div>
+
+    </div>
+
+</div>

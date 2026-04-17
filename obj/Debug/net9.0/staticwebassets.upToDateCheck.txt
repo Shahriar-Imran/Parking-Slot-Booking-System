@@ -44,6 +44,7 @@ C:\Users\shahr\OneDrive\Desktop\Practicum Project\ParkingSystem\ParkingSystem\ww
 C:\Users\shahr\OneDrive\Desktop\Practicum Project\ParkingSystem\ParkingSystem\wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.rtl.min.css
 C:\Users\shahr\OneDrive\Desktop\Practicum Project\ParkingSystem\ParkingSystem\wwwroot\lib\bootstrap\dist\js\bootstrap.js.map
 C:\Users\shahr\OneDrive\Desktop\Practicum Project\ParkingSystem\ParkingSystem\wwwroot\lib\bootstrap\dist\css\bootstrap.rtl.min.css
+C:\Users\shahr\OneDrive\Desktop\Practicum Project\ParkingSystem\ParkingSystem\wwwroot\js\slot.js
 C:\Users\shahr\OneDrive\Desktop\Practicum Project\ParkingSystem\ParkingSystem\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.min.css
 C:\Users\shahr\OneDrive\Desktop\Practicum Project\ParkingSystem\ParkingSystem\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.css.map
 C:\Users\shahr\OneDrive\Desktop\Practicum Project\ParkingSystem\ParkingSystem\wwwroot\lib\bootstrap\dist\js\bootstrap.bundle.js.map
@@ -64,6 +65,7 @@ wwwroot\css\site.css
 wwwroot\favicon.ico
 wwwroot\images\parking-bg.jpg
 wwwroot\js\site.js
+wwwroot\js\slot.js
 wwwroot\lib\bootstrap\dist\css\bootstrap.css
 wwwroot\lib\bootstrap\dist\css\bootstrap.css.map
 wwwroot\lib\bootstrap\dist\css\bootstrap.min.css

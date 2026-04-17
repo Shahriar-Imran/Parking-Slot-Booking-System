@@ -1,0 +1,78 @@
+﻿@model List<ParkingSystem.Models.ApplicationUser>
+
+@{
+    ViewData["Title"] = "Manage Users";
+}
+
+<div class="container mt-4">
+    <a asp-controller="Admin" asp-action="Dashboard" class="btn btn-secondary mb-3">
+        ⬅ Back to Dashboard
+    </a>
+
+    <h2 class="mb-3">User Management</h2>
+
+    <table class="table table-bordered table-hover shadow">
+
+        <thead class="table-dark">
+            <tr>
+                <th>Full Name</th>
+                <th>Email</th>
+                <th style="width:250px;">Actions</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            @if (Model != null && Model.Any())
+            {
+                foreach (var user in Model)
+                {
+                    <tr>
+                        <td>@user.FullName</td>
+                        <td>@user.Email</td>
+
+                        <td>
+
+                            <!-- Make Admin -->
+                            <form asp-action="MakeAdmin"
+                                  method="post"
+                                  style="display:inline;">
+
+                                <input type="hidden" name="userId" value="@user.Id" />
+
+                                <button class="btn btn-warning btn-sm">
+                                    Make Admin
+                                </button>
+                            </form>
+
+                            <!-- Delete User -->
+                            <form asp-action="DeleteUser"
+                                  method="post"
+                                  style="display:inline;"
+                                  onsubmit="return confirm('Are you sure to delete this user?');">
+
+                                <input type="hidden" name="userId" value="@user.Id" />
+
+                                <button class="btn btn-danger btn-sm">
+                                    Delete
+                                </button>
+                            </form>
+
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="3" class="text-center text-danger">
+                        No users found
+                    </td>
+                </tr>
+            }
+
+        </tbody>
+
+    </table>
+
+</div>

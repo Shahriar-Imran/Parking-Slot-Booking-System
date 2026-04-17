@@ -11,6 +11,16 @@ namespace ParkingSystem.Data
         {
         }
 
-        // Add your DbSets here
+        public DbSet<ParkingArea> ParkingAreas { get; set; }
+
+        public DbSet<ParkingSlot> ParkingSlots { get; set; }
+
+        public DbSet<Booking> Bookings { get; set; }
+
+        public DbSet<BookingSlot> BookingSlots { get; set; }
+
+        public DbSet<Vehicle> Vehicles { get; set; }
+
+        public DbSet<Payment> Payments { get; set; }
     }
 }

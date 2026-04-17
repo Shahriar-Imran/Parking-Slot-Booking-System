@@ -73,3 +73,24 @@ body {
     .btn:hover {
         transform: scale(1.05);
     }
+.slot-card {
+    border-radius: 10px;
+    transition: 0.3s;
+}
+
+    .slot-card:hover {
+        transform: scale(1.05);
+        background-color: #f8f9fa;
+    }
+
+.selected-slot {
+    background-color: #ffc107 !important;
+    color: black;
+}
+.table {
+    background: white;
+    border-radius: 10px;
+}
+.btn-secondary {
+    border-radius: 20px;
+}
