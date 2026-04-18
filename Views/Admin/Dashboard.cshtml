@@ -9,6 +9,10 @@
             Manage Users
         </a>
 
+        <a asp-controller="Admin" asp-action="Areas" class="btn btn-info mt-3">
+            Manage Parking Areas
+        </a>
+
         <a asp-controller="Admin" asp-action="Slots" class="btn btn-warning mt-3 ms-2">
             Manage Slots
         </a>
@@ -42,5 +46,6 @@
         </div>
 
     </div>
+    <p>Total Areas: @((ViewBag.Areas as List<ParkingSystem.Models.ParkingArea>)?.Count)</p>
 
 </div>

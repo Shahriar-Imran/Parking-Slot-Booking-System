@@ -7,14 +7,19 @@
 
         <input type="hidden" asp-for="SlotId" />
 
+        <!-- Slot Number -->
         <div class="mb-3">
             <label>Slot Number</label>
             <input asp-for="SlotNumber" class="form-control" />
         </div>
 
+        <!-- ✅ Parking Area Dropdown -->
         <div class="mb-3">
-            <label>Hourly Rate</label>
-            <input asp-for="HourlyRate" class="form-control" />
+            <label>Parking Area</label>
+            <select asp-for="AreaId" class="form-control"
+                    asp-items="@(new SelectList(ViewBag.Areas, "AreaId", "Name"))">
+                <option value="">Select Area</option>
+            </select>
         </div>
 
         <button class="btn btn-primary">Update</button>

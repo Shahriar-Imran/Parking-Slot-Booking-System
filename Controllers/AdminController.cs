@@ -4,6 +4,7 @@ using ParkingSystem.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using ParkingSystem.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace ParkingSystem.Controllers
 {
@@ -54,26 +55,83 @@ namespace ParkingSystem.Controllers
         // Manage Slots
         public IActionResult Slots()
         {
-            var slots = _context.ParkingSlots.ToList();
+            var slots = _context.ParkingSlots
+                                .Include(s => s.ParkingArea) // VERY IMPORTANT
+                                .ToList();
+
             return View(slots);
         }
 
-        // ========================= Add Slot =========================
+        // ================== Create Area ====================
+        // =======================
+        // GET: Create Area Page
+        // =======================
+        public IActionResult CreateArea()
+        {
+            return View();
+        }
+
+        // =======================
+        // POST: Save Area
+        // =======================
+        [HttpPost]
+        public async Task<IActionResult> CreateArea(ParkingArea area)
+        {
+            //Console.WriteLine("Create are hit");
+            if (!ModelState.IsValid)
+            {
+                //Console.WriteLine("Invalid");
+
+                /*foreach (var state in ModelState)
+                {
+                    foreach (var error in state.Value.Errors)
+                    {
+                        Console.WriteLine($"Field: {state.Key} → Error: {error.ErrorMessage}");
+                    }
+                }*/
+
+                return View(area);
+            }
+
+            _context.ParkingAreas.Add(area);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Areas");
+        }
+
+        // View areas
+        public IActionResult Areas()
+        {
+            var areas = _context.ParkingAreas.ToList();
+            return View(areas);
+        }
+
+        // ========================= Create Slot =========================
         public IActionResult CreateSlot()
         {
+            ViewBag.Areas = _context.ParkingAreas.ToList();  // Load areas
             return View();
         }
 
         [HttpPost]
         public async Task<IActionResult> CreateSlot(ParkingSlot slot)
         {
-            if (ModelState.IsValid)
+            Console.WriteLine("Create Slot HIT");
+
+            if (!ModelState.IsValid)
             {
-                _context.ParkingSlots.Add(slot);
-                await _context.SaveChangesAsync();
-                return RedirectToAction("Slots");
+                Console.WriteLine("Model Invalid");
+
+                // Reload dropdown if validation fails
+                ViewBag.Areas = _context.ParkingAreas.ToList();
+
+                return View(slot);
             }
-            return View(slot);
+
+            _context.ParkingSlots.Add(slot);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Slots");
         }
 
         // Edit Slot

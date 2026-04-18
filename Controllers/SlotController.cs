@@ -69,7 +69,7 @@ namespace ParkingSystem.Controllers
             // Calculate price
             if (availableSlots.Any())
             {
-                model.HourlyRate = availableSlots.First().HourlyRate;
+                model.HourlyRate = availableSlots.First().ParkingArea.HourlyRate;
                 model.TotalAmount = model.HourlyRate * model.DurationHours * model.NumberOfSlots;
             }
 

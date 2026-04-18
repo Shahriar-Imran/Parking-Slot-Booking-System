@@ -1,0 +1,30 @@
+﻿@model List<ParkingSystem.Models.ParkingArea>
+
+<div class="container mt-4">
+
+    <h2>Parking Areas</h2>
+
+    <a asp-action="CreateArea" class="btn btn-success mb-3">
+        ➕ Add New Area
+    </a>
+
+    <table class="table table-bordered table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th>Area Name</th>
+                <th>Hourly Rate</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (var area in Model)
+            {
+                <tr>
+                    <td>@area.Name</td>
+                    <td>@area.HourlyRate</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+</div>

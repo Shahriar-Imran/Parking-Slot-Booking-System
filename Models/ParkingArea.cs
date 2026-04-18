@@ -5,16 +5,14 @@ namespace ParkingSystem.Models
 {
     public class ParkingArea
     {
-        [Key]
+        [Key]   // ✅ IMPORTANT
         public int AreaId { get; set; }
-
         [Required]
         public string Name { get; set; }
 
-        public string Location { get; set; }
+        [Required]
+        public decimal HourlyRate { get; set; }
 
-        public string Description { get; set; }
-
-        public ICollection<ParkingSlot> ParkingSlots { get; set; }
+        public ICollection<ParkingSlot>? ParkingSlots { get; set; }
     }
 }

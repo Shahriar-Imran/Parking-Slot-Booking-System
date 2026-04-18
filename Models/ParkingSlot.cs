@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ParkingSystem.Models
@@ -12,16 +11,11 @@ namespace ParkingSystem.Models
         [Required]
         public string SlotNumber { get; set; }
 
-        public decimal HourlyRate { get; set; }
-
-        public SlotStatus Status { get; set; }
-
         [Required]
         public int AreaId { get; set; }
 
+        // 🔥 IMPORTANT FIX
         [ForeignKey("AreaId")]
-        public ParkingArea ParkingArea { get; set; }
-
-        public ICollection<BookingSlot> BookingSlots { get; set; }
+        public ParkingArea? ParkingArea { get; set; }
     }
 }

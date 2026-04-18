@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ParkingSystem.Data;
 
@@ -11,9 +12,11 @@ using ParkingSystem.Data;
 namespace ParkingSystem.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260418180343_addparkingarea")]
+    partial class addparkingarea
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -344,13 +347,16 @@ namespace ParkingSystem.Migrations
                     b.Property<int>("AreaId")
                         .HasColumnType("int");
 
+                    b.Property<int>("ParkingAreaAreaId")
+                        .HasColumnType("int");
+
                     b.Property<string>("SlotNumber")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("SlotId");
 
-                    b.HasIndex("AreaId");
+                    b.HasIndex("ParkingAreaAreaId");
 
                     b.ToTable("ParkingSlots");
                 });
@@ -510,7 +516,7 @@ namespace ParkingSystem.Migrations
                 {
                     b.HasOne("ParkingSystem.Models.ParkingArea", "ParkingArea")
                         .WithMany("ParkingSlots")
-                        .HasForeignKey("AreaId")
+                        .HasForeignKey("ParkingAreaAreaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

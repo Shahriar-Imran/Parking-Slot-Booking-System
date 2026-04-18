@@ -67,12 +67,24 @@
                         {
                             var currentUser = await UserManager.GetUserAsync(User);
 
+                            <!-- Show User Name -->
                             <li class="nav-item">
                                 <span class="nav-link text-light">
                                     @currentUser.FullName
                                 </span>
                             </li>
 
+                            <!-- ✅ Admin Dashboard (FIXED POSITION) -->
+                            @if (User.IsInRole("Admin"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-controller="Admin" asp-action="Dashboard">
+                                        Admin Dashboard
+                                    </a>
+                                </li>
+                            }
+
+                            <!-- Logout -->
                             <li class="nav-item">
                                 <form asp-controller="Account" asp-action="Logout" method="post">
                                     <button type="submit" class="btn btn-outline-light btn-sm ms-2">
@@ -81,22 +93,16 @@
                                 </form>
                             </li>
                         }
-                        else if (User.IsInRole("Admin"))
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link" asp-controller="Admin" asp-action="Dashboard">
-                                    Admin Dashboard
-                                </a>
-                            </li>
-                        }
                         else
                         {
+                            <!-- Login -->
                             <li class="nav-item">
                                 <a class="nav-link" asp-controller="Account" asp-action="Login">
                                     Login
                                 </a>
                             </li>
 
+                            <!-- Register -->
                             <li class="nav-item">
                                 <a class="btn btn-primary btn-sm ms-2"
                                    asp-controller="Account"
