@@ -5,6 +5,7 @@ using ParkingSystem.ViewModels;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using ParkingSystem.ViewModels;
 
 namespace ParkingSystem.Controllers
 {
@@ -20,60 +21,40 @@ namespace ParkingSystem.Controllers
         // =========================
         // GET: Availability Page
         // =========================
-        public async Task<IActionResult> Availability()
+        public IActionResult Availability()
         {
             var model = new SlotAvailabilityViewModel
             {
-                Areas = await _context.ParkingAreas.ToListAsync(),
-                AvailableSlots = new(),
-                Date = DateTime.Now,
-                DurationHours = 1,
-                NumberOfSlots = 1
+                Areas = _context.ParkingAreas.ToList(),
+                Date = DateTime.Now
             };
 
             return View(model);
         }
 
+
         // =========================
         // POST: Search Availability
         // =========================
         [HttpPost]
-        [HttpPost]
         public async Task<IActionResult> Availability(SlotAvailabilityViewModel model)
         {
-            // Convert selected slots from string → list
-            var selectedSlotIds = model.SelectedSlots?.Split(',')
-                                    .Select(int.Parse)
-                                    .ToList();
+            model.Areas = _context.ParkingAreas.ToList();
 
-            // Load areas again (important for dropdown)
-            model.Areas = await _context.ParkingAreas.ToListAsync();
+            var start = model.Date;
+            var end = start.AddHours(model.DurationHours);
 
-            var requestedStart = model.Date;
-            var requestedEnd = model.Date.AddHours(model.DurationHours);
-
-            // Find already booked slots
             var bookedSlotIds = _context.BookingSlots
-                .Where(bs =>
-                    bs.Booking.StartTime < requestedEnd &&
-                    bs.Booking.EndTime > requestedStart)
-                .Select(bs => bs.SlotId);
+                .Where(b => b.Booking.StartTime < end && b.Booking.EndTime > start)
+                .Select(b => b.SlotId);
 
-            // Get available slots
-            var availableSlots = await _context.ParkingSlots
-                .Where(s => s.AreaId == model.AreaId && !bookedSlotIds.Contains(s.SlotId))
+            
+            var slots = await _context.ParkingSlots
+                .Include(s => s.ParkingArea)
+                .Where(s => !bookedSlotIds.Contains(s.SlotId))
                 .ToListAsync();
 
-            model.AvailableSlots = availableSlots;
-
-            // Calculate price
-            if (availableSlots.Any())
-            {
-                model.HourlyRate = availableSlots.First().ParkingArea.HourlyRate;
-                model.TotalAmount = model.HourlyRate * model.DurationHours * model.NumberOfSlots;
-            }
-
-            // OPTIONAL: You can use selectedSlotIds later for booking
+            model.AvailableSlots = slots;
 
             return View(model);
         }

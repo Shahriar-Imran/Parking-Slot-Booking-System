@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "lOp7iKJu07rCnTh2Bvsyt7MCdf80U1L0UPPoNsaRujs=",
+  "Hash": "fQN4kEuBq7r0xDEnp1R5vbUuJcfOw5uLfyaLkB1KbPA=",
   "Source": "ParkingSystem",
   "BasePath": "_content/ParkingSystem",
   "Mode": "Default",
@@ -1025,12 +1025,12 @@
       "OriginalItemSpec": "C:\\Users\\shahr\\OneDrive\\Desktop\\Practicum Project\\ParkingSystem\\ParkingSystem\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.min.css"
     },
     {
-      "Identity": "C:\\Users\\shahr\\OneDrive\\Desktop\\Practicum Project\\ParkingSystem\\ParkingSystem\\obj\\Debug\\net9.0\\compressed\\w7f49d60d8-8q1cebvygd.gz",
+      "Identity": "C:\\Users\\shahr\\OneDrive\\Desktop\\Practicum Project\\ParkingSystem\\ParkingSystem\\obj\\Debug\\net9.0\\compressed\\w7f49d60d8-20cus9feac.gz",
       "SourceId": "ParkingSystem",
       "SourceType": "Discovered",
       "ContentRoot": "C:\\Users\\shahr\\OneDrive\\Desktop\\Practicum Project\\ParkingSystem\\ParkingSystem\\obj\\Debug\\net9.0\\compressed\\",
       "BasePath": "_content/ParkingSystem",
-      "RelativePath": "js/slot#[.{fingerprint=8q1cebvygd}]?.js.gz",
+      "RelativePath": "js/slot#[.{fingerprint=20cus9feac}]?.js.gz",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Alternative",
@@ -1039,8 +1039,8 @@
       "RelatedAsset": "C:\\Users\\shahr\\OneDrive\\Desktop\\Practicum Project\\ParkingSystem\\ParkingSystem\\wwwroot\\js\\slot.js",
       "AssetTraitName": "Content-Encoding",
       "AssetTraitValue": "gzip",
-      "Fingerprint": "5opsucbos1",
-      "Integrity": "9a6QhjzFOWMOOA90ZxG/KryXzfy1t+0t6h+XLk420u4=",
+      "Fingerprint": "l5nrx455qg",
+      "Integrity": "B3En5ZNWVJajx+nNp7At9iiaiw71xu6s+rqXYG+/tb0=",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "C:\\Users\\shahr\\OneDrive\\Desktop\\Practicum Project\\ParkingSystem\\ParkingSystem\\wwwroot\\js\\slot.js"
@@ -1522,8 +1522,8 @@
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
-      "Fingerprint": "8q1cebvygd",
-      "Integrity": "wN2PY5rIgkwOYBRPb08SP62JkcnYQgzEReijZDrO0H0=",
+      "Fingerprint": "20cus9feac",
+      "Integrity": "QmiWcljb6RFYbyAgmt7/fUlviE51VqtY+2Jjftm3Slg=",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\js\\slot.js"
@@ -3767,13 +3767,13 @@
       ]
     },
     {
-      "Route": "js/slot.8q1cebvygd.js",
-      "AssetFile": "C:\\Users\\shahr\\OneDrive\\Desktop\\Practicum Project\\ParkingSystem\\ParkingSystem\\obj\\Debug\\net9.0\\compressed\\w7f49d60d8-8q1cebvygd.gz",
+      "Route": "js/slot.20cus9feac.js",
+      "AssetFile": "C:\\Users\\shahr\\OneDrive\\Desktop\\Practicum Project\\ParkingSystem\\ParkingSystem\\obj\\Debug\\net9.0\\compressed\\w7f49d60d8-20cus9feac.gz",
       "Selectors": [
         {
           "Name": "Content-Encoding",
           "Value": "gzip",
-          "Quality": "0.002695417790"
+          "Quality": "0.001404494382"
         }
       ],
       "ResponseHeaders": [
@@ -3783,15 +3783,15 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "370"
+          "Value": "711"
         },
         {
           "Name": "ETag",
-          "Value": "\"9a6QhjzFOWMOOA90ZxG/KryXzfy1t+0t6h+XLk420u4=\""
+          "Value": "\"B3En5ZNWVJajx+nNp7At9iiaiw71xu6s+rqXYG+/tb0=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Fri, 17 Apr 2026 11:02:37 GMT"
+          "Value": "Sun, 19 Apr 2026 18:31:46 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -3811,13 +3811,13 @@
         },
         {
           "Name": "ETag",
-          "Value": "W/\"wN2PY5rIgkwOYBRPb08SP62JkcnYQgzEReijZDrO0H0=\""
+          "Value": "W/\"QmiWcljb6RFYbyAgmt7/fUlviE51VqtY+2Jjftm3Slg=\""
         }
       ],
       "EndpointProperties": [
         {
           "Name": "fingerprint",
-          "Value": "8q1cebvygd"
+          "Value": "20cus9feac"
         },
         {
           "Name": "label",
@@ -3825,12 +3825,12 @@
         },
         {
           "Name": "integrity",
-          "Value": "sha256-wN2PY5rIgkwOYBRPb08SP62JkcnYQgzEReijZDrO0H0="
+          "Value": "sha256-QmiWcljb6RFYbyAgmt7/fUlviE51VqtY+2Jjftm3Slg="
         }
       ]
     },
     {
-      "Route": "js/slot.8q1cebvygd.js",
+      "Route": "js/slot.20cus9feac.js",
       "AssetFile": "C:\\Users\\shahr\\OneDrive\\Desktop\\Practicum Project\\ParkingSystem\\ParkingSystem\\wwwroot\\js\\slot.js",
       "Selectors": [],
       "ResponseHeaders": [
@@ -3840,7 +3840,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "763"
+          "Value": "1694"
         },
         {
           "Name": "Content-Type",
@@ -3848,11 +3848,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"wN2PY5rIgkwOYBRPb08SP62JkcnYQgzEReijZDrO0H0=\""
+          "Value": "\"QmiWcljb6RFYbyAgmt7/fUlviE51VqtY+2Jjftm3Slg=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Fri, 17 Apr 2026 11:02:37 GMT"
+          "Value": "Sun, 19 Apr 2026 18:31:46 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -3862,7 +3862,7 @@
       "EndpointProperties": [
         {
           "Name": "fingerprint",
-          "Value": "8q1cebvygd"
+          "Value": "20cus9feac"
         },
         {
           "Name": "label",
@@ -3870,13 +3870,13 @@
         },
         {
           "Name": "integrity",
-          "Value": "sha256-wN2PY5rIgkwOYBRPb08SP62JkcnYQgzEReijZDrO0H0="
+          "Value": "sha256-QmiWcljb6RFYbyAgmt7/fUlviE51VqtY+2Jjftm3Slg="
         }
       ]
     },
     {
-      "Route": "js/slot.8q1cebvygd.js.gz",
-      "AssetFile": "C:\\Users\\shahr\\OneDrive\\Desktop\\Practicum Project\\ParkingSystem\\ParkingSystem\\obj\\Debug\\net9.0\\compressed\\w7f49d60d8-8q1cebvygd.gz",
+      "Route": "js/slot.20cus9feac.js.gz",
+      "AssetFile": "C:\\Users\\shahr\\OneDrive\\Desktop\\Practicum Project\\ParkingSystem\\ParkingSystem\\obj\\Debug\\net9.0\\compressed\\w7f49d60d8-20cus9feac.gz",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -3885,7 +3885,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "370"
+          "Value": "711"
         },
         {
           "Name": "Content-Type",
@@ -3893,11 +3893,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"9a6QhjzFOWMOOA90ZxG/KryXzfy1t+0t6h+XLk420u4=\""
+          "Value": "\"B3En5ZNWVJajx+nNp7At9iiaiw71xu6s+rqXYG+/tb0=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Fri, 17 Apr 2026 11:02:37 GMT"
+          "Value": "Sun, 19 Apr 2026 18:31:46 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -3915,7 +3915,7 @@
       "EndpointProperties": [
         {
           "Name": "fingerprint",
-          "Value": "8q1cebvygd"
+          "Value": "20cus9feac"
         },
         {
           "Name": "label",
@@ -3923,18 +3923,18 @@
         },
         {
           "Name": "integrity",
-          "Value": "sha256-9a6QhjzFOWMOOA90ZxG/KryXzfy1t+0t6h+XLk420u4="
+          "Value": "sha256-B3En5ZNWVJajx+nNp7At9iiaiw71xu6s+rqXYG+/tb0="
         }
       ]
     },
     {
       "Route": "js/slot.js",
-      "AssetFile": "C:\\Users\\shahr\\OneDrive\\Desktop\\Practicum Project\\ParkingSystem\\ParkingSystem\\obj\\Debug\\net9.0\\compressed\\w7f49d60d8-8q1cebvygd.gz",
+      "AssetFile": "C:\\Users\\shahr\\OneDrive\\Desktop\\Practicum Project\\ParkingSystem\\ParkingSystem\\obj\\Debug\\net9.0\\compressed\\w7f49d60d8-20cus9feac.gz",
       "Selectors": [
         {
           "Name": "Content-Encoding",
           "Value": "gzip",
-          "Quality": "0.002695417790"
+          "Quality": "0.001404494382"
         }
       ],
       "ResponseHeaders": [
@@ -3944,15 +3944,15 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "370"
+          "Value": "711"
         },
         {
           "Name": "ETag",
-          "Value": "\"9a6QhjzFOWMOOA90ZxG/KryXzfy1t+0t6h+XLk420u4=\""
+          "Value": "\"B3En5ZNWVJajx+nNp7At9iiaiw71xu6s+rqXYG+/tb0=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Fri, 17 Apr 2026 11:02:37 GMT"
+          "Value": "Sun, 19 Apr 2026 18:31:46 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -3972,13 +3972,13 @@
         },
         {
           "Name": "ETag",
-          "Value": "W/\"wN2PY5rIgkwOYBRPb08SP62JkcnYQgzEReijZDrO0H0=\""
+          "Value": "W/\"QmiWcljb6RFYbyAgmt7/fUlviE51VqtY+2Jjftm3Slg=\""
         }
       ],
       "EndpointProperties": [
         {
           "Name": "integrity",
-          "Value": "sha256-wN2PY5rIgkwOYBRPb08SP62JkcnYQgzEReijZDrO0H0="
+          "Value": "sha256-QmiWcljb6RFYbyAgmt7/fUlviE51VqtY+2Jjftm3Slg="
         }
       ]
     },
@@ -3993,7 +3993,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "763"
+          "Value": "1694"
         },
         {
           "Name": "Content-Type",
@@ -4001,11 +4001,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"wN2PY5rIgkwOYBRPb08SP62JkcnYQgzEReijZDrO0H0=\""
+          "Value": "\"QmiWcljb6RFYbyAgmt7/fUlviE51VqtY+2Jjftm3Slg=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Fri, 17 Apr 2026 11:02:37 GMT"
+          "Value": "Sun, 19 Apr 2026 18:31:46 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -4015,13 +4015,13 @@
       "EndpointProperties": [
         {
           "Name": "integrity",
-          "Value": "sha256-wN2PY5rIgkwOYBRPb08SP62JkcnYQgzEReijZDrO0H0="
+          "Value": "sha256-QmiWcljb6RFYbyAgmt7/fUlviE51VqtY+2Jjftm3Slg="
         }
       ]
     },
     {
       "Route": "js/slot.js.gz",
-      "AssetFile": "C:\\Users\\shahr\\OneDrive\\Desktop\\Practicum Project\\ParkingSystem\\ParkingSystem\\obj\\Debug\\net9.0\\compressed\\w7f49d60d8-8q1cebvygd.gz",
+      "AssetFile": "C:\\Users\\shahr\\OneDrive\\Desktop\\Practicum Project\\ParkingSystem\\ParkingSystem\\obj\\Debug\\net9.0\\compressed\\w7f49d60d8-20cus9feac.gz",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -4030,7 +4030,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "370"
+          "Value": "711"
         },
         {
           "Name": "Content-Type",
@@ -4038,11 +4038,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"9a6QhjzFOWMOOA90ZxG/KryXzfy1t+0t6h+XLk420u4=\""
+          "Value": "\"B3En5ZNWVJajx+nNp7At9iiaiw71xu6s+rqXYG+/tb0=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Fri, 17 Apr 2026 11:02:37 GMT"
+          "Value": "Sun, 19 Apr 2026 18:31:46 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -4060,7 +4060,7 @@
       "EndpointProperties": [
         {
           "Name": "integrity",
-          "Value": "sha256-9a6QhjzFOWMOOA90ZxG/KryXzfy1t+0t6h+XLk420u4="
+          "Value": "sha256-B3En5ZNWVJajx+nNp7At9iiaiw71xu6s+rqXYG+/tb0="
         }
       ]
     },
@@ -21753,7 +21753,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Tue, 03 Mar 2026 21:16:20 GMT"
+          "Value": "Sun, 19 Apr 2026 07:54:13 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -21806,7 +21806,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Tue, 03 Mar 2026 21:16:20 GMT"
+          "Value": "Sun, 19 Apr 2026 07:54:13 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -21843,7 +21843,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Tue, 03 Mar 2026 21:16:20 GMT"
+          "Value": "Sun, 19 Apr 2026 07:54:13 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -21890,7 +21890,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Tue, 03 Mar 2026 21:16:20 GMT"
+          "Value": "Sun, 19 Apr 2026 07:54:13 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -21951,7 +21951,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Tue, 03 Mar 2026 21:16:20 GMT"
+          "Value": "Sun, 19 Apr 2026 07:54:13 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -21996,7 +21996,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Tue, 03 Mar 2026 21:16:20 GMT"
+          "Value": "Sun, 19 Apr 2026 07:54:13 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -22051,7 +22051,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Tue, 03 Mar 2026 21:16:20 GMT"
+          "Value": "Sun, 19 Apr 2026 07:54:13 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -22112,7 +22112,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Tue, 03 Mar 2026 21:16:20 GMT"
+          "Value": "Sun, 19 Apr 2026 07:54:13 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -22157,7 +22157,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Tue, 03 Mar 2026 21:16:20 GMT"
+          "Value": "Sun, 19 Apr 2026 07:54:13 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -22212,7 +22212,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Tue, 03 Mar 2026 21:16:20 GMT"
+          "Value": "Sun, 19 Apr 2026 07:54:13 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -22265,7 +22265,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Tue, 03 Mar 2026 21:16:20 GMT"
+          "Value": "Sun, 19 Apr 2026 07:54:13 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -22302,7 +22302,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Tue, 03 Mar 2026 21:16:20 GMT"
+          "Value": "Sun, 19 Apr 2026 07:54:13 GMT"
         },
         {
           "Name": "Cache-Control",

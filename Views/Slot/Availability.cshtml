@@ -1,109 +1,86 @@
-﻿@model ParkingSystem.ViewModels.SlotAvailabilityViewModel
+﻿@using ParkingSystem.ViewModels
+@model ParkingSystem.ViewModels.SlotAvailabilityViewModel
+@using Microsoft.AspNetCore.Mvc.Rendering
 
+<div id="authData" data-auth="@(User.Identity.IsAuthenticated.ToString().ToLower())">
+    <div class="container mt-4">
 
-@{
-    ViewData["Title"] = "Slot Availability";
-}
+        <h2>Slot Availability</h2>
 
-<div class="container mt-4">
+        <form method="post">
 
-    <h2 class="mb-4 text-center">Check Slot Availability</h2>
-
-    <!-- SEARCH FORM -->
-    <form asp-action="Availability" method="post" class="card p-4 shadow">
-
-        <div class="row">
-
-            <div class="col-md-3">
-                <label>Parking Area</label>
-                <select asp-for="AreaId" class="form-control"
-                        asp-items="@(new SelectList(Model.Areas, "AreaId", "Name"))">
-                    <option value="">Select Area</option>
-                </select>
+            <!-- Date -->
+            <div class="mb-3">
+                <input type="datetime-local"
+                       name="Date"
+                       id="dateInput"
+                       class="form-control"
+                       value="@Model.Date.ToString("yyyy-MM-ddTHH:mm")"
+                       step="60" />
             </div>
 
-            <div class="col-md-3">
-                <label>Date & Time</label>
-                <input asp-for="Date" type="datetime-local" class="form-control" />
+            
+
+            <!-- Duration -->
+            <div class="mb-3">
+                <label>Duration (Hours)</label>
+            <input asp-for="DurationHours" type="number" class="form-control" min="1" required />
             </div>
 
-            <div class="col-md-2">
-                <label>Duration (hrs)</label>
-                <input asp-for="DurationHours" class="form-control" />
-            </div>
 
-            <div class="col-md-2">
-                <label>Vehicles</label>
-                <input asp-for="NumberOfSlots" class="form-control" />
-            </div>
+            <button class="btn btn-primary">Search</button>
+        </form>
 
-            <div class="col-md-2 d-flex align-items-end">
-                <button type="submit" class="btn btn-warning w-100">
-                    Check
-                </button>
-            </div>
+        <hr />
 
-        </div>
-    </form>
+        <!-- SLOT GRID -->
+        @if (Model.AvailableSlots != null && Model.AvailableSlots.Any())
+        {
+            var grouped = Model.AvailableSlots
+            .GroupBy(s => s.ParkingArea.Name);
 
-    <!-- AVAILABLE SLOTS -->
-    @if (Model.AvailableSlots != null && Model.AvailableSlots.Any())
-    {
-        <h4 class="mt-5">Available Slots</h4>
+            foreach (var areaGroup in grouped)
+            {
+                var area = areaGroup.First().ParkingArea;
 
-        <div class="row">
+                <div class="mt-4">
+                    <h4 class="text-primary">
+                        @area.Name (৳ @area.HourlyRate / hour)
+                    </h4>
 
-            <form asp-action="Availability" method="post">
+                    <div class="row">
 
-                <!-- Hidden field to store selected slots -->
-                <input type="hidden" id="SelectedSlots" name="SelectedSlots" />
-
-                <div class="row mt-4">
-
-                    @foreach (var slot in Model.AvailableSlots)
-                    {
-                        <div class="col-md-2 mb-3">
-                            <div class="card slot-card text-center"
-                                 onclick="selectSlot(this, @slot.SlotId)">
-
-                                <div class="card-body">
-                                    <h5>@slot.SlotNumber</h5>
-                                    <span class="badge bg-success">Available</span>
-                                </div>
-
+                        @foreach (var slot in areaGroup)
+                        {
+                            <div class="col-md-2 mb-2">
+                                <button type="button"
+                                        class="btn btn-outline-success slot-btn"
+                                        data-id="@slot.SlotId"
+                                        data-rate="@slot.ParkingArea.HourlyRate">
+                                    @slot.SlotNumber
+                                </button>
+                                
                             </div>
-                        </div>
-                    }
+                        }
 
+                    </div>
                 </div>
+            }
 
-                <button type="submit" class="btn btn-warning mt-3">
-                    Proceed to Booking
-                </button>
+            <!-- Selected count -->
+            <p class="mt-3">
+                Selected Slots: <span id="countDisplay">0</span>
+            </p>
 
-            </form>
+            <!-- Total -->
+            <p class="mt-2 fw-bold text-success">
+                Total Amount: <span id="totalAmount">0</span>
+            </p>
 
-        </div>
+            <button class="btn btn-success mt-3" onclick="bookSlots()">
+                Book Now
+            </button>
+        }
 
-        <!-- PRICE SUMMARY -->
-        <div class="card p-3 mt-4 shadow">
-            <h5>Booking Summary</h5>
-
-            <p>Hourly Rate: @Model.HourlyRate</p>
-            <p>Duration: @Model.DurationHours hours</p>
-            <p>Slots: @Model.NumberOfSlots</p>
-
-            <h4>Total: @Model.TotalAmount</h4>
-
-            <a class="btn btn-warning mt-2">Proceed to Booking</a>
-        </div>
-    }
-    else if (Model.AreaId != 0)
-    {
-        <p class="text-danger mt-4">No slots available for selected time.</p>
-    }
-
+    </div>
 </div>
-<script>
-    setMaxSlots(@Model.NumberOfSlots);
-</script>
