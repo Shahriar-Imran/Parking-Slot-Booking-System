@@ -1,0 +1,36 @@
+﻿@model List<ParkingSystem.Models.ParkingSlot>
+
+<div class="container mt-4">
+
+    <h2>Booking Confirmation</h2>
+
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Slot</th>
+                <th>Area</th>
+                <th>Rate</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var slot in Model)
+            {
+                <tr>
+                    <td>@slot.SlotNumber</td>
+                    <td>@slot.ParkingArea.VehicleType (Block @slot.ParkingArea.BlockNumber)</td>
+                    <td>৳ @slot.ParkingArea.HourlyRate</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <h4>Duration: @ViewBag.Duration hour(s)</h4>
+    <h3>Total: ৳ @ViewBag.Total</h3>
+
+    
+
+    <a href="/Payment/Pay" class="btn btn-success">
+        Proceed to Payment
+    </a>
+
+</div>

@@ -26,7 +26,8 @@ namespace ParkingSystem.Controllers
             var model = new SlotAvailabilityViewModel
             {
                 Areas = _context.ParkingAreas.ToList(),
-                Date = DateTime.Now
+                Date = DateTime.Now,
+                DurationHours = 1
             };
 
             return View(model);

@@ -60,6 +60,10 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cRGFzaGJvYXJkLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/shahr/OneDrive/Desktop/Practicum Project/ParkingSystem/ParkingSystem/Views/Admin/EditArea.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cRWRpdEFyZWEuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/shahr/OneDrive/Desktop/Practicum Project/ParkingSystem/ParkingSystem/Views/Admin/EditSlot.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cRWRpdFNsb3QuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
@@ -70,6 +74,10 @@ build_metadata.AdditionalFiles.CssScope =
 
 [C:/Users/shahr/OneDrive/Desktop/Practicum Project/ParkingSystem/ParkingSystem/Views/Admin/Users.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cVXNlcnMuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/shahr/OneDrive/Desktop/Practicum Project/ParkingSystem/ParkingSystem/Views/Booking/Checkout.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQm9va2luZ1xDaGVja291dC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/shahr/OneDrive/Desktop/Practicum Project/ParkingSystem/ParkingSystem/Views/Home/Index.cshtml]

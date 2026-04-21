@@ -4,24 +4,41 @@
 
     <h2>Parking Areas</h2>
 
-    <a asp-action="CreateArea" class="btn btn-success mb-3">
-        ➕ Add New Area
+    <!-- ✅ ADD BUTTON HERE -->
+    <a asp-controller="Admin" asp-action="CreateArea" class="btn btn-success mb-3">
+        ➕ Add Parking Area
     </a>
 
-    <table class="table table-bordered table-hover">
-        <thead class="table-dark">
+    <table class="table table-bordered">
+        <thead>
             <tr>
-                <th>Area Name</th>
+                <th>Block</th>
+                <th>Vehicle Type</th>
                 <th>Hourly Rate</th>
+                <th>Action</th>
             </tr>
         </thead>
 
         <tbody>
-            @foreach (var area in Model)
+            @foreach (var a in Model)
             {
                 <tr>
-                    <td>@area.Name</td>
-                    <td>@area.HourlyRate</td>
+                    <td>@a.BlockNumber</td>
+                    <td>@a.VehicleType</td>
+                    <td>@a.HourlyRate</td>
+                    <td>
+                        <a asp-action="EditArea"
+                           asp-route-id="@a.AreaId"
+                           class="btn btn-warning btn-sm">
+                            Edit
+                        </a>
+                        <a asp-action="DeleteArea"
+                           asp-route-id="@a.AreaId"
+                           class="btn btn-danger btn-sm"
+                           onclick="return confirm('Are you sure you want to delete this area?');">
+                            Delete
+                        </a>
+                    </td>
                 </tr>
             }
         </tbody>

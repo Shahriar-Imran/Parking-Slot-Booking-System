@@ -7,8 +7,6 @@ namespace ParkingSystem.Models
     {
         [Key]
         public int SlotId { get; set; }
-
-        [Required]
         public string SlotNumber { get; set; }
 
         [Required]

@@ -18,10 +18,11 @@
         <thead class="table-dark">
             <tr>
                 <th>Slot Number</th>
+                <th>Block Number</th>
                 <th>Area</th>
                 <th>Hourly Rate</th>
                 <th>Status</th>
-                <th style="width:200px;">Actions</th>
+                <th style="width:200px;">Action</th>
             </tr>
         </thead>
 
@@ -33,7 +34,8 @@
                 {
                     <tr>
                         <td>@slot.SlotNumber</td>
-                        <td>@slot.ParkingArea?.Name</td>
+						<td>@slot.ParkingArea?.BlockNumber</td>
+                        <td>@slot.ParkingArea.VehicleType (Block @slot.ParkingArea.BlockNumber)</td>
                         <td>@slot.ParkingArea?.HourlyRate</td>
                         <td>
                             <span class="badge bg-success">
@@ -42,12 +44,7 @@
                         </td>
 
                         <td>
-                            <!-- Edit Button -->
-                            <a asp-action="EditSlot"
-                               asp-route-id="@slot.SlotId"
-                               class="btn btn-primary btn-sm">
-                                Edit
-                            </a>
+                            
 
                             <!-- Delete Button -->
                             <form asp-action="DeleteSlot"

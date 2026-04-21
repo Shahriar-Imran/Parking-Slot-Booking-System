@@ -1,0 +1,47 @@
+﻿@model ParkingSystem.Models.ParkingArea
+@using ParkingSystem.Models
+
+@if (ViewBag.ErrorMessage != null)
+{
+    <script>
+        alert("@ViewBag.ErrorMessage");
+    </script>
+}
+
+<div class="container mt-4">
+
+    <h2>Edit Parking Area</h2>
+
+    <form asp-action="EditArea" method="post">
+
+        <input type="hidden" asp-for="AreaId" />
+
+        <!-- Block -->
+        <div class="mb-3">
+            <label>Block</label>
+            <input asp-for="BlockNumber" class="form-control" />
+            <span asp-validation-for="BlockNumber" class="text-danger"></span>
+        </div>
+
+        <!-- Vehicle Type -->
+        <div class="mb-3">
+            <label>Vehicle Type</label>
+            <select asp-for="VehicleType"
+                    class="form-control"
+                    asp-items="Html.GetEnumSelectList<VehicleType>()">
+            </select>
+        </div>
+
+        <!-- Hourly Rate -->
+        <div class="mb-3">
+            <label>Hourly Rate</label>
+            <input asp-for="HourlyRate" class="form-control" />
+        </div>
+
+        <button class="btn btn-primary">Update</button>
+
+        <a asp-action="Areas" class="btn btn-secondary ms-2">Cancel</a>
+
+    </form>
+
+</div>

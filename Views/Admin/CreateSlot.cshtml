@@ -1,34 +1,24 @@
-﻿@model ParkingSystem.Models.ParkingSlot
-@using Microsoft.AspNetCore.Mvc.Rendering
+﻿@using Microsoft.AspNetCore.Mvc.Rendering
 
 <div class="container mt-4">
-    <h2>Add Parking Slot</h2>
+    <h2>Add Slot</h2>
 
-    <form asp-controller="Admin" asp-action="CreateSlot" method="post">
+    <form asp-action="CreateSlot" method="post">
 
-        <!-- Slot Number -->
         <div class="mb-3">
-            <label>Slot Number</label>
-            <input asp-for="SlotNumber" class="form-control" />
-            <span asp-validation-for="SlotNumber" class="text-danger"></span>
-        </div>
-
-        <!-- Parking Area Dropdown -->
-        <div class="mb-3">
-            <label>Select Parking Area</label>
-            <select asp-for="AreaId"
-                    class="form-control"
-                    asp-items="@(new SelectList(ViewBag.Areas, "AreaId", "Name"))">
-
+            <label>Select Area</label>
+            <select name="AreaId" class="form-control">
                 <option value="">-- Select Area --</option>
+
+                @foreach (var area in ViewBag.Areas)
+                {
+                    <option value="@area.AreaId">
+                        @area.VehicleType (Block @area.BlockNumber)
+                    </option>
+                }
             </select>
-            <span asp-validation-for="AreaId" class="text-danger"></span>
         </div>
 
-        <button type="submit" class="btn btn-success">Save</button>
-
-        <a asp-action="Slots" class="btn btn-secondary ms-2">
-            Cancel
-        </a>
+        <button class="btn btn-success">Add Slot</button>
     </form>
 </div>

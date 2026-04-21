@@ -1,33 +1,32 @@
 ﻿@model ParkingSystem.Models.ParkingArea
+@using ParkingSystem.Models
 
 <div class="container mt-4">
     <h2>Add Parking Area</h2>
 
-    <form asp-controller="Admin" asp-action="CreateArea" method="post">
+    <form asp-action="CreateArea" method="post">
 
-        <!-- Dropdown -->
+        <!-- Block -->
         <div class="mb-3">
-            <label>Select Area Type</label>
-            <select asp-for="Name" class="form-control" required>
-                <option value="">-- Select Area --</option>
-                <option value="Car">Car</option>
-                <option value="Bus">Bus</option>
-                <option value="Truck">Truck</option>
-                <option value="3 Wheeler">3 Wheeler</option>
-                <option value="2 Wheeler">2 Wheeler</option>
+            <label>Block</label>
+            <input asp-for="BlockNumber" required class="form-control" placeholder="A / B / C" />
+        </div>
+
+        <!-- Vehicle Type -->
+        <div class="mb-3">
+            <label>Vehicle Type</label>
+            <select asp-for="VehicleType" class="form-control"
+                    asp-items="Html.GetEnumSelectList<VehicleType>()">
             </select>
         </div>
 
-        <!-- Hourly Rate -->
+        <!-- Rate -->
         <div class="mb-3">
             <label>Hourly Rate</label>
             <input asp-for="HourlyRate" class="form-control" />
         </div>
 
-        <button type="submit" class="btn btn-success">Save</button>
+        <button class="btn btn-success">Save</button>
 
-        <a asp-action="Dashboard" class="btn btn-secondary ms-2">
-            Cancel
-        </a>
     </form>
 </div>

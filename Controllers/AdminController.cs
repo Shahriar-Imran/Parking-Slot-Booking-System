@@ -72,28 +72,79 @@ namespace ParkingSystem.Controllers
         }
 
         // =======================
-        // POST: Save Area
+        // POST: Create Area
         // =======================
         [HttpPost]
         public async Task<IActionResult> CreateArea(ParkingArea area)
         {
-            //Console.WriteLine("Create are hit");
-            if (!ModelState.IsValid)
+            // Trim first
+            area.BlockNumber = area.BlockNumber?.Trim();
+
+            // Validate empty
+            if (string.IsNullOrEmpty(area.BlockNumber))
             {
-                //Console.WriteLine("Invalid");
-
-                /*foreach (var state in ModelState)
-                {
-                    foreach (var error in state.Value.Errors)
-                    {
-                        Console.WriteLine($"Field: {state.Key} → Error: {error.ErrorMessage}");
-                    }
-                }*/
-
+                ModelState.AddModelError("", "Block is required");
                 return View(area);
             }
 
+            // Check duplicate
+            bool exists = _context.ParkingAreas
+                .Any(a => a.BlockNumber == area.BlockNumber &&
+                          a.VehicleType == area.VehicleType);
+
+            if (exists)
+            {
+                ModelState.AddModelError("", "This area already exists!");
+                return View(area);
+            }
+
+            if (!ModelState.IsValid)
+                return View(area);
+
             _context.ParkingAreas.Add(area);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Areas");
+        }
+
+        // =======================
+        // Edit Area
+        // =======================
+        public IActionResult EditArea(int id)
+        {
+            var area = _context.ParkingAreas.Find(id);
+
+            if (area == null)
+                return NotFound();
+
+            return View(area);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditArea(ParkingArea area)
+        {
+            area.BlockNumber = area.BlockNumber?.Trim();
+
+            if (string.IsNullOrEmpty(area.BlockNumber))
+            {
+                ModelState.AddModelError("", "Block is required");
+                return View(area);
+            }
+
+            // 🔥 Duplicate check
+            var exists = _context.ParkingAreas
+                .Any(a => a.AreaId != area.AreaId &&
+                          a.BlockNumber == area.BlockNumber &&
+                          a.VehicleType == area.VehicleType);
+
+            if (exists)
+            {
+                // 👉 Send message to View
+                ViewBag.ErrorMessage = "This area already exists!";
+                return View(area);
+            }
+
+            _context.ParkingAreas.Update(area);
             await _context.SaveChangesAsync();
 
             return RedirectToAction("Areas");
@@ -106,6 +157,22 @@ namespace ParkingSystem.Controllers
             return View(areas);
         }
 
+        // =======================
+        // Delete Area
+        // =======================
+        public async Task<IActionResult> DeleteArea(int id)
+        {
+            var area = await _context.ParkingAreas.FindAsync(id);
+
+            if (area != null)
+            {
+                _context.ParkingAreas.Remove(area);
+                await _context.SaveChangesAsync();
+            }
+
+            return RedirectToAction("Areas");
+        }
+
         // ========================= Create Slot =========================
         public IActionResult CreateSlot()
         {
@@ -114,19 +181,26 @@ namespace ParkingSystem.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateSlot(ParkingSlot slot)
+        public async Task<IActionResult> CreateSlot(int AreaId)
         {
-            Console.WriteLine("Create Slot HIT");
-
-            if (!ModelState.IsValid)
+            if (AreaId == 0)
             {
-                Console.WriteLine("Model Invalid");
-
-                // Reload dropdown if validation fails
+                ModelState.AddModelError("", "Please select an area");
                 ViewBag.Areas = _context.ParkingAreas.ToList();
-
-                return View(slot);
+                return View();
             }
+
+            var area = _context.ParkingAreas.FirstOrDefault(a => a.AreaId == AreaId);
+
+            int count = _context.ParkingSlots.Count(s => s.AreaId == AreaId);
+
+            string slotNumber = $"{area.BlockNumber}-{count + 1}";
+
+            var slot = new ParkingSlot
+            {
+                AreaId = AreaId,
+                SlotNumber = slotNumber
+            };
 
             _context.ParkingSlots.Add(slot);
             await _context.SaveChangesAsync();
