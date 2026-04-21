@@ -27,10 +27,17 @@
     <h4>Duration: @ViewBag.Duration hour(s)</h4>
     <h3>Total: ৳ @ViewBag.Total</h3>
 
-    
+    <form method="post" asp-controller="Payment" asp-action="ProcessPayment">
 
-    <a href="/Payment/Pay" class="btn btn-success">
-        Proceed to Payment
-    </a>
+        <input type="hidden" name="slots" value="@string.Join(",", Model.Select(s => s.SlotId))" />
+        <input type="hidden" name="duration" value="@ViewBag.Duration" />
+        <input type="hidden" name="total" value="@ViewBag.Total" />
+        <input type="hidden" name="date" value="@ViewBag.Date" />
+
+        <button class="btn btn-success">
+            Proceed to Payment
+        </button>
+
+    </form>
 
 </div>

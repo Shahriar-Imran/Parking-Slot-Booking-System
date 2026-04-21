@@ -42,6 +42,12 @@ namespace ParkingSystem.Controllers
         {
             model.Areas = _context.ParkingAreas.ToList();
 
+            if (model.DurationHours <= 0)
+            {
+                ModelState.AddModelError("", "Invalid duration");
+                return View(model);
+            }
+
             var start = model.Date;
             var end = start.AddHours(model.DurationHours);
 

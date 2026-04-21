@@ -18,6 +18,8 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 .AddDefaultTokenProviders();
 
 // 3?? Add MVC
+builder.Services.AddSession();
+builder.Services.AddDistributedMemoryCache();
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
@@ -31,6 +33,8 @@ app.UseRouting();
 // IMPORTANT
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.UseSession();
 
 app.MapControllerRoute(
     name: "default",

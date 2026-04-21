@@ -1,20 +1,16 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-
+using ParkingSystem.Models;
 namespace ParkingSystem.Models
 {
     public class BookingSlot
     {
         [Key]
-        public int BookingSlotId { get; set; }
+        public int Id { get; set; }
 
         public int BookingId { get; set; }
-        public int SlotId { get; set; }
-
-        [ForeignKey("BookingId")]
         public Booking Booking { get; set; }
 
-        [ForeignKey("SlotId")]
-        public ParkingSlot ParkingSlot { get; set; }
+        public int SlotId { get; set; }
+        public ParkingSlot Slot { get; set; }
     }
 }
