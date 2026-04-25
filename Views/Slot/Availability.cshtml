@@ -57,11 +57,15 @@
 
                         @foreach (var slot in group)
                         {
+                            var isBooked = ViewBag.BookedSlots != null &&
+                            ((List<int>)ViewBag.BookedSlots).Contains(slot.SlotId);
+
                             <div class="col-md-2 mb-2">
                                 <button type="button"
-                                        class="btn btn-outline-success slot-btn"
+                                        class="btn slot-btn @(isBooked ? "btn-secondary disabled-slot" : "btn-outline-success")"
                                         data-id="@slot.SlotId"
-                                        data-rate="@slot.ParkingArea.HourlyRate">
+                                        data-rate="@slot.ParkingArea.HourlyRate"
+                                @(isBooked ? "disabled" : "")>
                                     @slot.SlotNumber
                                 </button>
                             </div>

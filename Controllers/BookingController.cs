@@ -2,6 +2,7 @@
 using ParkingSystem.Data;
 using ParkingSystem.Models;
 using Microsoft.EntityFrameworkCore;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 public class BookingController : Controller
 {
@@ -12,8 +13,9 @@ public class BookingController : Controller
         _context = context;
     }
 
-    public IActionResult Checkout(string slots, string duration)
+    public IActionResult Checkout(string slots, string duration, DateTime date)
     {
+        ViewBag.Date = date;
         Console.WriteLine("Slots: " + slots);
         Console.WriteLine("Duration: " + duration);
 
@@ -35,6 +37,7 @@ public class BookingController : Controller
 
         ViewBag.Total = total;
         ViewBag.Duration = durationInt;
+        
 
         return View(selectedSlots);
     }

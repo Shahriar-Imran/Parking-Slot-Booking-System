@@ -32,7 +32,13 @@
         <input type="hidden" name="slots" value="@string.Join(",", Model.Select(s => s.SlotId))" />
         <input type="hidden" name="duration" value="@ViewBag.Duration" />
         <input type="hidden" name="total" value="@ViewBag.Total" />
-        <input type="hidden" name="date" value="@ViewBag.Date" />
+        @{
+            var bookingDate = ViewBag.Date as DateTime?;
+        }
+        <input type="hidden"
+               name="date"
+               value="@(bookingDate.HasValue ? bookingDate.Value.ToString("yyyy-MM-ddTHH:mm") : "")" />
+        <p>DEBUG DATE: @ViewBag.Date</p>
 
         <button class="btn btn-success">
             Proceed to Payment

@@ -94,3 +94,8 @@ body {
 .btn-secondary {
     border-radius: 20px;
 }
+.disabled-slot {
+    background-color: gray !important;
+    opacity: 0.5;
+    cursor: not-allowed;
+}

@@ -57,11 +57,14 @@ namespace ParkingSystem.Controllers
 
             
             var slots = await _context.ParkingSlots
-                .Include(s => s.ParkingArea)
-                .Where(s => !bookedSlotIds.Contains(s.SlotId))
+                .Include(s => s.ParkingArea)               
                 .ToListAsync();
 
+            var bookedIds = bookedSlotIds.ToList();
+            ViewBag.BookedSlots = bookedIds;
+
             model.AvailableSlots = slots;
+            ViewBag.Date = model.Date;
 
             return View(model);
         }

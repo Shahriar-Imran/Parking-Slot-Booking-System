@@ -20,6 +20,7 @@ public class PaymentController : Controller
     [HttpPost]
     public IActionResult ProcessPayment(string slots, int duration, decimal total, DateTime date)
     {
+        Console.WriteLine("Received Date in Payment: " + date);
         var tranId = Guid.NewGuid().ToString();
 
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -52,7 +53,7 @@ public class PaymentController : Controller
 
             { "success_url", $"https://localhost:7114/Payment/Success?tran_id={tranId}" },
             { "fail_url", "https://localhost:7114/Payment/Fail" },
-            { "cancel_url", "https://localhost:7114/Payment/Cancel" },
+            { "cancel_url", "https://localhost:7114/Booking/Checkout" },
 
             { "cus_name", "Test User" },
             { "cus_email", "test@test.com" },
