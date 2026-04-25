@@ -1,12 +1,59 @@
 ﻿@model ParkingSystem.Models.Booking
 
-<div class="container mt-5 text-center">
+@{
+    var user = ViewBag.User;
+    var slots = ViewBag.Slots as List<ParkingSystem.Models.ParkingSlot>;
+}
 
-    <h2 class="text-success">Booking Confirmed ✔</h2>
+<div class="container mt-5">
 
-    <p>Booking ID: @Model.BookingId</p>
-    <p>Total Paid: ৳ @Model.TotalAmount</p>
-    <p>Start: @Model.StartTime</p>
-    <p>End: @Model.EndTime</p>
+    <div class="card shadow p-4">
 
+        <h2 class="text-center text-success mb-3">Booking Invoice</h2>
+
+        <hr />
+
+        <p><strong>Booking ID:</strong> @Model.BookingId</p>
+        <p><strong>Transaction ID:</strong> @ViewBag.TransactionId</p>
+
+        <p><strong>User ID:</strong> @Model.UserId</p>
+        <p><strong>User Name:</strong> @user?.FullName</p>
+
+        <hr />
+
+        <h5>Slot Details</h5>
+
+        <ul>
+            @foreach (var slot in slots)
+            {
+                <li>
+                    Slot @slot.SlotNumber - @slot.ParkingArea.VehicleType
+                </li>
+            }
+        </ul>
+
+        <hr />
+
+        <p><strong>Start Time:</strong> @Model.StartTime</p>
+        <p><strong>End Time:</strong> @Model.EndTime</p>
+
+        <p><strong>Total Amount:</strong> ৳ @Model.TotalAmount</p>
+
+        <hr />
+
+        <div class="text-center">
+            <h5>QR Code</h5>
+            <img src="data:image/png;base64,@ViewBag.QRCode"
+                 style="width:200px; height:200px;" />
+        </div>
+
+        <hr />
+
+        <div class="text-center">
+            <button onclick="window.print()" class="btn btn-primary">
+                Print Invoice
+            </button>
+        </div>
+
+    </div>
 </div>

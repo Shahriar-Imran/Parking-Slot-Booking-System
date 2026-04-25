@@ -13,32 +13,36 @@
             Manage Parking Areas
         </a>
 
-        <a asp-controller="Admin" asp-action="Slots" class="btn btn-warning mt-3 ms-2">
+        <a asp-controller="Admin" asp-action="Slots" class="btn btn-warning mt-3">
             Manage Slots
         </a>
 
-        <div class="col-md-3">
+        <a asp-controller="Admin" asp-action="BookingHistory" class="btn btn-primary mt-3">
+                View Booking History
+        </a>
+
+        <div class="col-md-3 mt-3">
             <div class="card text-center bg-primary text-white p-3">
                 <h4>@Model.TotalUsers</h4>
                 <p>Users</p>
             </div>
         </div>
 
-        <div class="col-md-3">
+        <div class="col-md-3 mt-3">
             <div class="card text-center bg-success text-white p-3">
                 <h4>@Model.TotalBookings</h4>
                 <p>Bookings</p>
             </div>
         </div>
 
-        <div class="col-md-3">
+        <div class="col-md-3 mt-3">
             <div class="card text-center bg-warning text-dark p-3">
                 <h4>@Model.TotalSlots</h4>
                 <p>Slots</p>
             </div>
         </div>
 
-        <div class="col-md-3">
+        <div class="col-md-3 mt-3">
             <div class="card text-center bg-dark text-white p-3">
                 <h4>@Model.TotalRevenue</h4>
                 <p>Revenue</p>

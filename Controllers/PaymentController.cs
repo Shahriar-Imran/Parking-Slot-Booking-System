@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using ParkingSystem.Data;
 using ParkingSystem.Models;
@@ -85,6 +86,7 @@ public class PaymentController : Controller
     // STEP 2: SUCCESS → SAVE BOOKING
     public async Task<IActionResult> Success(string tran_id)
     {
+
         var temp = _context.TempBookings
             .FirstOrDefault(t => t.TransactionId == tran_id);
 
@@ -101,7 +103,8 @@ public class PaymentController : Controller
             UserId = temp.UserId,
             StartTime = start,
             EndTime = end,
-            TotalAmount = temp.Total
+            TotalAmount = temp.Total,
+            TransactionId = tran_id
         };
 
         _context.Bookings.Add(booking);
@@ -138,8 +141,38 @@ public class PaymentController : Controller
     public IActionResult Confirmation(int id)
     {
         var booking = _context.Bookings
-            .Where(b => b.BookingId == id)
-            .FirstOrDefault();
+            .Include(b => b.BookingSlots)
+                .ThenInclude(bs => bs.Slot)
+                    .ThenInclude(s => s.ParkingArea)
+            .FirstOrDefault(b => b.BookingId == id);
+
+        if (booking == null)
+            return NotFound();
+
+        var user = _context.Users.FirstOrDefault(u => u.Id == booking.UserId);
+
+        // 👉 No need for separate slot query anymore
+        var slots = booking.BookingSlots.Select(bs => bs.Slot).ToList();
+
+        // QR generation (keep your existing code)
+        string qrText = $"Booking ID: {booking.BookingId}\n" +
+                        $"Transaction: {booking.TransactionId}\n" +
+                        $"User: {user?.FullName}\n" +
+                        $"Slots: {string.Join(", ", slots.Select(s => $"{s.SlotNumber} ({s.ParkingArea.VehicleType})"))}\n" +
+                        $"Start: {booking.StartTime:dd MMM yyyy hh:mm tt}\n" +
+                        $"End: {booking.EndTime:dd MMM yyyy hh:mm tt}\n";
+
+        using (var qrGenerator = new QRCoder.QRCodeGenerator())
+        {
+            var qrData = qrGenerator.CreateQrCode(qrText, QRCoder.QRCodeGenerator.ECCLevel.Q);
+            var qrCode = new QRCoder.PngByteQRCode(qrData);
+            byte[] qrBytes = qrCode.GetGraphic(5);
+
+            ViewBag.QRCode = Convert.ToBase64String(qrBytes);
+        }
+
+        ViewBag.User = user;
+        ViewBag.Slots = slots;
 
         return View(booking);
     }

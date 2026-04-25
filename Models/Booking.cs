@@ -7,7 +7,9 @@ namespace ParkingSystem.Models
         [Key]
         public int BookingId { get; set; }
 
+
         public string UserId { get; set; }
+        public ApplicationUser User { get; set; }
 
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
@@ -15,6 +17,7 @@ namespace ParkingSystem.Models
         public decimal TotalAmount { get; set; }
 
         public DateTime CreatedAt { get; set; } = DateTime.Now;
+        public string TransactionId { get; set; }
 
         public ICollection<BookingSlot> BookingSlots { get; set; }
     }

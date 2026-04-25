@@ -27,7 +27,10 @@ namespace ParkingSystem.Controllers
                 TotalUsers = _context.Users.Count(),
                 TotalBookings = _context.Bookings.Count(),
                 TotalSlots = _context.ParkingSlots.Count(),
-                TotalRevenue = _context.Payments.Sum(p => p.Amount)
+
+                // 🔥 FIXED
+                TotalRevenue = _context.Bookings
+                    .Sum(b => (decimal?)b.TotalAmount) ?? 0
             };
 
             return View(model);
@@ -253,6 +256,48 @@ namespace ParkingSystem.Controllers
             }
 
             return RedirectToAction("Users");
+        }
+
+        //Booking history
+        public IActionResult BookingHistory()
+        {
+            var bookings = _context.Bookings
+                .Include(b => b.BookingSlots)
+                    .ThenInclude(bs => bs.Slot)
+                        .ThenInclude(s => s.ParkingArea)
+                .Include(b => b.User)   // if navigation exists
+                .OrderByDescending(b => b.StartTime)
+                .ToList();
+
+            return View(bookings);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CancelBooking(int id)
+        {
+            var booking = _context.Bookings.FirstOrDefault(b => b.BookingId == id);
+
+            if (booking == null)
+                return NotFound();
+
+            // ❌ Prevent cancel if already finished
+            if (booking.EndTime <= DateTime.Now)
+            {
+                TempData["Error"] = "Cannot cancel completed booking!";
+                return RedirectToAction("BookingHistory");
+            }
+
+            // 👉 Delete booking + related slots
+            var bookingSlots = _context.BookingSlots.Where(bs => bs.BookingId == id);
+            _context.BookingSlots.RemoveRange(bookingSlots);
+
+            _context.Bookings.Remove(booking);
+
+            await _context.SaveChangesAsync();
+
+            TempData["Success"] = "Booking cancelled successfully";
+
+            return RedirectToAction("BookingHistory");
         }
     }
 }
