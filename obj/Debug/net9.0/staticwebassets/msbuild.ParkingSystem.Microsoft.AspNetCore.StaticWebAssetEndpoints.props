@@ -4,13 +4,13 @@
       <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\css\site.css'))</AssetFile>
       <Selectors><![CDATA[[]]]></Selectors>
       <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-a53KpHuz1EYr5WQ59P\u002BE6veKhdaiiAgetIYlD1GGm24="}]]]></EndpointProperties>
-      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"no-cache"},{"Name":"Content-Length","Value":"2004"},{"Name":"Content-Type","Value":"text/css"},{"Name":"ETag","Value":"\u0022a53KpHuz1EYr5WQ59P\u002BE6veKhdaiiAgetIYlD1GGm24=\u0022"},{"Name":"Last-Modified","Value":"Sat, 25 Apr 2026 17:33:31 GMT"}]]]></ResponseHeaders>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"no-cache"},{"Name":"Content-Length","Value":"2004"},{"Name":"Content-Type","Value":"text/css"},{"Name":"ETag","Value":"\u0022a53KpHuz1EYr5WQ59P\u002BE6veKhdaiiAgetIYlD1GGm24=\u0022"},{"Name":"Last-Modified","Value":"Sat, 25 Apr 2026 20:19:28 GMT"}]]]></ResponseHeaders>
     </StaticWebAssetEndpoint>
     <StaticWebAssetEndpoint Include="_content/ParkingSystem/css/site.r4swr75eaq.css">
       <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\css\site.css'))</AssetFile>
       <Selectors><![CDATA[[]]]></Selectors>
       <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"r4swr75eaq"},{"Name":"integrity","Value":"sha256-a53KpHuz1EYr5WQ59P\u002BE6veKhdaiiAgetIYlD1GGm24="},{"Name":"label","Value":"_content/ParkingSystem/css/site.css"}]]]></EndpointProperties>
-      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"2004"},{"Name":"Content-Type","Value":"text/css"},{"Name":"ETag","Value":"\u0022a53KpHuz1EYr5WQ59P\u002BE6veKhdaiiAgetIYlD1GGm24=\u0022"},{"Name":"Last-Modified","Value":"Sat, 25 Apr 2026 17:33:31 GMT"}]]]></ResponseHeaders>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"2004"},{"Name":"Content-Type","Value":"text/css"},{"Name":"ETag","Value":"\u0022a53KpHuz1EYr5WQ59P\u002BE6veKhdaiiAgetIYlD1GGm24=\u0022"},{"Name":"Last-Modified","Value":"Sat, 25 Apr 2026 20:19:28 GMT"}]]]></ResponseHeaders>
     </StaticWebAssetEndpoint>
     <StaticWebAssetEndpoint Include="_content/ParkingSystem/favicon.61n19gt1b8.ico">
       <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\favicon.ico'))</AssetFile>
