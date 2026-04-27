@@ -30,6 +30,7 @@ namespace ParkingSystem.Data
         public DbSet<Vehicle> Vehicles { get; set; }
 
         public DbSet<Payment> Payments { get; set; }
+        public DbSet<SlotLock> SlotLocks { get; set; }
         public DbSet<TempBooking> TempBookings { get; set; }
     }
 }

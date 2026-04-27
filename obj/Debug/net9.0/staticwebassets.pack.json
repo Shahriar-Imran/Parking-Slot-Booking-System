@@ -17,6 +17,14 @@
       "PackagePath": "staticwebassets\\images\\parking-bg.jpg"
     },
     {
+      "Id": "C:\\Users\\shahr\\OneDrive\\Desktop\\Practicum Project\\ParkingSystem\\ParkingSystem\\wwwroot\\images\\users\\9901e215-c662-42c5-97a4-ef22363f3731.jpeg",
+      "PackagePath": "staticwebassets\\images\\users\\9901e215-c662-42c5-97a4-ef22363f3731.jpeg"
+    },
+    {
+      "Id": "C:\\Users\\shahr\\OneDrive\\Desktop\\Practicum Project\\ParkingSystem\\ParkingSystem\\wwwroot\\images\\users\\b55954c8-0bef-400e-a4ea-16b54ccfd1a1.jpg",
+      "PackagePath": "staticwebassets\\images\\users\\b55954c8-0bef-400e-a4ea-16b54ccfd1a1.jpg"
+    },
+    {
       "Id": "C:\\Users\\shahr\\OneDrive\\Desktop\\Practicum Project\\ParkingSystem\\ParkingSystem\\wwwroot\\js\\site.js",
       "PackagePath": "staticwebassets\\js\\site.js"
     },

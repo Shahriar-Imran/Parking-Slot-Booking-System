@@ -64,6 +64,8 @@ C:\Users\shahr\OneDrive\Desktop\Practicum Project\ParkingSystem\ParkingSystem\ww
 wwwroot\css\site.css
 wwwroot\favicon.ico
 wwwroot\images\parking-bg.jpg
+wwwroot\images\users\9901e215-c662-42c5-97a4-ef22363f3731.jpeg
+wwwroot\images\users\b55954c8-0bef-400e-a4ea-16b54ccfd1a1.jpg
 wwwroot\js\site.js
 wwwroot\js\slot.js
 wwwroot\lib\bootstrap\dist\css\bootstrap.css

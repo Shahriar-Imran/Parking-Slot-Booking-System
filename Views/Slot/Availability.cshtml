@@ -1,5 +1,6 @@
 ﻿@model ParkingSystem.ViewModels.SlotAvailabilityViewModel
 
+
 <div id="authData" data-auth="@(User.Identity.IsAuthenticated.ToString().ToLower())">
 
     <div class="container mt-4">
@@ -57,16 +58,19 @@
 
                         @foreach (var slot in group)
                         {
-                            var isBooked = ViewBag.BookedSlots != null &&
+                            var isUnavailable = ViewBag.BookedSlots != null &&
                             ((List<int>)ViewBag.BookedSlots).Contains(slot.SlotId);
 
                             <div class="col-md-2 mb-2">
                                 <button type="button"
-                                        class="btn slot-btn @(isBooked ? "btn-secondary disabled-slot" : "btn-outline-success")"
+                                        class="btn slot-btn @(isUnavailable ? "btn-secondary disabled-slot" : "btn-outline-success")"
                                         data-id="@slot.SlotId"
                                         data-rate="@slot.ParkingArea.HourlyRate"
-                                @(isBooked ? "disabled" : "")>
+                                @(isUnavailable ? "disabled" : "")>
+
                                     @slot.SlotNumber
+
+                                    <small class="d-block timer" id="timer-@slot.SlotId"></small>
                                 </button>
                             </div>
                         }
@@ -93,3 +97,11 @@
 
     </div>
 </div>
+@using System.Text.Json
+
+<script>
+    var lockTimes = @Html.Raw(JsonSerializer.Serialize(ViewBag.LockTimes ?? new List<object>()));
+    console.log("LOCK TIMES:", lockTimes); // 🔥 MUST SHOW DATA
+</script>
+
+<script src="~/js/slot.js"></script>

@@ -1,0 +1,14 @@
+﻿@model ApplicationUser
+
+<div class="container mt-4">
+    <h2>Profile</h2>
+
+    <img src="@Model.ProfileImage" width="120" height="120" class="mb-3" />
+
+    <p><strong>Name:</strong> @Model.FullName</p>
+    <p><strong>Email:</strong> @Model.Email</p>
+    <p><strong>Phone:</strong> @Model.PhoneNumber</p>
+    <p><strong>Address:</strong> @Model.Address</p>
+
+    <a asp-action="EditProfile" class="btn btn-primary">Edit Profile</a>
+</div>

@@ -68,11 +68,7 @@
                             var currentUser = await UserManager.GetUserAsync(User);
 
                             <!-- Show User Name -->
-                            <li class="nav-item">
-                                <span class="nav-link text-light">
-                                    @currentUser.FullName
-                                </span>
-                            </li>
+                            
 
                             <!-- ✅ Admin Dashboard (FIXED POSITION) -->
                             @if (User.IsInRole("Admin"))
@@ -84,14 +80,53 @@
                                 </li>
                             }
 
-                            <!-- Logout -->
-                            <li class="nav-item">
-                                <form asp-controller="Account" asp-action="Logout" method="post">
-                                    <button type="submit" class="btn btn-outline-light btn-sm ms-2">
-                                        Logout
-                                    </button>
-                                </form>
-                            </li>
+                            <div class="dropdown">
+                                <button class="btn d-flex align-items-center gap-2 text-white border-0"
+                                        style="background: transparent;"
+                                        data-bs-toggle="dropdown">
+
+                                    <!-- Profile Image -->
+                                    <img src="@(string.IsNullOrEmpty(currentUser.ProfileImage) ? "/images/default-user.png" : currentUser.ProfileImage)"
+                                         class="rounded-circle"
+                                         width="35"
+                                         height="35"
+                                         style="object-fit: cover;" />
+
+                                    <!-- Name -->
+                                    <span>@currentUser.FullName</span>
+                                </button>
+
+                                <ul class="dropdown-menu dropdown-menu-end shadow">
+
+                                    <li class="px-3 py-2 border-bottom">
+                                        <strong>@currentUser.FullName</strong><br />
+                                        <small class="text-muted">@currentUser.Email</small>
+                                    </li>
+
+                                    <li>
+                                        <a class="dropdown-item" asp-controller="Account" asp-action="Profile">
+                                            👤 Profile
+                                        </a>
+                                    </li>
+
+                                    <li>
+                                        <a class="dropdown-item" asp-controller="Account" asp-action="MyBookings">
+                                            📋 Booking History
+                                        </a>
+                                    </li>
+
+                                    <li><hr class="dropdown-divider"></li>
+
+                                    <li>
+                                        <form asp-controller="Account" asp-action="Logout" method="post">
+                                            <button type="submit" class="dropdown-item text-danger">
+                                                🚪 Logout
+                                            </button>
+                                        </form>
+                                    </li>
+
+                                </ul>
+                            </div>
                         }
                         else
                         {
@@ -137,5 +172,6 @@
     
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/slot.js"></script>
+    @RenderSection("Scripts", required: false)
 </body>
 </html>

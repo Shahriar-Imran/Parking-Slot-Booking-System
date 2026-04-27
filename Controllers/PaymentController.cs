@@ -21,10 +21,14 @@ public class PaymentController : Controller
     [HttpPost]
     public IActionResult ProcessPayment(string slots, int duration, decimal total, DateTime date)
     {
-        Console.WriteLine("Received Date in Payment: " + date);
+        //Console.WriteLine("Received Date in Payment: " + date);
         var tranId = Guid.NewGuid().ToString();
 
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        var slotIds = slots.Split(',').Select(int.Parse).ToList();
+
+        var now = DateTime.Now;
+
 
         // ✅ SAVE TEMP DATA
         _context.TempBookings.Add(new TempBooking
@@ -86,7 +90,6 @@ public class PaymentController : Controller
     // STEP 2: SUCCESS → SAVE BOOKING
     public async Task<IActionResult> Success(string tran_id)
     {
-
         var temp = _context.TempBookings
             .FirstOrDefault(t => t.TransactionId == tran_id);
 
@@ -121,6 +124,13 @@ public class PaymentController : Controller
 
         await _context.SaveChangesAsync();
 
+        // 🔥 REMOVE SLOT LOCKS (PLACE HERE)
+        var locks = _context.SlotLocks
+            .Where(l => slotIds.Contains(l.SlotId));
+
+        _context.SlotLocks.RemoveRange(locks);
+        await _context.SaveChangesAsync();
+
         // ✅ DELETE TEMP DATA
         _context.TempBookings.Remove(temp);
         await _context.SaveChangesAsync();
@@ -133,9 +143,15 @@ public class PaymentController : Controller
         return View();
     }
 
-    public IActionResult Cancel()
+    public async Task<IActionResult> Cancel(string userId)
     {
-        return View();
+        var locks = _context.SlotLocks
+            .Where(l => l.UserId == userId);
+
+        _context.SlotLocks.RemoveRange(locks);
+        await _context.SaveChangesAsync();
+
+        return RedirectToAction("Availability", "Slot");
     }
 
     public IActionResult Confirmation(int id)

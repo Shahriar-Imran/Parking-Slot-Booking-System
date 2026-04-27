@@ -12,8 +12,8 @@
       <RelatedAsset></RelatedAsset>
       <AssetTraitName></AssetTraitName>
       <AssetTraitValue></AssetTraitValue>
-      <Fingerprint>r4swr75eaq</Fingerprint>
-      <Integrity>a53KpHuz1EYr5WQ59P+E6veKhdaiiAgetIYlD1GGm24=</Integrity>
+      <Fingerprint>k99w7j76ub</Fingerprint>
+      <Integrity>GIaCCMxwbyq5GK50z5LRJfpmJkdpnxoPqP8QPHb/b9E=</Integrity>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\css\site.css'))</OriginalItemSpec>
@@ -54,6 +54,42 @@
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\images\parking-bg.jpg'))</OriginalItemSpec>
     </StaticWebAsset>
+    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\images\users\9901e215-c662-42c5-97a4-ef22363f3731.jpeg'))">
+      <SourceType>Package</SourceType>
+      <SourceId>ParkingSystem</SourceId>
+      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
+      <BasePath>_content/ParkingSystem</BasePath>
+      <RelativePath>images/users/9901e215-c662-42c5-97a4-ef22363f3731.jpeg</RelativePath>
+      <AssetKind>All</AssetKind>
+      <AssetMode>All</AssetMode>
+      <AssetRole>Primary</AssetRole>
+      <RelatedAsset></RelatedAsset>
+      <AssetTraitName></AssetTraitName>
+      <AssetTraitValue></AssetTraitValue>
+      <Fingerprint>khqrw1y7go</Fingerprint>
+      <Integrity>KJ0Z/v1q+9yX76XD9In41q+eY/vqKor1Aup/lgl8xa0=</Integrity>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\images\users\9901e215-c662-42c5-97a4-ef22363f3731.jpeg'))</OriginalItemSpec>
+    </StaticWebAsset>
+    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\images\users\b55954c8-0bef-400e-a4ea-16b54ccfd1a1.jpg'))">
+      <SourceType>Package</SourceType>
+      <SourceId>ParkingSystem</SourceId>
+      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
+      <BasePath>_content/ParkingSystem</BasePath>
+      <RelativePath>images/users/b55954c8-0bef-400e-a4ea-16b54ccfd1a1.jpg</RelativePath>
+      <AssetKind>All</AssetKind>
+      <AssetMode>All</AssetMode>
+      <AssetRole>Primary</AssetRole>
+      <RelatedAsset></RelatedAsset>
+      <AssetTraitName></AssetTraitName>
+      <AssetTraitValue></AssetTraitValue>
+      <Fingerprint>zwpyu7yufz</Fingerprint>
+      <Integrity>TU4Fnht02Frb+jmZqrcTv/q2XgotkCa2n3Oc6ZdgI0E=</Integrity>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\images\users\b55954c8-0bef-400e-a4ea-16b54ccfd1a1.jpg'))</OriginalItemSpec>
+    </StaticWebAsset>
     <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\js\site.js'))">
       <SourceType>Package</SourceType>
       <SourceId>ParkingSystem</SourceId>
@@ -84,8 +120,8 @@
       <RelatedAsset></RelatedAsset>
       <AssetTraitName></AssetTraitName>
       <AssetTraitValue></AssetTraitValue>
-      <Fingerprint>89wsreu2gd</Fingerprint>
-      <Integrity>tBo+KUjdhaHVpupJFRPe0O/xVhQqfS+6jxLX7ufEWac=</Integrity>
+      <Fingerprint>btmp86t6o5</Fingerprint>
+      <Integrity>v291Ovx3u8gSiZk7tarwSpOA7KAXL1kC2R0/YXMTWyk=</Integrity>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\js\slot.js'))</OriginalItemSpec>

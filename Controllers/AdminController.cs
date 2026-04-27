@@ -30,7 +30,8 @@ namespace ParkingSystem.Controllers
 
                 // 🔥 FIXED
                 TotalRevenue = _context.Bookings
-                    .Sum(b => (decimal?)b.TotalAmount) ?? 0
+                    .Where(b => !b.IsCancelled)
+                    .Sum(b => b.TotalAmount - b.RefundAmount)
             };
 
             return View(model);
