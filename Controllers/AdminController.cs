@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Authorization;
 using ParkingSystem.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System.Net.Mail;
+using System.Net;
 
 namespace ParkingSystem.Controllers
 {
@@ -13,6 +15,7 @@ namespace ParkingSystem.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
+        private const string MAIN_ADMIN_EMAIL = "admin@gmail.com";
 
         public AdminController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
@@ -46,11 +49,25 @@ namespace ParkingSystem.Controllers
         [HttpPost]
         public async Task<IActionResult> MakeAdmin(string userId)
         {
+            var currentUser = await _userManager.GetUserAsync(User);
+
+            // ❌ Only main admin can assign admin role
+            if (currentUser.Email != MAIN_ADMIN_EMAIL)
+            {
+                TempData["Error"] = "Only main admin can assign admin role!";
+                return RedirectToAction("Users");
+            }
+
             var user = await _userManager.FindByIdAsync(userId);
 
             if (user != null)
             {
-                await _userManager.AddToRoleAsync(user, "Admin");
+                var isAdmin = await _userManager.IsInRoleAsync(user, "Admin");
+
+                if (!isAdmin)
+                {
+                    await _userManager.AddToRoleAsync(user, "Admin");
+                }
             }
 
             return RedirectToAction("Users");
@@ -245,17 +262,39 @@ namespace ParkingSystem.Controllers
         [HttpPost]
         public async Task<IActionResult> DeleteUser(string userId)
         {
+            var currentUser = await _userManager.GetUserAsync(User);
             var user = await _userManager.FindByIdAsync(userId);
 
-            if (user != null)
-            {
-                // Prevent self delete
-                if (user.Id == _userManager.GetUserId(User))
-                    return RedirectToAction("Users");
+            if (user == null)
+                return RedirectToAction("Users");
 
-                await _userManager.DeleteAsync(user);
+            // ❌ Prevent deleting main admin
+            if (user.Email == MAIN_ADMIN_EMAIL)
+            {
+                TempData["Error"] = "Main admin cannot be deleted!";
+                return RedirectToAction("Users");
             }
 
+            var isTargetAdmin = await _userManager.IsInRoleAsync(user, "Admin");
+            var isCurrentMainAdmin = currentUser.Email == MAIN_ADMIN_EMAIL;
+
+            // ❌ Only main admin can delete admins
+            if (isTargetAdmin && !isCurrentMainAdmin)
+            {
+                TempData["Error"] = "Only main admin can delete admin users!";
+                return RedirectToAction("Users");
+            }
+
+            // ❌ Prevent self delete
+            if (user.Id == currentUser.Id)
+            {
+                TempData["Error"] = "You cannot delete yourself!";
+                return RedirectToAction("Users");
+            }
+
+            await _userManager.DeleteAsync(user);
+
+            TempData["Success"] = "User deleted successfully";
             return RedirectToAction("Users");
         }
 
@@ -274,6 +313,7 @@ namespace ParkingSystem.Controllers
         }
 
         [HttpPost]
+        [HttpPost]
         public async Task<IActionResult> CancelBooking(int id)
         {
             var booking = _context.Bookings.FirstOrDefault(b => b.BookingId == id);
@@ -281,24 +321,106 @@ namespace ParkingSystem.Controllers
             if (booking == null)
                 return NotFound();
 
-            // ❌ Prevent cancel if already finished
+            // ❌ prevent cancelling completed booking
             if (booking.EndTime <= DateTime.Now)
             {
                 TempData["Error"] = "Cannot cancel completed booking!";
                 return RedirectToAction("BookingHistory");
             }
 
-            // 👉 Delete booking + related slots
-            var bookingSlots = _context.BookingSlots.Where(bs => bs.BookingId == id);
-            _context.BookingSlots.RemoveRange(bookingSlots);
+            // ❌ prevent duplicate cancel
+            if (booking.IsCancelled)
+            {
+                TempData["Error"] = "Booking already cancelled!";
+                return RedirectToAction("BookingHistory");
+            }
 
-            _context.Bookings.Remove(booking);
+            // ✅ FULL REFUND
+            booking.IsCancelled = true;
+            booking.RefundAmount = booking.TotalAmount;
+            booking.CancelledAt = DateTime.Now;
 
             await _context.SaveChangesAsync();
 
-            TempData["Success"] = "Booking cancelled successfully";
+            // ✅ SEND EMAIL
+            await SendAdminCancellationEmail(booking);
+
+            TempData["Success"] = "Booking cancelled and full refund initiated.";
 
             return RedirectToAction("BookingHistory");
         }
+        
+
+    private async Task SendAdminCancellationEmail(Booking booking)
+        {
+            var user = _context.Users.FirstOrDefault(u => u.Id == booking.UserId);
+
+            if (user == null || string.IsNullOrEmpty(user.Email))
+                return;
+
+            string fromEmail = "shahriarimran2002@gmail.com";
+            string appPassword = "nhnjcthqsdgmqlqv";
+
+            string subject = "Booking Cancelled by Admin";
+
+            string body = $@"
+            <h3>Booking Cancelled by Admin</h3>
+            <p>Booking ID: <b>{booking.BookingId}</b></p>
+            <p>Total Amount: <b>৳ {booking.TotalAmount}</b></p>
+            <p>Refund Amount: <b>৳ {booking.TotalAmount}</b></p>
+            <p>Your booking has been cancelled by admin.</p>
+            <p>The full refund will be processed within 24 hours.</p>
+        ";
+
+            var smtp = new SmtpClient("smtp.gmail.com", 587)
+            {
+                Credentials = new NetworkCredential(fromEmail, appPassword),
+                EnableSsl = true
+            };
+
+            var mail = new MailMessage
+            {
+                From = new MailAddress(fromEmail),
+                Subject = subject,
+                Body = body,
+                IsBodyHtml = true
+            };
+
+            mail.To.Add(user.Email);
+
+            await smtp.SendMailAsync(mail);
+        }
+
+        //========= View User Profile ========//
+        public async Task<IActionResult> UserProfile(string id)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+
+            if (user == null)
+                return NotFound();
+
+            return View(user);
+        }
+        [HttpPost]
+        public async Task<IActionResult> RemoveAdmin(string userId)
+        {
+            var currentUser = await _userManager.GetUserAsync(User);
+
+            if (currentUser.Email != "admin@gmail.com")
+                return RedirectToAction("Users");
+
+            var user = await _userManager.FindByIdAsync(userId);
+
+            if (user != null)
+            {
+                await _userManager.RemoveFromRoleAsync(user, "Admin");
+            }
+
+            return RedirectToAction("Users");
+        }
     }
+
+
+
+
 }

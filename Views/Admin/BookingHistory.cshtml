@@ -41,15 +41,21 @@
                     <td>৳ @b.TotalAmount</td>
 
                     <td>
-                        <form method="post" asp-action="CancelBooking">
-                            <input type="hidden" name="id" value="@b.BookingId" />
-
-                            <button type="submit"
-                                    class="btn btn-danger"
-                            @(isPast ? "disabled" : "")>
-                                Cancel
+                        @if (!b.IsCancelled && b.EndTime > DateTime.Now)
+                        {
+                            <form asp-action="CancelBooking" method="post">
+                                <input type="hidden" name="id" value="@b.BookingId" />
+                                <button class="btn btn-danger btn-sm">
+                                    Cancel
+                                </button>
+                            </form>
+                        }
+                        else
+                        {
+                            <button class="btn btn-secondary btn-sm" disabled>
+                                Cancelled / Expired
                             </button>
-                        </form>
+                        }
                     </td>
                 </tr>
             }

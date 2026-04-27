@@ -1,14 +1,14 @@
 ﻿@model List<ParkingSystem.Models.ApplicationUser>
-
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<ParkingSystem.Models.ApplicationUser> UserManager
 @{
     ViewData["Title"] = "Manage Users";
 }
-
 <div class="container mt-4">
 
     <h2 class="mb-3">User Management</h2>
 
-    <table class="table table-bordered table-hover shadow">
+    <table class="table table-hover align-middle">
 
         <thead class="table-dark">
             <tr>
@@ -20,41 +20,94 @@
 
         <tbody>
 
+            @{
+                var currentUserEmail = User.Identity.Name;
+                bool isMainAdmin = currentUserEmail == "admin@gmail.com";
+            }
             @if (Model != null && Model.Any())
             {
                 foreach (var user in Model)
                 {
                     <tr>
-                        <td>@user.FullName</td>
+                        <td>
+                            <a asp-action="UserProfile" asp-route-id="@user.Id"
+                               class="fw-semibold text-decoration-none text-dark">
+                                @user.FullName
+                            </a>
+                        </td>
                         <td>@user.Email</td>
 
                         <td>
+                            @{
+                                var isAdmin = await UserManager.IsInRoleAsync(user, "Admin");
+                            }
 
-                            <!-- Make Admin -->
-                            <form asp-action="MakeAdmin"
-                                  method="post"
-                                  style="display:inline;">
+                            <!-- 🔥 ROLE BADGE -->
+                            @if (user.Email == "admin@gmail.com")
+                            {
+                                <span class="badge bg-dark px-3 py-2">Main Admin</span>
+                            }
+                            else if (isAdmin)
+                            {
+                                <span class="badge bg-danger px-3 py-2">Admin</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-primary px-3 py-2">User</span>
+                            }
 
-                                <input type="hidden" name="userId" value="@user.Id" />
+                            <div class="mt-2 d-flex flex-wrap gap-2">
 
-                                <button class="btn btn-warning btn-sm">
-                                    Make Admin
-                                </button>
-                            </form>
+                                <!-- 🔥 MAKE ADMIN -->
+                                @if (!isAdmin && isMainAdmin)
+                                {
+                                    <form asp-action="MakeAdmin" method="post">
+                                        <input type="hidden" name="userId" value="@user.Id" />
+                                        <button class="btn btn-outline-warning btn-sm">
+                                            <i class="fas fa-user-shield"></i> Make Admin
+                                        </button>
+                                    </form>
+                                }
 
-                            <!-- Delete User -->
-                            <form asp-action="DeleteUser"
-                                  method="post"
-                                  style="display:inline;"
-                                  onsubmit="return confirm('Are you sure to delete this user?');">
+                                <!-- 🔥 REMOVE ADMIN -->
+                                @if (isAdmin && isMainAdmin && user.Email != "admin@gmail.com")
+                                {
+                                    <form asp-action="RemoveAdmin" method="post">
+                                        <input type="hidden" name="userId" value="@user.Id" />
+                                        <button class="btn btn-outline-dark btn-sm">
+                                            <i class="fas fa-user-minus"></i> Remove Admin
+                                        </button>
+                                    </form>
+                                }
 
-                                <input type="hidden" name="userId" value="@user.Id" />
+                                <!-- 🔥 DELETE -->
+                                @{
+                                    var isTargetAdmin = await UserManager.IsInRoleAsync(user, "Admin");
+                                }
 
-                                <button class="btn btn-danger btn-sm">
-                                    Delete
-                                </button>
-                            </form>
+                                @if (user.Email == "admin@gmail.com")
+                                {
+                                    <button class="btn btn-secondary btn-sm" disabled>
+                                        <i class="fas fa-lock"></i> Protected
+                                    </button>
+                                }
+                                else if (isTargetAdmin && !isMainAdmin)
+                                {
+                                    <button class="btn btn-secondary btn-sm" disabled>
+                                        <i class="fas fa-user-lock"></i> Protected
+                                    </button>
+                                }
+                                else
+                                {
+                                    <form asp-action="DeleteUser" method="post">
+                                        <input type="hidden" name="userId" value="@user.Id" />
+                                        <button class="btn btn-outline-danger btn-sm">
+                                            <i class="fas fa-trash"></i> Delete
+                                        </button>
+                                    </form>
+                                }
 
+                            </div>
                         </td>
                     </tr>
                 }
