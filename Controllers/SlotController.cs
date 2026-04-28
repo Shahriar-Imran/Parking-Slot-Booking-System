@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using ParkingSystem.ViewModels;
 using ParkingSystem.Models;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ParkingSystem.Controllers
 {
@@ -109,6 +110,7 @@ namespace ParkingSystem.Controllers
         }
 
         //======== Lock Slot =========
+        [Authorize]
         [HttpPost]
         public IActionResult LockSlot([FromBody] LockRequest model)
         {

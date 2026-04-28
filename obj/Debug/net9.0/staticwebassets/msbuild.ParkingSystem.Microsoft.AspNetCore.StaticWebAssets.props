@@ -120,8 +120,8 @@
       <RelatedAsset></RelatedAsset>
       <AssetTraitName></AssetTraitName>
       <AssetTraitValue></AssetTraitValue>
-      <Fingerprint>btmp86t6o5</Fingerprint>
-      <Integrity>v291Ovx3u8gSiZk7tarwSpOA7KAXL1kC2R0/YXMTWyk=</Integrity>
+      <Fingerprint>5e9aoz9icu</Fingerprint>
+      <Integrity>DeKeBzQLkrt+p/Rc3PCHtQCMMnXA+1GldcE+H0Y0+20=</Integrity>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\js\slot.js'))</OriginalItemSpec>

@@ -41,7 +41,7 @@
                     <td>৳ @b.TotalAmount</td>
 
                     <td>
-                        @if (!b.IsCancelled && b.EndTime > DateTime.Now)
+                        @if (!b.IsCancelled && b.StartTime > DateTime.Now)
                         {
                             <form asp-action="CancelBooking" method="post">
                                 <input type="hidden" name="id" value="@b.BookingId" />
@@ -50,10 +50,16 @@
                                 </button>
                             </form>
                         }
+                        else if (b.IsCancelled)
+                        {
+                            <button class="btn btn-secondary btn-sm" disabled>
+                                Cancelled
+                            </button>
+                        }
                         else
                         {
                             <button class="btn btn-secondary btn-sm" disabled>
-                                Cancelled / Expired
+                                Expired
                             </button>
                         }
                     </td>

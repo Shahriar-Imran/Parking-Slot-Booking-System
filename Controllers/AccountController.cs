@@ -244,8 +244,14 @@ namespace ParkingSystem.Controllers
 
             foreach (var b in bookings)
             {
-                b.RefundAmount = CalculateRefund(b.TotalAmount, b.StartTime);
+                // 🔥 Only calculate once
+                if (b.RefundPreview == null)
+                {
+                    b.RefundPreview = CalculateRefund(b.TotalAmount, b.StartTime);
+                }
             }
+
+            await _context.SaveChangesAsync(); // 🔥 save fixed value
 
             return View(bookings);
         }

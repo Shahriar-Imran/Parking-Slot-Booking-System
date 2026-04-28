@@ -1,6 +1,72 @@
-﻿@{
-    ViewData["Title"] = "Privacy Policy";
-}
-<h1>@ViewData["Title"]</h1>
+﻿<div class="container mt-5">
 
-<p>Use this page to detail your site's privacy policy.</p>
+    <h2 class="text-center mb-4">Parking System Policies</h2>
+
+    <hr />
+
+    <!-- BOOKING POLICY -->
+    <h4 class="mt-4">1. Booking Policy</h4>
+    <ul>
+        <li>Slots can be booked online <strong>4 days in advance</strong>.</li>
+        <li>Each booking requires selecting date, time, duration, and slot.</li>
+        <li>Maximum <strong>5 slots</strong> can be booked at once.</li>
+        <li>Slots are temporarily locked during payment to prevent double booking.</li>
+        
+        <li>Users can also download their invoice copy from the booking history of their account after they login.</li>
+    </ul>
+
+    <!-- PAYMENT POLICY -->
+    <h4 class="mt-4">2. Payment Policy</h4>
+    <ul>
+        <li>All bookings require <strong>advance payment</strong>.</li>
+        <li>Payments are processed through a secure payment gateway.</li>
+        <li>Users can pay for booking using movile financial services: Bkash, Nagad, Rocket, Upay, Tap or debit/credit cards: Mastercard, Visa, DBBL Nexus. Other payment options will be available soon.</li>
+        <li>In case of payment or transaction failure, the deducted amount would be refunded by users' bank or MFS provider within 24 hours.</li>
+        <li>A booking is confirmed only after successful payment.</li>
+    </ul>
+
+    <!-- USER RESPONSIBILITIES -->
+    <h4 class="mt-4">4. User Responsibilities</h4>
+    <ul>
+        <li>Users must provide accurate booking and contact information.</li>
+        <li>Users must park only in their assigned slot.</li>
+        <li>Misuse of slots may result in account suspension.</li>
+    </ul>
+
+    <!-- ADMIN RIGHTS -->
+    <h4 class="mt-4">5. Admin Rights</h4>
+    <ul>
+        <li>Admin can cancel any booking if required.</li>
+        <li>Admin-initiated cancellations are eligible for <strong>full refund</strong>.</li>
+        <li>Admins manage users, slots, and system operations.</li>
+    </ul>
+
+    <!-- SLOT USAGE -->
+    <h4 class="mt-4">6. Slot Usage Policy</h4>
+    <ul>
+        <li>Users must vacate the slot within their booked time.</li>
+        <li>Overstaying may result in penalties.</li>
+        <li>Each slot is designated for specific vehicle types.</li>
+    </ul>
+
+    <!-- PRIVACY POLICY -->
+    <h4 class="mt-4">7. Privacy Policy</h4>
+    <ul>
+        <li>User data is securely stored and not shared with third parties.</li>
+        <li>Email and phone number are used only for booking and refund communication.</li>
+    </ul>
+
+    <!-- TERMS -->
+    <h4 class="mt-4">8. Terms & Conditions</h4>
+    <ul>
+        <li>All users must comply with system rules and policies.</li>
+        <li>The system reserves the right to update policies at any time.</li>
+    </ul>
+
+    <hr />
+
+    <p class="text-center text-muted mt-4">
+        Last Updated: @DateTime.Now.ToString("MMMM yyyy")
+    </p>
+
+</div>

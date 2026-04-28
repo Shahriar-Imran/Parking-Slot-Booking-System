@@ -17,10 +17,10 @@ namespace ParkingSystem.Models
         public decimal TotalAmount { get; set; }
         public bool IsCancelled { get; set; } = false;
 
-        public decimal RefundAmount { get; set; }
-        public string RefundPhone { get; set; }
-
+        public decimal? RefundAmount { get; set; }   // ✅ nullable
+        public string? RefundPhone { get; set; }     // ✅ nullable
         public DateTime? CancelledAt { get; set; }
+        public decimal? RefundPreview { get; set; }
 
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         public string TransactionId { get; set; }

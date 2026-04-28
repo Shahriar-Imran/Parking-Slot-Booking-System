@@ -118,7 +118,9 @@ public class BookingController : Controller
         if (booking.StartTime <= DateTime.Now)
             return Content("Cannot cancel completed booking!");
 
-        var refund = CalculateRefund(booking.TotalAmount, booking.StartTime);
+        var refund = booking.RefundPreview ?? 0;
+
+        booking.RefundAmount = refund;
 
         booking.IsCancelled = true;
         booking.RefundAmount = refund;

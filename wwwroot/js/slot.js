@@ -33,9 +33,38 @@ document.addEventListener("click", async function (e) {
 
     if (e.target.classList.contains("slot-btn") && !e.target.disabled) {
 
+        const isLoggedIn = document
+            .getElementById("authData")
+            .getAttribute("data-auth");
+
+        if (isLoggedIn !== "true") {
+            alert("Login first to select any slot");
+            
+            return; // ⛔ STOP HERE
+        }
+
         const btn = e.target;
         const id = btn.dataset.id;
         const rate = parseFloat(btn.dataset.rate);
+
+        // 🔥 CALL SERVER ONLY IF LOGGED IN
+        const response = await fetch('/Slot/LockSlot', {
+            method: 'POST',
+            credentials: 'include', // 🔥 IMPORTANT
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                slotId: parseInt(id),
+                start: document.getElementById("dateInput").value,
+                end: calculateEndTime()
+            })
+        });
+
+        if (!response.ok) {
+            alert("Slot already selected by another user!");
+            return;
+        }
 
         // 🔥 IF ALREADY SELECTED → UNSELECT (NO LOCK CALL)
         if (selected.find(x => x.id == id)) {
@@ -115,7 +144,7 @@ function bookSlots() {
     const MAX_ALLOWED = 5;
 
     if (selected.length > MAX_ALLOWED) {
-        alert("You can select maximum 5 slots only!");
+        alert("You can select maximum 5 slots only!");  
         return;
     }
 

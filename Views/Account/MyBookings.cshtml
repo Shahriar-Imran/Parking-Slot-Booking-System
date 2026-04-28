@@ -48,7 +48,7 @@
                             @if (b.IsCancelled)
                             {
                                 <p class="text-danger">
-                                    Cancelled | Refund: ৳ @b.RefundAmount
+                                    Cancelled | Refund: ৳ @(b.RefundPreview ?? 0)
                                 </p>
                             }
 
@@ -133,20 +133,26 @@
         <div class="modal-content">
 
             <div class="modal-header">
-                <h5 class="modal-title">Refund Policy</h5>
+                <h4 class="modal-title">Refund Policy</h4>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
 
             <div class="modal-body">
                 <ul>
-                    <li>Before 24 hours → 10% deduction</li>
-                    <li>Before 12 hours → 25% deduction</li>
-                    <li>Before 6 hours → 50% deduction</li>
-                    <li>Before 1 hour → 75% deduction</li>
-                    <li>Less than 1 hour → No refund</li>
+                    <li>Cancellation is allowed only before the booking start time.</li>
+                    <li>Refund is calculated based on time remaining before start:</li>
+                    <ul>
+                        <li>In case of cancel booking 24 hours prior to the commencement of the start time, 10% of the slot fare will be deducted;</li>
+                        <li>In case of less than 24 hours and more than 12 hours, 25% of the slot fare will be deducted;</li>
+                        <li>In case of less than 12 hours and more than 6 hours, 50% of the slot fare will be deducted;</li>
+                        <li>In case of less than 6 hours and more than 1 hours, 75% of the slot fare will be deducted;</li>
+                        <li>No refund for less than 1 hours;</li>
+                    </ul>
+                    <li>Refunds are processed manually to the provided mobile number (bKash/Nagad).</li>
                 </ul>
             </div>
 
         </div>
     </div>
 </div>
+<!-- CANCELLATION POLICY -->
