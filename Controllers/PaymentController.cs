@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using ParkingSystem.Data;
@@ -11,9 +12,11 @@ using System.Text;
 public class PaymentController : Controller
 {
     private readonly ApplicationDbContext _context;
-    public PaymentController(ApplicationDbContext context)
+    private readonly IHubContext<SlotHub> _hub;
+    public PaymentController(ApplicationDbContext context, IHubContext<SlotHub> hub)
     {
         _context = context;
+        _hub = hub;
     }
 
 
@@ -29,6 +32,24 @@ public class PaymentController : Controller
 
         var now = DateTime.Now;
 
+        var start = date;
+        var end = start.AddHours(duration);
+
+        start = start.AddSeconds(-start.Second).AddMilliseconds(-start.Millisecond);
+        end = end.AddSeconds(-end.Second).AddMilliseconds(-end.Millisecond);
+
+        var validLock = _context.SlotLocks
+            .Where(l => slotIds.Contains(l.SlotId)
+                && l.UserId == userId
+                && l.ExpireTime > now
+                && l.StartTime < end
+                && l.EndTime > start) // 🔥 ADD THIS
+            .Count();
+
+        if (validLock != slotIds.Count)
+        {
+            return Content("❌ Your slot hold expired. Please reselect slots.");
+        }
 
         // ✅ SAVE TEMP DATA
         _context.TempBookings.Add(new TempBooking
@@ -96,46 +117,85 @@ public class PaymentController : Controller
         if (temp == null)
             return Content("Transaction not found!");
 
-        var slotIds = temp.Slots.Split(',').Select(int.Parse).ToList();
-
-        var start = temp.BookingDate;
-        var end = start.AddHours(temp.Duration);
-
-        var booking = new Booking
+        using (var transaction = _context.Database.BeginTransaction())
         {
-            UserId = temp.UserId,
-            StartTime = start,
-            EndTime = end,
-            TotalAmount = temp.Total,
-            TransactionId = tran_id
-        };
+            var start = temp.BookingDate;
+            var end = start.AddHours(temp.Duration);
 
-        _context.Bookings.Add(booking);
-        await _context.SaveChangesAsync();
+            start = start.AddSeconds(-start.Second).AddMilliseconds(-start.Millisecond);
+            end = end.AddSeconds(-end.Second).AddMilliseconds(-end.Millisecond);
 
-        foreach (var slotId in slotIds)
-        {
-            _context.BookingSlots.Add(new BookingSlot
+            var slotIds = temp.Slots.Split(',').Select(int.Parse).ToList();
+
+            // 🔴 HARD CHECK (MOST IMPORTANT)
+            var conflictExists = _context.BookingSlots
+                .Any(b => slotIds.Contains(b.SlotId)
+                       && !b.Booking.IsCancelled
+                       && b.Booking.StartTime < end
+                       && b.Booking.EndTime > start);
+
+            if (conflictExists)
             {
-                BookingId = booking.BookingId,
-                SlotId = slotId
-            });
+                return Content("❌ Slot already booked. Payment will be refunded.");
+            }
+
+            // ✅ CREATE BOOKING
+            var booking = new Booking
+            {
+                UserId = temp.UserId,
+                StartTime = start,
+                EndTime = end,
+                TotalAmount = temp.Total,
+                TransactionId = temp.TransactionId
+            };
+
+            _context.Bookings.Add(booking);
+            await _context.SaveChangesAsync();
+
+            foreach (var slotId in slotIds)
+            {
+                _context.BookingSlots.Add(new BookingSlot
+                {
+                    BookingId = booking.BookingId,
+                    SlotId = slotId
+                });
+            }
+
+            await _context.SaveChangesAsync();
+
+            // 🔥 REMOVE SLOT LOCKS
+            var locks = _context.SlotLocks
+    .Where(l => slotIds.Contains(l.SlotId))
+    .ToList(); // 🔥 IMPORTANT FIX
+
+            foreach (var lockItem in locks)
+            {
+                var slot = _context.ParkingSlots
+                    .Include(s => s.ParkingArea)
+                    .First(s => s.SlotId == lockItem.SlotId);
+
+                var areaKey = $"{slot.ParkingArea.BlockNumber}-{slot.ParkingArea.VehicleType}";
+
+                await _hub.Clients.All.SendAsync("ReceiveSlotUpdate", new
+                {
+                    slotId = lockItem.SlotId,
+                    status = "available",
+                    userId = lockItem.UserId,
+                    area = areaKey
+                });
+            }
+
+            _context.SlotLocks.RemoveRange(locks);
+            await _context.SaveChangesAsync();
+
+            // 🔥 DELETE TEMP DATA
+            _context.TempBookings.Remove(temp);
+            await _context.SaveChangesAsync();
+
+            transaction.Commit();
+
+            return RedirectToAction("Confirmation", new { id = booking.BookingId });
         }
-
-        await _context.SaveChangesAsync();
-
-        // 🔥 REMOVE SLOT LOCKS (PLACE HERE)
-        var locks = _context.SlotLocks
-            .Where(l => slotIds.Contains(l.SlotId));
-
-        _context.SlotLocks.RemoveRange(locks);
-        await _context.SaveChangesAsync();
-
-        // ✅ DELETE TEMP DATA
-        _context.TempBookings.Remove(temp);
-        await _context.SaveChangesAsync();
-
-        return RedirectToAction("Confirmation", new { id = booking.BookingId });
     }
 
     public IActionResult Fail()
@@ -146,7 +206,19 @@ public class PaymentController : Controller
     public async Task<IActionResult> Cancel(string userId)
     {
         var locks = _context.SlotLocks
-            .Where(l => l.UserId == userId);
+            .Where(l => l.UserId == userId)
+            .ToList(); // 🔥 important
+
+        // 🔥 LOOP THROUGH EACH LOCK
+        foreach (var lockItem in locks)
+        {
+            await _hub.Clients.All.SendAsync("ReceiveSlotUpdate", new
+            {
+                slotId = lockItem.SlotId, // ✅ FIXED
+                status = "available",
+                userId = lockItem.UserId
+            });
+        }
 
         _context.SlotLocks.RemoveRange(locks);
         await _context.SaveChangesAsync();

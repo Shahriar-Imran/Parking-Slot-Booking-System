@@ -1,14 +1,61 @@
 ﻿// ============================
+// 🔥 SIGNALR + INIT
+// ============================
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const currentUserId = document
+        .getElementById("authData")
+        .getAttribute("data-userid");
+
+    const connection = new signalR.HubConnectionBuilder()
+        .withUrl("/slotHub")
+        .build();
+
+    connection.start()
+        .then(() => console.log("SignalR Connected"))
+        .catch(err => console.error(err));
+
+    // 🔥 RECEIVE LIVE UPDATES
+    connection.on("ReceiveSlotUpdate", function (data) {
+
+        const btn = document.querySelector(`[data-id='${data.slotId}']`);
+        if (!btn) return;
+        const area = btn.dataset.area;
+
+        // 🔥 Don't override your own selected slot
+        if (btn.classList.contains("btn-success") && data.status === "locked") return;
+
+        if (data.status === "locked") {
+
+            if (data.userId === currentUserId) return;
+
+            // 🔥 ONLY VISUAL CHANGE
+            btn.classList.add("border-warning");
+            btn.disabled = true;
+            updateCount(area, -1);
+        }
+
+        if (data.status === "available") {
+
+            btn.classList.remove("border-warning");
+            btn.disabled = false;
+
+            updateCount(area, +1);
+        }
+    });
+
+});
+
+
+// ============================
 // DATE RESTRICTION
 // ============================
 
 const dateInput = document.getElementById("dateInput");
 
 if (dateInput) {
-
     let now = new Date();
-
-    // Remove seconds & milliseconds
     now.setSeconds(0);
     now.setMilliseconds(0);
 
@@ -23,6 +70,7 @@ if (dateInput) {
     dateInput.max = formatDate(max);
 }
 
+
 // ============================
 // SLOT SELECTION
 // ============================
@@ -31,79 +79,63 @@ let selected = [];
 
 document.addEventListener("click", async function (e) {
 
-    if (e.target.classList.contains("slot-btn") && !e.target.disabled) {
+    const btn = e.target.closest(".slot-btn");
+    if (!btn || btn.style.pointerEvents === "none") return;
 
-        const isLoggedIn = document
-            .getElementById("authData")
-            .getAttribute("data-auth");
+    const auth = document.getElementById("authData");
 
-        if (isLoggedIn !== "true") {
-            alert("Login first to select any slot");
-            
-            return; // ⛔ STOP HERE
-        }
+    if (auth.getAttribute("data-auth") !== "true") {
+        alert("Login first to select any slot");
+        return;
+    }
 
-        const btn = e.target;
-        const id = btn.dataset.id;
-        const rate = parseFloat(btn.dataset.rate);
+    
 
-        // 🔥 CALL SERVER ONLY IF LOGGED IN
+    const id = btn.dataset.id;
+    const rate = parseFloat(btn.dataset.rate);
+    const area = btn.dataset.area;
+
+    // UNSELECT
+    if (selected.find(x => x.id == id)) {
+
+        selected = selected.filter(x => x.id != id);
+        btn.classList.remove("btn-success");
+        btn.classList.add("btn-outline-success");
+        updateCount(area, +1);
+        
+    } else {
+
+        const date = document.getElementById("dateInput").value;
+        const duration = document.getElementById("durationInput").value;
+
         const response = await fetch('/Slot/LockSlot', {
             method: 'POST',
-            credentials: 'include', // 🔥 IMPORTANT
-            headers: {
-                'Content-Type': 'application/json'
-            },
+            credentials: 'include',
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 slotId: parseInt(id),
-                start: document.getElementById("dateInput").value,
-                end: calculateEndTime()
+                startTime: date,
+                duration: parseInt(duration)
             })
         });
 
-        if (!response.ok) {
-            alert("Slot already selected by another user!");
-            return;
-        }
-
-        // 🔥 IF ALREADY SELECTED → UNSELECT (NO LOCK CALL)
-        if (selected.find(x => x.id == id)) {
-
-            selected = selected.filter(x => x.id != id);
-            btn.classList.remove("btn-success");
-            btn.classList.add("btn-outline-success");
-
-        } else {
-
-            // 🔥 LOCK ONLY WHEN SELECTING
-            const date = document.getElementById("dateInput").value;
-            const duration = document.getElementById("durationInput").value;
-
-            const response = await fetch('/Slot/LockSlot', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    slotId: parseInt(id),
-                    startTime: date,
-                    duration: parseInt(duration)
-                })
-            });
-
-            if (!response.ok) {
-                alert("Slot already selected by another user!");
-                return;
-            }
-
-            selected.push({ id: id, rate: rate });
-            btn.classList.remove("btn-outline-success");
-            btn.classList.add("btn-success");
-        }
-
-        document.getElementById("countDisplay").innerText = selected.length;
-
-        calculateTotal();
+        selected.push({ id: id, rate: rate });
+        btn.classList.remove("btn-outline-success");
+        btn.classList.add("btn-success");
+        const area = btn.dataset.area;
+        updateCount(area, -1);
     }
+
+    document.getElementById("countDisplay").innerText = selected.length;
+
+    if (selected.length > 5) {
+        alert("Max 5 slots allowed!");
+        location.reload();
+    }
+
+    calculateTotal();
 });
+
 
 // ============================
 // CALCULATE TOTAL
@@ -111,22 +143,18 @@ document.addEventListener("click", async function (e) {
 
 function calculateTotal() {
 
-    const durationInput = document.getElementById("durationInput");
-    const duration = parseInt(durationInput.value);
+    const duration = parseInt(document.getElementById("durationInput").value);
 
-    if (isNaN(duration) || duration <= 0) {
+    if (!duration || duration <= 0) {
         document.getElementById("totalAmount").innerText = "৳ 0";
         return;
     }
 
-    let total = 0;
-
-    selected.forEach(s => {
-        total += s.rate * duration;
-    });
+    let total = selected.reduce((sum, s) => sum + s.rate * duration, 0);
 
     document.getElementById("totalAmount").innerText = "৳ " + total.toFixed(2);
 }
+
 
 // ============================
 // BOOK BUTTON
@@ -134,54 +162,10 @@ function calculateTotal() {
 
 function bookSlots() {
 
-    let isLoggedIn = document.getElementById("authData").getAttribute("data-auth");
+    const auth = document.getElementById("authData");
 
-    if (isLoggedIn !== "true") {
+    if (auth.getAttribute("data-auth") !== "true") {
         alert("Please login first!");
-        return;
-    }
-
-    const MAX_ALLOWED = 5;
-
-    if (selected.length > MAX_ALLOWED) {
-        alert("You can select maximum 5 slots only!");  
-        return;
-    }
-
-    // ============================
-    // DATE VALIDATION (FIXED)
-    // ============================
-
-    if (!dateInput || !dateInput.value) {
-        alert("Please select date and time!");
-        return;
-    }
-
-    const selectedDate = new Date(dateInput.value);
-    const nowDate = new Date();
-
-    let maxDate = new Date();
-    maxDate.setDate(nowDate.getDate() + 4);
-
-    if (isNaN(selectedDate.getTime())) {
-        alert("Invalid date selected!");
-        return;
-    }
-
-    if (selectedDate < nowDate || selectedDate > maxDate) {
-        alert("Please select a valid date within 4 days!");
-        return;
-    }
-
-    // ============================
-    // DURATION VALIDATION
-    // ============================
-
-    const durationInput = document.getElementById("durationInput");
-    const duration = durationInput.value;
-
-    if (!duration || duration <= 0) {
-        alert("Enter valid duration!");
         return;
     }
 
@@ -190,56 +174,75 @@ function bookSlots() {
         return;
     }
 
-    // ============================
-    // FINAL REDIRECT (FIXED)
-    // ============================
+    const date = dateInput.value;
+    const duration = document.getElementById("durationInput").value;
 
     const ids = selected.map(s => s.id).join(',');
-    const date = dateInput.value;
 
-    console.log("Selected Date:", date); // DEBUG
-
-    // 🔥 IMPORTANT FIX: encode date
     window.location.href =
         `/Booking/Checkout?slots=${ids}&duration=${duration}&date=${encodeURIComponent(date)}`;
 }
-function startTimers() {
 
-    if (!lockTimes || lockTimes.length === 0) {
-        console.log("No lock data found");
-        return;
+//Set Intervals 
+setInterval(async () => {
+
+    const auth = document.getElementById("authData");
+    if (!auth || auth.getAttribute("data-auth") !== "true") return;
+
+    try {
+        // 🔥 CHECK LOCK STATUS FROM SERVER
+        const res = await fetch('/Slot/CheckMyLocks');
+        const data = await res.json();
+
+        // 🔥 IF USER LOCK EXPIRED → RESET UI
+        if (!data.active && selected.length > 0) {
+            alert("Your slot hold expired!");
+            selected = [];
+            location.reload();
+            return;
+        }
+
+    } catch (err) {
+        console.error("CheckMyLocks error:", err);
     }
 
-    setInterval(() => {
+    // 🔥 TIMER DISPLAY
+    if (!window.lockTimes || lockTimes.length === 0) return;
 
-        const now = new Date().getTime();
+    const now = new Date().getTime();
 
-        lockTimes.forEach(lock => {
+    lockTimes.forEach(lock => {
 
-            console.log("LOCK:", lock); // 🔥 DEBUG
+        const el = document.getElementById("timer-" + lock.slotId);
+        if (!el) return;
 
-            const expire = new Date(lock.expireTime).getTime();
-            const remaining = expire - now;
+        const expire = new Date(lock.expireTime).getTime();
+        const remaining = expire - now;
 
-            const el = document.getElementById("timer-" + lock.slotId);
+        if (remaining <= 0) {
+            el.innerText = "";
+            return;
+        }
 
-            if (!el) {
-                console.log("No element for:", lock.slotId);
-                return;
-            }
+        const minutes = Math.floor(remaining / 60000);
+        const seconds = Math.floor((remaining % 60000) / 1000);
 
-            if (remaining <= 0) {
-                el.innerText = "";
-                return;
-            }
+        el.innerText = `⏳ ${minutes}:${seconds.toString().padStart(2, '0')}`;
+    });
 
-            const minutes = Math.floor(remaining / 60000);
-            const seconds = Math.floor((remaining % 60000) / 1000);
+}, 1000);
 
-            el.innerText = `⏳ ${minutes}:${seconds.toString().padStart(2, '0')}`;
-        });
+function updateCount(area, change) {
 
-    }, 1000);
+    const el = document.getElementById("count-" + area);
+
+    if (!el) return;
+
+    let current = parseInt(el.innerText.replace(/\D/g, ''));
+
+    current += change;
+
+    if (current < 0) current = 0;
+
+    el.innerText = "Available: " + current;
 }
-
-startTimers();

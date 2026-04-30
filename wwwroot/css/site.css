@@ -84,7 +84,7 @@ body {
     }
 
 .selected-slot {
-    background-color: #ffc107 !important;
+    background-color: #ffc107;
     color: black;
 }
 .table {
@@ -93,11 +93,6 @@ body {
 }
 .btn-secondary {
     border-radius: 20px;
-}
-.disabled-slot {
-    background-color: gray !important;
-    opacity: 0.5;
-    cursor: not-allowed;
 }
 .dropdown-menu {
     border-radius: 10px;
@@ -111,4 +106,61 @@ body {
 .dropdown button:hover {
     background-color: rgba(255,255,255,0.1);
     border-radius: 8px;
+}
+.slot-container {
+    background: #f8f9fa;
+    border-radius: 12px;
+    padding: 15px;
+}
+
+.block-header {
+    background: #e9ecef;
+    padding: 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: 0.2s;
+}
+
+    .block-header:hover {
+        background: #dee2e6;
+    }
+
+.slot-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 12px;
+    padding: 15px;
+    background: #fff;
+    border-radius: 10px;
+    margin-top: 10px;
+}
+
+.slot-btn {
+    border-radius: 20px;
+    font-weight: 500;
+    transition: 0.2s;
+    padding: 10px;
+}
+
+    .slot-btn:hover {
+        transform: scale(1.05);
+    }
+
+.disabled-slot {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.legend-box span {
+    margin-right: 15px;
+    font-size: 14px;
+}
+
+.legend-color {
+    display: inline-block;
+    width: 15px;
+    height: 15px;
+    border-radius: 4px;
+    margin-right: 5px;
 }

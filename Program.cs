@@ -21,6 +21,9 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 builder.Services.AddSession();
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddControllersWithViews();
+builder.Services.AddSignalR();
+builder.Services.AddHostedService<LockCleanupService>();
+
 
 var app = builder.Build();
 
@@ -28,6 +31,7 @@ var app = builder.Build();
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
+app.MapHub<SlotHub>("/slotHub");
 app.UseRouting();
 
 // IMPORTANT
