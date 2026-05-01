@@ -47,13 +47,11 @@
 
                             @if (b.IsCancelled)
                             {
-                                <p class="text-danger">
+                                <button class="btn btn-secondary btn-sm" disabled>
                                     Cancelled | Refund: ৳ @(b.RefundPreview ?? 0)
-                                </p>
+                                </button>
                             }
-
-                            <!-- CANCEL BUTTON (UI ONLY) -->
-                            @if (!b.IsCancelled && b.StartTime > DateTime.Now)
+                            else if (b.StartTime > DateTime.Now)
                             {
                                 <!-- DOWNLOAD INVOICE -->
                                 <a asp-controller="Payment"

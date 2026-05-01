@@ -7,6 +7,10 @@ using ParkingSystem.Services;
 using Microsoft.EntityFrameworkCore;
 using ParkingSystem.Data;
 using Microsoft.AspNetCore.Authorization;
+using System.Net.Mail;
+using System.Net;
+using System.Security.Claims;
+
 
 namespace ParkingSystem.Controllers
 {
@@ -264,6 +268,118 @@ namespace ParkingSystem.Controllers
         {
             await _signInManager.SignOutAsync();
             return RedirectToAction("Index", "Home");
+        }
+
+        public IActionResult ForgotPassword()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ForgotPassword(ForgotPasswordViewModel model)
+        {
+            if (!ModelState.IsValid)
+                return View(model);
+
+            var user = await _userManager.FindByEmailAsync(model.Email);
+
+            if (user == null)
+            {
+                // Don't reveal user existence
+                return RedirectToAction("ForgotPasswordConfirmation");
+            }
+
+            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+
+            var resetLink = Url.Action("ResetPassword", "Account",
+                new { token, email = user.Email }, Request.Scheme);
+
+            await SendResetEmail(user.Email, resetLink);
+
+            return RedirectToAction("ForgotPasswordConfirmation");
+        }
+
+        public IActionResult ForgotPasswordConfirmation()
+        {
+            return View();
+        }
+
+        public IActionResult ResetPassword(string token, string email)
+        {
+            if (token == null || email == null)
+                return BadRequest();
+
+            return View(new ResetPasswordViewModel
+            {
+                Token = token,
+                Email = email
+            });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ResetPassword(ResetPasswordViewModel model)
+        {
+            
+
+            var user = await _userManager.FindByEmailAsync(model.Email);
+
+            if (user == null)
+                return RedirectToAction("ResetPasswordConfirmation");
+
+            var result = await _userManager.ResetPasswordAsync(
+                user, model.Token, model.Password);
+
+            if (result.Succeeded)
+                return RedirectToAction("ResetPasswordConfirmation");
+
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError("", error.Description);
+            }
+
+            return View(model);
+        }
+
+        public IActionResult ResetPasswordConfirmation()
+        {
+            return View();
+        }
+
+        private async Task SendResetEmail(string email, string link)
+        {
+            string fromEmail = "shahriarimran2002@gmail.com";          // 🔥 your email
+            string appPassword = "uxanihdkpniphluk";
+            var subject = "Reset Your Password";
+
+            var body = $@"
+                <h3>Password Reset Request</h3>
+                <p>Click the button below to reset your password:</p>
+
+                <a href='{link}' 
+                   style='padding:10px 20px; background:#28a745; color:white; text-decoration:none; border-radius:5px;'>
+                   Reset Password
+                </a>
+
+                <p>If you did not request this, please ignore this email.</p>
+            ";
+
+            var smtp = new SmtpClient("smtp.gmail.com", 587)
+            {
+                Credentials = new NetworkCredential(fromEmail, appPassword),
+                EnableSsl = true
+            };
+
+            var mail = new MailMessage
+            {
+                From = new MailAddress(fromEmail),
+                Subject = subject,
+                Body = body,
+                IsBodyHtml = true
+            };
+
+            mail.To.Add(email);
+
+            await smtp.SendMailAsync(mail);
         }
     }
 }

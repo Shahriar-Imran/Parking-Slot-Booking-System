@@ -26,6 +26,9 @@
                         <input asp-for="Password" type="password" class="form-control" placeholder="Enter password" />
                         <span asp-validation-for="Password" class="text-danger"></span>
                     </div>
+                    <a asp-controller="Account" asp-action="ForgotPassword">
+                        Forgot Password?
+                    </a>
 
                     <div class="form-check mb-3">
                         <input asp-for="RememberMe" class="form-check-input" />

@@ -11,13 +11,13 @@ namespace ParkingSystem.Services   // ⚠️ Add namespace
             var smtpClient = new SmtpClient("smtp.gmail.com")
             {
                 Port = 587,
-                Credentials = new NetworkCredential("shahriarimran2002@gmail.com", "nhnjcthqsdgmqlqv"),
+                Credentials = new NetworkCredential("shahriarimran2002@gmail.com", "uxanihdkpniphluk"),
                 EnableSsl = true,
             };
 
             var mailMessage = new MailMessage
             {
-                From = new MailAddress("your_email@gmail.com"),
+                From = new MailAddress("shahriarimran2002@gmail.com"),
                 Subject = subject,
                 Body = message,
                 IsBodyHtml = true,

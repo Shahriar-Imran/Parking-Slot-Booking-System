@@ -74,7 +74,7 @@ public class BookingController : Controller
             return;
 
         string fromEmail = "shahriarimran2002@gmail.com";          // 🔥 your email
-        string appPassword = "nhnjcthqsdgmqlqv";           // 🔥 Gmail App Password
+        string appPassword = "uxanihdkpniphluk";           // 🔥 Gmail App Password
 
         string subject = "Booking Cancelled - Refund Info";
 

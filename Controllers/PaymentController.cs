@@ -5,6 +5,9 @@ using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using ParkingSystem.Data;
 using ParkingSystem.Models;
+using ParkingSystem.Services;
+using System.Net.Mail;
+using System.Net;
 using System.Security.Claims;
 using System.Text;
 
@@ -13,10 +16,12 @@ public class PaymentController : Controller
 {
     private readonly ApplicationDbContext _context;
     private readonly IHubContext<SlotHub> _hub;
-    public PaymentController(ApplicationDbContext context, IHubContext<SlotHub> hub)
+    private readonly InvoiceService _invoiceService;
+    public PaymentController(ApplicationDbContext context, IHubContext<SlotHub> hub, InvoiceService invoiceService)
     {
         _context = context;
         _hub = hub;
+        _invoiceService = invoiceService;
     }
 
 
@@ -165,8 +170,8 @@ public class PaymentController : Controller
 
             // 🔥 REMOVE SLOT LOCKS
             var locks = _context.SlotLocks
-    .Where(l => slotIds.Contains(l.SlotId))
-    .ToList(); // 🔥 IMPORTANT FIX
+                .Where(l => slotIds.Contains(l.SlotId))
+                .ToList(); // 🔥 IMPORTANT FIX
 
             foreach (var lockItem in locks)
             {
@@ -192,7 +197,21 @@ public class PaymentController : Controller
             _context.TempBookings.Remove(temp);
             await _context.SaveChangesAsync();
 
+
+            _context.Entry(booking)
+                .Collection(b => b.BookingSlots)
+                .Query()
+                .Include(bs => bs.Slot)
+                .ThenInclude(s => s.ParkingArea)
+                .Load();
+
+
             transaction.Commit();
+
+            var user = _context.Users.FirstOrDefault(u => u.Id == booking.UserId);
+            var qrBytes = GenerateQr(booking, user);
+            var pdfBytes = _invoiceService.GenerateInvoice(booking, user, qrBytes);
+            await SendInvoiceEmailWithPdf(user.Email, pdfBytes, booking.BookingId);
 
             return RedirectToAction("Confirmation", new { id = booking.BookingId });
         }
@@ -243,6 +262,52 @@ public class PaymentController : Controller
         var slots = booking.BookingSlots.Select(bs => bs.Slot).ToList();
 
         // QR generation (keep your existing code)
+        var qrBytes = GenerateQr(booking, user);
+        ViewBag.QRCode = Convert.ToBase64String(qrBytes);
+
+        ViewBag.User = user;
+        ViewBag.Slots = slots;
+
+        return View(booking);
+    }
+
+
+    private async Task SendInvoiceEmailWithPdf(string email, byte[] pdfBytes, int bookingId)
+    {
+        string fromEmail = "shahriarimran2002@gmail.com";
+        string appPassword = "uxanihdkpniphluk";
+
+        var smtp = new SmtpClient("smtp.gmail.com", 587)
+        {
+            Credentials = new NetworkCredential(fromEmail, appPassword),
+            EnableSsl = true
+        };
+
+        var mail = new MailMessage
+        {
+            From = new MailAddress(fromEmail),
+            Subject = $"Invoice #{bookingId}",
+            Body = "Your booking invoice is attached.",
+            IsBodyHtml = true
+        };
+
+        mail.To.Add(email);
+
+        // 🔥 ATTACH PDF
+        mail.Attachments.Add(new Attachment(
+            new MemoryStream(pdfBytes),
+            $"Invoice_{bookingId}.pdf",
+            "application/pdf"));
+
+        await smtp.SendMailAsync(mail);
+    }
+
+
+    // ========== QR Code Generator =============
+    private byte[] GenerateQr(Booking booking, ApplicationUser user)
+    {
+        var slots = booking.BookingSlots.Select(bs => bs.Slot).ToList();
+
         string qrText = $"Booking ID: {booking.BookingId}\n" +
                         $"Transaction: {booking.TransactionId}\n" +
                         $"User: {user?.FullName}\n" +
@@ -254,14 +319,7 @@ public class PaymentController : Controller
         {
             var qrData = qrGenerator.CreateQrCode(qrText, QRCoder.QRCodeGenerator.ECCLevel.Q);
             var qrCode = new QRCoder.PngByteQRCode(qrData);
-            byte[] qrBytes = qrCode.GetGraphic(5);
-
-            ViewBag.QRCode = Convert.ToBase64String(qrBytes);
+            return qrCode.GetGraphic(5);
         }
-
-        ViewBag.User = user;
-        ViewBag.Slots = slots;
-
-        return View(booking);
     }
 }
