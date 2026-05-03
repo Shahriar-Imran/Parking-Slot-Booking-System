@@ -112,6 +112,10 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cVXNlcnMuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/shahr/OneDrive/Desktop/Practicum Project/ParkingSystem/ParkingSystem/Views/Booking/Cancelled.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQm9va2luZ1xDYW5jZWxsZWQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/shahr/OneDrive/Desktop/Practicum Project/ParkingSystem/ParkingSystem/Views/Booking/Checkout.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQm9va2luZ1xDaGVja291dC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
@@ -126,6 +130,18 @@ build_metadata.AdditionalFiles.CssScope =
 
 [C:/Users/shahr/OneDrive/Desktop/Practicum Project/ParkingSystem/ParkingSystem/Views/Payment/Confirmation.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGF5bWVudFxDb25maXJtYXRpb24uY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/shahr/OneDrive/Desktop/Practicum Project/ParkingSystem/ParkingSystem/Views/Payment/PaymentFailed.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGF5bWVudFxQYXltZW50RmFpbGVkLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/shahr/OneDrive/Desktop/Practicum Project/ParkingSystem/ParkingSystem/Views/Payment/SlotBooked.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGF5bWVudFxTbG90Qm9va2VkLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/shahr/OneDrive/Desktop/Practicum Project/ParkingSystem/ParkingSystem/Views/Payment/SlotExpired.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGF5bWVudFxTbG90RXhwaXJlZC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/shahr/OneDrive/Desktop/Practicum Project/ParkingSystem/ParkingSystem/Views/Shared/Error.cshtml]

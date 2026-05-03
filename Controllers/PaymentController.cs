@@ -29,12 +29,12 @@ public class PaymentController : Controller
     [HttpPost]
     public IActionResult ProcessPayment(string slots, int duration, decimal total, DateTime date)
     {
-        //Console.WriteLine("Received Date in Payment: " + date);
         var tranId = Guid.NewGuid().ToString();
 
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-        var slotIds = slots.Split(',').Select(int.Parse).ToList();
+        var user = _context.Users.FirstOrDefault(u => u.Id == userId);
 
+        var slotIds = slots.Split(',').Select(int.Parse).ToList();
         var now = DateTime.Now;
 
         var start = date;
@@ -48,15 +48,16 @@ public class PaymentController : Controller
                 && l.UserId == userId
                 && l.ExpireTime > now
                 && l.StartTime < end
-                && l.EndTime > start) // 🔥 ADD THIS
+                && l.EndTime > start)
             .Count();
 
         if (validLock != slotIds.Count)
         {
-            return Content("❌ Your slot hold expired. Please reselect slots.");
+            ViewBag.Error = "❌ Your slot hold expired. Please reselect slots.";
+            return View("SlotExpired");
         }
 
-        // ✅ SAVE TEMP DATA
+        // SAVE TEMP
         _context.TempBookings.Add(new TempBooking
         {
             UserId = userId,
@@ -69,42 +70,40 @@ public class PaymentController : Controller
 
         _context.SaveChanges();
 
-        // Save temporarily in session
-        HttpContext.Session.SetString("slots", slots);
-        HttpContext.Session.SetString("duration", duration.ToString());
-        HttpContext.Session.SetString("total", total.ToString());
-
         var postData = new Dictionary<string, string>
-        {
-            { "store_id", "testbox" },
-            { "store_passwd", "qwerty" },
-            { "total_amount", total.ToString() },
-            { "currency", "BDT" },
-            { "tran_id", tranId },
+    {
+        { "store_id", "perso69f6349142741" },
+        { "store_passwd", "perso69f6349142741@ssl" },
 
-            { "success_url", $"https://localhost:7114/Payment/Success?tran_id={tranId}" },
-            { "fail_url", "https://localhost:7114/Payment/Fail" },
-            { "cancel_url", "https://localhost:7114/Booking/Checkout" },
+        { "total_amount", total.ToString("F2") },
+        { "currency", "BDT" },
+        { "tran_id", tranId },
 
-            { "cus_name", "Test User" },
-            { "cus_email", "test@test.com" },
-            { "cus_add1", "Dhaka" },
-            { "cus_phone", "01700000000" },
+        { "success_url", "https://localhost:7114/Payment/Success" },
+        { "fail_url", "https://localhost:7114/Payment/Fail" },
+        { "cancel_url", "https://localhost:7114/Booking/Checkout" },
 
-            { "shipping_method", "NO" },
-            { "product_name", "Parking Booking" },
-            { "product_category", "Service" },
-            { "product_profile", "general" }
-        };
+        // 🔥 REAL USER DATA (FIXED)
+        { "cus_name", user?.FullName ?? "Customer" },
+        { "cus_email", user?.Email ?? "test@test.com" },
+        { "cus_add1", user?.Address ?? "Dhaka" },
+        { "cus_phone", user?.PhoneNumber ?? "01700000000" },
+
+        { "shipping_method", "NO" },
+        { "product_name", "Parking Booking" },
+        { "product_category", "Service" },
+        { "product_profile", "general" }
+    };
 
         using (var client = new HttpClient())
         {
             var response = client.PostAsync(
-                "https://sandbox.sslcommerz.com/gwprocess/v4/api.php",
+                "https://sandbox.sslcommerz.com/gwprocess/v4/api.php", // ✅ FIXED
                 new FormUrlEncodedContent(postData)
             ).Result;
 
             var result = response.Content.ReadAsStringAsync().Result;
+
             dynamic json = JsonConvert.DeserializeObject(result);
 
             string gatewayUrl = json.GatewayPageURL;
@@ -114,15 +113,36 @@ public class PaymentController : Controller
     }
 
     // STEP 2: SUCCESS → SAVE BOOKING
-    public async Task<IActionResult> Success(string tran_id)
+    [HttpPost]
+    public async Task<IActionResult> Success()
     {
+        // 🔥 READ SSL RESPONSE (POST)
+        var form = Request.Form;
+
+        string tranId = form["tran_id"];
+        string bankTranId = form["bank_tran_id"];
+        string status = form["status"];
+
+        // 🔁 FALLBACK (if SSL sends GET - rare but safe)
+        if (string.IsNullOrEmpty(tranId))
+            tranId = Request.Query["tran_id"];
+
+        if (string.IsNullOrEmpty(tranId))
+            return Content("Invalid transaction!");
+
+        // ❌ PAYMENT FAILED
+        if (status != "VALID" && status != "VALIDATED")
+        {
+            return Content("❌ Payment validation failed!");
+        }
+
         var temp = _context.TempBookings
-            .FirstOrDefault(t => t.TransactionId == tran_id);
+            .FirstOrDefault(t => t.TransactionId == tranId);
 
         if (temp == null)
             return Content("Transaction not found!");
 
-        using (var transaction = _context.Database.BeginTransaction())
+        using (var transaction = await _context.Database.BeginTransactionAsync())
         {
             var start = temp.BookingDate;
             var end = start.AddHours(temp.Duration);
@@ -132,7 +152,7 @@ public class PaymentController : Controller
 
             var slotIds = temp.Slots.Split(',').Select(int.Parse).ToList();
 
-            // 🔴 HARD CHECK (MOST IMPORTANT)
+            // 🔴 HARD CHECK
             var conflictExists = _context.BookingSlots
                 .Any(b => slotIds.Contains(b.SlotId)
                        && !b.Booking.IsCancelled
@@ -141,22 +161,25 @@ public class PaymentController : Controller
 
             if (conflictExists)
             {
-                return Content("❌ Slot already booked. Payment will be refunded.");
+                ViewBag.Error = "❌ Slot already booked. Payment failed.";
+                return View("SlotBooked");
             }
 
-            // ✅ CREATE BOOKING
+            // ✅ CREATE BOOKING (🔥 SAVE bank_tran_id)
             var booking = new Booking
             {
                 UserId = temp.UserId,
                 StartTime = start,
                 EndTime = end,
                 TotalAmount = temp.Total,
-                TransactionId = temp.TransactionId
+                TransactionId = tranId,
+                BankTranId = bankTranId   // 🔥 CRITICAL FIX
             };
 
             _context.Bookings.Add(booking);
             await _context.SaveChangesAsync();
 
+            // 🔹 SAVE SLOTS
             foreach (var slotId in slotIds)
             {
                 _context.BookingSlots.Add(new BookingSlot
@@ -168,10 +191,10 @@ public class PaymentController : Controller
 
             await _context.SaveChangesAsync();
 
-            // 🔥 REMOVE SLOT LOCKS
+            // 🔥 REMOVE SLOT LOCKS + SIGNALR
             var locks = _context.SlotLocks
                 .Where(l => slotIds.Contains(l.SlotId))
-                .ToList(); // 🔥 IMPORTANT FIX
+                .ToList();
 
             foreach (var lockItem in locks)
             {
@@ -193,11 +216,11 @@ public class PaymentController : Controller
             _context.SlotLocks.RemoveRange(locks);
             await _context.SaveChangesAsync();
 
-            // 🔥 DELETE TEMP DATA
+            // 🔥 DELETE TEMP
             _context.TempBookings.Remove(temp);
             await _context.SaveChangesAsync();
 
-
+            // 🔥 LOAD NAVIGATION
             _context.Entry(booking)
                 .Collection(b => b.BookingSlots)
                 .Query()
@@ -205,21 +228,24 @@ public class PaymentController : Controller
                 .ThenInclude(s => s.ParkingArea)
                 .Load();
 
+            await transaction.CommitAsync();
 
-            transaction.Commit();
-
+            // 🔥 EMAIL + PDF
             var user = _context.Users.FirstOrDefault(u => u.Id == booking.UserId);
+
             var qrBytes = GenerateQr(booking, user);
             var pdfBytes = _invoiceService.GenerateInvoice(booking, user, qrBytes);
+
             await SendInvoiceEmailWithPdf(user.Email, pdfBytes, booking.BookingId);
 
             return RedirectToAction("Confirmation", new { id = booking.BookingId });
         }
     }
 
-    public IActionResult Fail()
+    public async Task<IActionResult> Fail()
     {
-        return View();
+        ViewBag.Error = "❌ Payment Failed";
+        return View("PaymentFailed");
     }
 
     public async Task<IActionResult> Cancel(string userId)

@@ -13,6 +13,7 @@
                 <th>End</th>
                 <th>Amount</th>
                 <th>Action</th>
+                <th>Request</th>
             </tr>
         </thead>
 
@@ -61,6 +62,36 @@
                             <button class="btn btn-secondary btn-sm" disabled>
                                 Expired
                             </button>
+                        }
+                    </td>
+                    <td>
+                        @if (b.RefundStatus == "Pending")
+                        {
+                            <form asp-action="ApproveRefund" method="post" style="display:inline;">
+                                <input type="hidden" name="bookingId" value="@b.BookingId" />
+                                <button class="btn btn-success btn-sm">
+                                    Approve
+                                </button>
+                            </form>
+
+                            <form asp-action="RejectRefund" method="post" style="display:inline;">
+                                <input type="hidden" name="bookingId" value="@b.BookingId" />
+                                <button class="btn btn-danger btn-sm">
+                                    Reject
+                                </button>
+                            </form>
+                        }
+                        else if (b.RefundStatus == "Success")
+                        {
+                            <span class="badge bg-success">Refunded</span>
+                        }
+                        else if (b.RefundStatus == "Failed")
+                        {
+                            <span class="badge bg-danger">Failed</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-secondary">No Request</span>
                         }
                     </td>
                 </tr>

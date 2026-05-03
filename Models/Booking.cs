@@ -21,9 +21,15 @@ namespace ParkingSystem.Models
         public string? RefundPhone { get; set; }     // ✅ nullable
         public DateTime? CancelledAt { get; set; }
         public decimal? RefundPreview { get; set; }
+        public string RefundStatus { get; set; } = "None";
+        // None | Pending | Success | Failed
+
+        public DateTime? RefundRequestedAt { get; set; }
+        public DateTime? RefundProcessedAt { get; set; }
 
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         public string TransactionId { get; set; }
+        public string BankTranId { get; set; }
 
         public ICollection<BookingSlot> BookingSlots { get; set; }
     }

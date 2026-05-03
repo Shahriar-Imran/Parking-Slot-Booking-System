@@ -24,7 +24,8 @@ public class BookingController : Controller
 
         if (string.IsNullOrEmpty(slots) || string.IsNullOrEmpty(duration))
         {
-            return Content("Duration or slots missing!");
+            ViewBag.Error = "Payment Cancelled";
+            return View("Cancelled");
         }
 
         int durationInt = int.Parse(duration);
@@ -45,26 +46,6 @@ public class BookingController : Controller
         return View(selectedSlots);
     }
 
-    // Calculate Refund Amount
-    private decimal CalculateRefund(decimal totalAmount, DateTime startTime)
-    {
-        var now = DateTime.Now;
-        var diff = startTime - now;
-
-        if (diff.TotalHours >= 24)
-            return totalAmount * 0.90m;
-
-        if (diff.TotalHours >= 12)
-            return totalAmount * 0.75m;
-
-        if (diff.TotalHours >= 6)
-            return totalAmount * 0.50m;
-
-        if (diff.TotalHours >= 1)
-            return totalAmount * 0.25m;
-
-        return 0; // no refund
-    }
 
     private async Task SendCancellationEmail(Booking booking)
     {
@@ -136,5 +117,55 @@ public class BookingController : Controller
 
         return RedirectToAction("MyBookings", "Account");
     }
-    
+
+    // Calculate Refund Amount
+    private decimal CalculateRefund(decimal totalAmount, DateTime startTime, DateTime requestTime)
+    {
+        var now = requestTime;
+        var diff = startTime - now;
+        if(startTime <= now)
+        {
+            return 0; // no refund
+        } 
+
+        if (diff.TotalHours >= 24)
+            return totalAmount * 0.90m;
+
+        if (diff.TotalHours >= 12)
+            return totalAmount * 0.75m;
+
+        if (diff.TotalHours >= 6)
+            return totalAmount * 0.50m;
+
+        if (diff.TotalHours >= 1)
+            return totalAmount * 0.25m;
+
+        return 0; // no refund
+    }
+
+    // ============ Request Cancellation ============
+    [HttpPost]
+    public async Task<IActionResult> RequestCancel(int bookingId)
+    {
+        var booking = _context.Bookings.Find(bookingId);
+
+        if (booking == null)
+            return NotFound();
+
+        booking.RefundStatus = "Pending";
+        booking.RefundRequestedAt = DateTime.Now;
+
+        booking.RefundAmount = CalculateRefund(
+            booking.TotalAmount,
+            booking.StartTime,
+            booking.RefundRequestedAt.Value
+        );
+
+        booking.RefundPreview = booking.RefundAmount;
+
+        await _context.SaveChangesAsync();
+
+        return RedirectToAction("MyBookings", "Account");
+    }
+
 }

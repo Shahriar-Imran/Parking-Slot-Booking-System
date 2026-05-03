@@ -3,10 +3,14 @@ using ParkingSystem.Data;
 using ParkingSystem.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using ParkingSystem.Models;
+using Newtonsoft.Json;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Net.Mail;
 using System.Net;
+
+using static QRCoder.PayloadGenerator;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace ParkingSystem.Controllers
 {
@@ -45,7 +49,7 @@ namespace ParkingSystem.Controllers
             return View(users);
         }
 
-        // Make user admin
+        // ================ Make user admin =================
         [HttpPost]
         public async Task<IActionResult> MakeAdmin(string userId)
         {
@@ -73,7 +77,7 @@ namespace ParkingSystem.Controllers
             return RedirectToAction("Users");
         }
 
-        // Manage Slots
+        // =================== Manage Slots ==================
         public IActionResult Slots()
         {
             var slots = _context.ParkingSlots
@@ -171,7 +175,7 @@ namespace ParkingSystem.Controllers
             return RedirectToAction("Areas");
         }
 
-        // View areas
+        // ================ View areas =============
         public IActionResult Areas()
         {
             var areas = _context.ParkingAreas.ToList();
@@ -229,7 +233,7 @@ namespace ParkingSystem.Controllers
             return RedirectToAction("Slots");
         }
 
-        // Edit Slot
+        // ================ Edit Slot ================
         public async Task<IActionResult> EditSlot(int id)
         {
             var slot = await _context.ParkingSlots.FindAsync(id);
@@ -243,7 +247,7 @@ namespace ParkingSystem.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction("Slots");
         }
-        // Delete Slot
+        // =============== Delete Slot ==============
         [HttpPost]
         public async Task<IActionResult> DeleteSlot(int id)
         {
@@ -258,7 +262,7 @@ namespace ParkingSystem.Controllers
             return RedirectToAction("Slots");
         }
 
-        // Delete User
+        // ================ Delete User ================
         [HttpPost]
         public async Task<IActionResult> DeleteUser(string userId)
         {
@@ -298,7 +302,7 @@ namespace ParkingSystem.Controllers
             return RedirectToAction("Users");
         }
 
-        //Booking history
+        //============= Booking history ===============
         public IActionResult BookingHistory()
         {
             var bookings = _context.Bookings
@@ -312,7 +316,7 @@ namespace ParkingSystem.Controllers
             return View(bookings);
         }
 
-        [HttpPost]
+        // ======================== Cancel Booking ================
         [HttpPost]
         public async Task<IActionResult> CancelBooking(int id)
         {
@@ -350,8 +354,8 @@ namespace ParkingSystem.Controllers
             return RedirectToAction("BookingHistory");
         }
         
-
-    private async Task SendAdminCancellationEmail(Booking booking)
+        // ================= Admin Cancellation Email ==============
+        private async Task SendAdminCancellationEmail(Booking booking)
         {
             var user = _context.Users.FirstOrDefault(u => u.Id == booking.UserId);
 
@@ -364,13 +368,13 @@ namespace ParkingSystem.Controllers
             string subject = "Booking Cancelled by Admin";
 
             string body = $@"
-            <h3>Booking Cancelled by Admin</h3>
-            <p>Booking ID: <b>{booking.BookingId}</b></p>
-            <p>Total Amount: <b>৳ {booking.TotalAmount}</b></p>
-            <p>Refund Amount: <b>৳ {booking.TotalAmount}</b></p>
-            <p>Your booking has been cancelled by admin.</p>
-            <p>The full refund will be processed within 24 hours.</p>
-        ";
+                <h3>Booking Cancelled by Admin</h3>
+                <p>Booking ID: <b>{booking.BookingId}</b></p>
+                <p>Total Amount: <b>৳ {booking.TotalAmount}</b></p>
+                <p>Refund Amount: <b>৳ {booking.TotalAmount}</b></p>
+                <p>Your booking has been cancelled by admin.</p>
+                <p>The full refund will be processed within 24 hours.</p>
+            ";
 
             var smtp = new SmtpClient("smtp.gmail.com", 587)
             {
@@ -401,6 +405,8 @@ namespace ParkingSystem.Controllers
 
             return View(user);
         }
+
+        // ========== Remove Admin ===========
         [HttpPost]
         public async Task<IActionResult> RemoveAdmin(string userId)
         {
@@ -418,9 +424,150 @@ namespace ParkingSystem.Controllers
 
             return RedirectToAction("Users");
         }
+
+        //========================= Approve Refund =========================
+        [HttpPost]
+        public async Task<IActionResult> ApproveRefund(int bookingId)
+        {
+            var booking = _context.Bookings
+                .Include(b => b.User)
+                .FirstOrDefault(b => b.BookingId == bookingId);
+
+            if (booking == null)
+                return NotFound();
+
+            // 🔥 CALL SSL API
+            var refundSuccess = await ProcessSslRefund(booking);
+
+            if (refundSuccess)
+            {
+                booking.RefundStatus = "Success";
+                booking.IsCancelled = true;
+                booking.RefundProcessedAt = DateTime.Now;
+
+                await SendRefundEmail(booking);
+
+                await _context.SaveChangesAsync();
+            }
+            else
+            {
+                booking.RefundStatus = "Failed";
+                await _context.SaveChangesAsync();
+            }
+
+            return RedirectToAction("BookingHistory");
+        }
+
+        // ========================= Refund Process =========================
+        private async Task<bool> ProcessSslRefund(Booking booking)
+        {
+            var baseUrl = "https://sandbox.sslcommerz.com/validator/api/merchantTransIDvalidationAPI.php";
+
+            var query = new Dictionary<string, string>
+            {
+                { "store_id", "perso69f6349142741" },
+                { "store_passwd", "perso69f6349142741@ssl" },
+                { "bank_tran_id", booking.BankTranId },
+                { "refund_trans_id", Guid.NewGuid().ToString() },
+                { "refund_amount", booking.RefundAmount.GetValueOrDefault().ToString("F2") },
+                { "refund_remarks", "Booking Cancel Refund" },
+                { "format", "json" }
+            };
+
+            // 🔥 BUILD QUERY STRING
+            var url = baseUrl + "?" + string.Join("&",
+                query.Select(kvp => $"{kvp.Key}={Uri.EscapeDataString(kvp.Value)}"));
+
+            var client = new HttpClient();
+
+            var response = await client.GetAsync(url);
+            var result = await response.Content.ReadAsStringAsync();
+
+            // 🔥 DEBUG (VERY IMPORTANT)
+            Console.WriteLine("SSL REFUND RESPONSE:");
+            Console.WriteLine(result);
+
+            // 🔥 SAFE PARSE
+            SslRefundResponse json = null;
+
+            try
+            {
+                json = System.Text.Json.JsonSerializer.Deserialize<SslRefundResponse>(result);
+            }
+            catch
+            {
+                Console.WriteLine("❌ Not JSON → likely API error");
+                return false;
+            }
+
+            if (json == null)
+                return false;
+
+            if (json.APIConnect != "DONE")
+                return false;
+
+            if (json.status == "success" || json.status == "processing")
+                return true;
+
+            Console.WriteLine("Refund Failed Reason: " + json.errorReason);
+
+            return false;
+        }
+
+        // ========================= Send Refund Email =========================
+        private async Task SendRefundEmail(Booking booking)
+        {
+            var subject = "Refund Approved";
+
+            var message = $@"
+                Your booking #{booking.BookingId} has been cancelled.
+
+                Refund Amount: ৳ {booking.RefundAmount}
+
+                Status: SUCCESS
+            ";
+
+            string fromEmail = "shahriarimran2002@gmail.com";          // 🔥 your email
+            string appPassword = "uxanihdkpniphluk";
+
+            var smtp = new SmtpClient("smtp.gmail.com", 587)
+            {
+                Credentials = new NetworkCredential(fromEmail, appPassword),
+                EnableSsl = true
+            };
+
+            var mail = new MailMessage
+            {
+                From = new MailAddress(fromEmail),
+                Subject = subject,
+                Body = message,
+                IsBodyHtml = true
+            };
+
+            mail.To.Add(booking.User.Email);
+
+            await smtp.SendMailAsync(mail);
+        }
+
+        
+
+        // ========================= Reject Refund =========================
+        [HttpPost]
+        public async Task<IActionResult> RejectRefund(int bookingId)
+        {
+            var booking = _context.Bookings.Find(bookingId);
+
+            if (booking == null)
+                return NotFound();
+
+            booking.RefundStatus = "Failed";
+
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("ManageBookings");
+        }
+
     }
-
-
 
 
 }

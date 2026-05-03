@@ -1,0 +1,12 @@
+﻿<div style="text-align:center; margin-top:50px;">
+    <h3 style="color:red;">
+        @ViewBag.Error
+    </h3>
+    <p>Redirecting in 5 seconds...</p>
+</div>
+
+<script>
+    setTimeout(function () {
+        window.location.href = '/Slot/Availability';
+    }, 5000); // 5000 ms = 5 seconds
+</script>

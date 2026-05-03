@@ -100,7 +100,7 @@ namespace ParkingSystem.Controllers
 
             var lockedIds = _context.SlotLocks
                 .Where(l => l.ExpireTime > now
-                    && l.UserId != userId   // 🔥 IMPORTANT
+                    && l.UserId != userId   
                     && l.StartTime < end
                     && l.EndTime > start)
                 .Select(l => l.SlotId)
