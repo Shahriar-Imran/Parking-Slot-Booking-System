@@ -1,24 +1,46 @@
-﻿@using Microsoft.AspNetCore.Mvc.Rendering
+@using Microsoft.AspNetCore.Mvc.Rendering
 
-<div class="container mt-4">
-    <h2>Add Slot</h2>
+@{
+    ViewData["Title"] = "Add Slot";
+}
 
-    <form asp-action="CreateSlot" method="post">
+<div class="row justify-content-center mt-4 mb-5 flex-grow-1 align-items-center" style="min-height: 50vh;">
+    <div class="col-md-7 col-lg-6 col-xl-5">
 
-        <div class="mb-3">
-            <label>Select Area</label>
-            <select name="AreaId" class="form-control">
-                <option value="">-- Select Area --</option>
+        <div class="card shadow-lg border-0 rounded-4 p-4 p-md-5" style="background: var(--surface-color);">
+            <div class="text-center mb-4">
+                <div class="d-inline-flex justify-content-center align-items-center bg-primary bg-opacity-10 rounded-circle text-primary mb-3 shadow-sm" style="width: 65px; height: 65px;">
+                    <i class="fas fa-car fs-3"></i>
+                </div>
+                <h4 class="fw-bold text-dark">Add New Slot</h4>
+                <p class="text-muted small">Create a slot and allocate to an area</p>
+            </div>
 
-                @foreach (var area in ViewBag.Areas)
-                {
-                    <option value="@area.AreaId">
-                        @area.VehicleType (Block @area.BlockNumber)
-                    </option>
-                }
-            </select>
+            <div class="card-body p-0">
+                <form asp-action="CreateSlot" method="post">
+
+                    <div class="mb-5">
+                        <label class="form-label text-secondary small fw-bold text-uppercase"><i class="fas fa-map-marker-alt text-danger me-2"></i>Parent Area</label>
+                        <select name="AreaId" class="form-select bg-light border-0 p-3 custom-input shadow-none rounded-3 fw-bold text-dark" required>
+                            <option value="">-- Choose Target Area --</option>
+                            @foreach (var area in ViewBag.Areas)
+                            {
+                                <option value="@area.AreaId">
+                                    @area.VehicleType (Block @area.BlockNumber)
+                                </option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center mt-4 gap-3">
+                        <a asp-action="Slots" class="btn btn-light border rounded-pill fw-bold text-secondary flex-grow-1 py-3 shadow-sm">Cancel</a>
+                        <button type="submit" class="btn btn-success rounded-pill shadow-sm py-3 fw-bold text-white flex-grow-1">
+                            Add Slot <i class="fas fa-plus-circle ms-2"></i>
+                        </button>
+                    </div>
+
+                </form>
+            </div>
         </div>
-
-        <button class="btn btn-success">Add Slot</button>
-    </form>
+    </div>
 </div>

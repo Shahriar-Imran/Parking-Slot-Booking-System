@@ -1,4 +1,4 @@
-﻿// ============================
+// ============================
 // 🔥 SIGNALR + INIT
 // ============================
 
@@ -24,7 +24,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const area = btn.dataset.area;
 
         // 🔥 Don't override your own selected slot
-        if (btn.classList.contains("btn-success") && data.status === "locked") return;
+        if (btn.classList.contains("selected-slot") && data.status === "locked") return;
 
         if (data.status === "locked") {
 
@@ -85,7 +85,7 @@ document.addEventListener("click", async function (e) {
     const auth = document.getElementById("authData");
 
     if (auth.getAttribute("data-auth") !== "true") {
-        alert("Login first to select any slot");
+        Swal.fire({ icon: 'warning', title: 'Authentication Required', text: 'Please login first to select any slot', confirmButtonColor: '#2a2a72' });
         return;
     }
 
@@ -99,8 +99,7 @@ document.addEventListener("click", async function (e) {
     if (selected.find(x => x.id == id)) {
 
         selected = selected.filter(x => x.id != id);
-        btn.classList.remove("btn-success");
-        btn.classList.add("btn-outline-success");
+        btn.classList.remove("selected-slot");
         updateCount(area, +1);
         
     } else {
@@ -120,8 +119,7 @@ document.addEventListener("click", async function (e) {
         });
 
         selected.push({ id: id, rate: rate });
-        btn.classList.remove("btn-outline-success");
-        btn.classList.add("btn-success");
+        btn.classList.add("selected-slot");
         const area = btn.dataset.area;
         updateCount(area, -1);
     }
@@ -129,8 +127,13 @@ document.addEventListener("click", async function (e) {
     document.getElementById("countDisplay").innerText = selected.length;
 
     if (selected.length > 5) {
-        alert("Max 5 slots allowed!");
-        location.reload();
+        Swal.fire({
+            icon: 'error',
+            title: 'Limit Exceeded',
+            text: 'Maximum 5 slots allowed!',
+            confirmButtonColor: '#ff007f'
+        }).then(() => location.reload());
+        return;
     }
 
     calculateTotal();
@@ -165,12 +168,12 @@ function bookSlots() {
     const auth = document.getElementById("authData");
 
     if (auth.getAttribute("data-auth") !== "true") {
-        alert("Please login first!");
+        Swal.fire({ icon: 'warning', title: 'Oops...', text: 'Please login first!', confirmButtonColor: '#2a2a72' });
         return;
     }
 
     if (selected.length === 0) {
-        alert("Select at least one slot!");
+        Swal.fire({ icon: 'info', title: 'No Slots Selected', text: 'Please select at least one slot before continuing.', confirmButtonColor: '#009ffd' });
         return;
     }
 
@@ -196,9 +199,15 @@ setInterval(async () => {
 
         // 🔥 IF USER LOCK EXPIRED → RESET UI
         if (!data.active && selected.length > 0) {
-            alert("Your slot hold expired!");
-            selected = [];
-            location.reload();
+            Swal.fire({
+                icon: 'error',
+                title: 'Time Expired',
+                text: 'Your slot hold has expired!',
+                confirmButtonColor: '#ff007f'
+            }).then(() => {
+                selected = [];
+                location.reload();
+            });
             return;
         }
 

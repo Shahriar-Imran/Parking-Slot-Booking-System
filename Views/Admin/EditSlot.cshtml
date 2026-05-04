@@ -1,27 +1,50 @@
-﻿@model ParkingSystem.Models.ParkingSlot
+@model ParkingSystem.Models.ParkingSlot
 
-<div class="container mt-4">
-    <h2>Edit Slot</h2>
+@{
+    ViewData["Title"] = "Edit Slot";
+}
 
-    <form asp-action="EditSlot" method="post">
+<div class="row justify-content-center mt-4 mb-5 flex-grow-1 align-items-center" style="min-height: 50vh;">
+    <div class="col-md-7 col-lg-6 col-xl-5">
 
-        <input type="hidden" asp-for="SlotId" />
+        <div class="card shadow-lg border-0 rounded-4 p-4 p-md-5" style="background: var(--surface-color);">
+            <div class="text-center mb-4">
+                <div class="d-inline-flex justify-content-center align-items-center bg-warning bg-opacity-10 rounded-circle text-warning mb-3 shadow-sm" style="width: 65px; height: 65px;">
+                    <i class="fas fa-pencil-alt fs-3"></i>
+                </div>
+                <h4 class="fw-bold text-dark">Modify Slot Properties</h4>
+                <p class="text-muted small">Update specific slot configuration</p>
+            </div>
 
-        <!-- Slot Number -->
-        <div class="mb-3">
-            <label>Slot Number</label>
-            <input asp-for="SlotNumber" class="form-control" />
+            <div class="card-body p-0">
+                <form asp-action="EditSlot" method="post">
+
+                    <input type="hidden" asp-for="SlotId" />
+
+                    <!-- Slot Number -->
+                    <div class="mb-3">
+                        <label class="form-label text-secondary small fw-bold text-uppercase"><i class="fas fa-hashtag text-info me-2"></i>Slot Identifier</label>
+                        <input asp-for="SlotNumber" class="form-control bg-light border-0 p-3 custom-input shadow-none rounded-3 fw-bold text-dark" required />
+                    </div>
+
+                    <!-- Parking Area Dropdown -->
+                    <div class="mb-5">
+                        <label class="form-label text-secondary small fw-bold text-uppercase"><i class="fas fa-map-marked-alt text-danger me-2"></i>Assigned Area</label>
+                        <select asp-for="AreaId" class="form-select bg-light border-0 p-3 custom-input shadow-none rounded-3 fw-bold text-dark"
+                                asp-items="@(new SelectList(ViewBag.Areas, "AreaId", "Name"))">
+                            <option value="">-- Switch Area --</option>
+                        </select>
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center mt-4 gap-3">
+                        <a asp-action="Slots" class="btn btn-light border rounded-pill fw-bold text-secondary flex-grow-1 py-3 shadow-sm">Cancel</a>
+                        <button type="submit" class="btn btn-warning rounded-pill shadow-sm py-3 fw-bold text-dark flex-grow-1">
+                            Save Changes <i class="fas fa-check-circle ms-2"></i>
+                        </button>
+                    </div>
+
+                </form>
+            </div>
         </div>
-
-        <!-- ✅ Parking Area Dropdown -->
-        <div class="mb-3">
-            <label>Parking Area</label>
-            <select asp-for="AreaId" class="form-control"
-                    asp-items="@(new SelectList(ViewBag.Areas, "AreaId", "Name"))">
-                <option value="">Select Area</option>
-            </select>
-        </div>
-
-        <button class="btn btn-primary">Update</button>
-    </form>
+    </div>
 </div>

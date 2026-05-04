@@ -1,101 +1,126 @@
-﻿@model List<ParkingSystem.Models.Booking>
+@model List<ParkingSystem.Models.Booking>
 
-<div class="container mt-4">
-    <h2>Booking History</h2>
+@{
+    ViewData["Title"] = "Booking History";
+}
 
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>User</th>
-                <th>Slots</th>
-                <th>Start</th>
-                <th>End</th>
-                <th>Amount</th>
-                <th>Action</th>
-                <th>Request</th>
-            </tr>
-        </thead>
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold mb-0 text-dark"><i class="fas fa-history text-success me-2"></i>Global Booking History</h2>
+    </div>
 
-        <tbody>
-            @foreach (var b in Model)
-            {
-                var isPast = b.EndTime <= DateTime.Now;
+    <div class="card shadow-sm border-0 rounded-4 overflow-hidden bg-white">
+        <div class="table-responsive">
+            <table class="table table-hover table-borderless mb-0 align-middle">
+                <thead class="bg-light text-secondary small text-uppercase">
+                    <tr>
+                        <th class="ps-4">ID</th>
+                        <th>User Account</th>
+                        <th>Slots Assigned</th>
+                        <th>Timeline</th>
+                        <th>Amount</th>
+                        <th class="text-center">Action</th>
+                        <th class="pe-4 text-end">Refund Request</th>
+                    </tr>
+                </thead>
+                <tbody class="border-top">
+                    @if (!Model.Any())
+                    {
+                        <tr>
+                            <td colspan="7" class="text-center py-5 text-muted">
+                                <i class="fas fa-calendar-times fs-1 mb-3 text-light"></i>
+                                <p class="mb-0">No bookings exist in the system yet.</p>
+                            </td>
+                        </tr>
+                    }
+                    @foreach (var b in Model)
+                    {
+                        var isPast = b.EndTime <= DateTime.Now;
 
-                <tr>
-                    <td>@b.BookingId</td>
-                    <td>@b.UserId</td>
+                        <tr>
+                            <td class="ps-4 fw-bold text-dark py-3">#@b.BookingId</td>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-user-circle fs-4 text-primary opacity-50 me-2"></i>
+                                    <span class="text-secondary fw-semibold">@b.UserId</span>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="d-flex flex-wrap gap-1">
+                                    @foreach (var s in b.BookingSlots)
+                                    {
+                                        <span class="badge bg-secondary bg-opacity-10 text-secondary border shadow-sm rounded-pill px-2 py-1">
+                                            @s.Slot.SlotNumber (@s.Slot.ParkingArea.VehicleType)
+                                        </span>
+                                    }
+                                </div>
+                            </td>
+                            <td>
+                                <div class="d-flex flex-column small text-muted gap-1">
+                                    <span class="fw-bold text-dark bg-light px-2 py-1 rounded d-inline-block shadow-sm w-auto"><i class="fas fa-play-circle text-success me-1"></i>@b.StartTime.ToString("MMM dd, hh:mm tt")</span>
+                                    <span class="bg-light px-2 py-1 rounded d-inline-block shadow-sm w-auto"><i class="fas fa-stop-circle text-danger me-1"></i>@b.EndTime.ToString("MMM dd, hh:mm tt")</span>
+                                </div>
+                            </td>
+                            <td class="fw-bold text-success fs-6">৳@b.TotalAmount</td>
 
-                    <td>
-                        @foreach (var s in b.BookingSlots)
-                        {
-                            <span>
-                                @s.Slot.SlotNumber (@s.Slot.ParkingArea.VehicleType)
-                            </span>
+                            <!-- ACTION -->
+                            <td class="text-center">
+                                @if (!b.IsCancelled && b.StartTime > DateTime.Now)
+                                {
+                                    <form asp-action="CancelBooking" method="post" class="m-0" onsubmit="return confirm('Administratively cancel this booking?');">
+                                        <input type="hidden" name="id" value="@b.BookingId" />
+                                        <button class="btn btn-outline-danger btn-sm rounded-pill shadow-sm px-3 fw-bold">
+                                            <i class="fas fa-times-circle me-1"></i>Cancel
+                                        </button>
+                                    </form>
+                                }
+                                else if (b.IsCancelled)
+                                {
+                                    <span class="badge bg-danger bg-opacity-10 text-danger px-3 py-2 border rounded-pill shadow-sm"><i class="fas fa-ban me-1"></i>Cancelled</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-dark bg-opacity-10 text-muted px-3 py-2 border rounded-pill shadow-sm"><i class="fas fa-history me-1"></i>Expired</span>
+                                }
+                            </td>
 
-                            <br />
-                        }
-                    </td>
+                            <!-- REFUND REQUEST -->
+                            <td class="pe-4 text-end">
+                                @if (b.RefundStatus == "Pending")
+                                {
+                                    <div class="d-flex justify-content-end flex-wrap gap-2">
+                                        <form asp-action="ApproveRefund" method="post" class="m-0" onsubmit="return confirm('Confirm refund approval per policy deductions?');">
+                                            <input type="hidden" name="bookingId" value="@b.BookingId" />
+                                            <button class="btn btn-success btn-sm rounded-pill shadow-sm px-3 fw-bold d-flex align-items-center">
+                                                <i class="fas fa-check me-1"></i> Accept
+                                            </button>
+                                        </form>
 
-                    <td>@b.StartTime</td>
-                    <td>@b.EndTime</td>
-                    <td>৳ @b.TotalAmount</td>
-
-                    <td>
-                        @if (!b.IsCancelled && b.StartTime > DateTime.Now)
-                        {
-                            <form asp-action="CancelBooking" method="post">
-                                <input type="hidden" name="id" value="@b.BookingId" />
-                                <button class="btn btn-danger btn-sm">
-                                    Cancel
-                                </button>
-                            </form>
-                        }
-                        else if (b.IsCancelled)
-                        {
-                            <button class="btn btn-secondary btn-sm" disabled>
-                                Cancelled
-                            </button>
-                        }
-                        else
-                        {
-                            <button class="btn btn-secondary btn-sm" disabled>
-                                Expired
-                            </button>
-                        }
-                    </td>
-                    <td>
-                        @if (b.RefundStatus == "Pending")
-                        {
-                            <form asp-action="ApproveRefund" method="post" style="display:inline;">
-                                <input type="hidden" name="bookingId" value="@b.BookingId" />
-                                <button class="btn btn-success btn-sm">
-                                    Approve
-                                </button>
-                            </form>
-
-                            <form asp-action="RejectRefund" method="post" style="display:inline;">
-                                <input type="hidden" name="bookingId" value="@b.BookingId" />
-                                <button class="btn btn-danger btn-sm">
-                                    Reject
-                                </button>
-                            </form>
-                        }
-                        else if (b.RefundStatus == "Success")
-                        {
-                            <span class="badge bg-success">Refunded</span>
-                        }
-                        else if (b.RefundStatus == "Failed")
-                        {
-                            <span class="badge bg-danger">Failed</span>
-                        }
-                        else
-                        {
-                            <span class="badge bg-secondary">No Request</span>
-                        }
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
+                                        <form asp-action="RejectRefund" method="post" class="m-0" onsubmit="return confirm('Confirm rejecting this refund request?');">
+                                            <input type="hidden" name="bookingId" value="@b.BookingId" />
+                                            <button class="btn btn-danger btn-sm rounded-pill shadow-sm px-3 fw-bold d-flex align-items-center">
+                                                <i class="fas fa-times me-1"></i> Reject
+                                            </button>
+                                        </form>
+                                    </div>
+                                }
+                                else if (b.RefundStatus == "Success")
+                                {
+                                    <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 px-3 py-2 rounded-pill shadow-sm"><i class="fas fa-check-double me-1"></i>Processed</span>
+                                }
+                                else if (b.RefundStatus == "Failed")
+                                {
+                                    <span class="badge bg-danger bg-opacity-10 text-danger border border-danger border-opacity-25 px-3 py-2 rounded-pill shadow-sm"><i class="fas fa-times-circle me-1"></i>Denied</span>
+                                }
+                                else
+                                {
+                                    <span class="text-muted small"><i class="fas fa-minus px-2 text-light"></i> </span>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>

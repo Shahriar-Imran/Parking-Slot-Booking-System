@@ -1,5 +1,17 @@
+:root {
+  --primary-color: #2a2a72;
+  --secondary-color: #009ffd;
+  --accent-color: #ff007f;
+  --bg-color: #f4f6f9;
+  --text-dark: #212529;
+  --text-light: #ffffff;
+  --surface-color: #ffffff;
+}
+
 html {
   font-size: 14px;
+  position: relative;
+  min-height: 100%;
 }
 
 @media (min-width: 768px) {
@@ -8,18 +20,14 @@ html {
   }
 }
 
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
-}
-
-html {
-  position: relative;
-  min-height: 100%;
-}
-
 body {
-    margin-bottom: 60px;
-    padding-bottom: 70px;
+    background-color: var(--bg-color);
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    color: var(--text-dark);
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem var(--secondary-color);
 }
 
 .form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
@@ -31,6 +39,158 @@ body {
   text-align: start;
 }
 
+/* Glassmorphism Navbar */
+.glass-navbar {
+    background: rgba(42, 42, 114, 0.95) !important;
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.15);
+    transition: all 0.3s ease;
+}
+
+.navbar-brand {
+    font-weight: 800;
+    letter-spacing: 0.5px;
+}
+
+.nav-link {
+    font-weight: 500;
+    transition: color 0.3s ease, transform 0.2s ease;
+}
+
+.nav-link:hover {
+    color: var(--secondary-color) !important;
+    transform: translateY(-1px);
+}
+
+/* Hero Section */
+.hero-header {
+    height: 500px;
+    background: linear-gradient(135deg, rgba(42, 42, 114, 0.75) 0%, rgba(0, 159, 253, 0.75) 100%), url('../images/parking-bg.jpg');
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: center;
+    color: white;
+    border-radius: 30px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+    margin-bottom: 3rem;
+}
+
+.hero-header h1 {
+    font-size: 4rem;
+    font-weight: 800;
+    text-shadow: 2px 4px 10px rgba(0,0,0,0.3);
+    letter-spacing: -1px;
+}
+
+.hero-header h3 {
+    font-weight: 300;
+    opacity: 0.9;
+}
+
+/* Buttons */
+.btn {
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    border-radius: 50px;
+    padding: 10px 25px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+.btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    border: none;
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, var(--secondary-color), var(--primary-color));
+}
+
+.btn-warning {
+    background: var(--accent-color);
+    color: white;
+    border: none;
+}
+.btn-warning:hover {
+    background: #e60073;
+    color: white;
+}
+
+/* Cards */
+.card {
+    border: none;
+    border-radius: 20px;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    background: var(--surface-color);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.05);
+    overflow: hidden;
+}
+
+.card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.12);
+}
+
+.card-title {
+    font-weight: 700;
+    color: var(--primary-color);
+}
+
+.icon-wrapper {
+    width: 70px;
+    height: 70px;
+    background: linear-gradient(135deg, rgba(42, 42, 114, 0.1), rgba(0, 159, 253, 0.1));
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+    font-size: 2rem;
+    color: var(--secondary-color);
+}
+
+/* How It Works Layer */
+.step-item {
+    padding: 20px;
+    position: relative;
+}
+
+.step-number {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: white;
+    font-size: 1.5rem;
+    font-weight: bold;
+    border-radius: 50%;
+    margin-bottom: 15px;
+    box-shadow: 0 5px 15px rgba(42, 42, 114, 0.3);
+}
+
+.step-title {
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+/* Base elements preserved */
+.custom-footer {
+    position: relative;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    background: var(--primary-color) !important;
+    border-top: 1px solid rgba(255,255,255,0.1);
+}
+
 .fixed-footer {
     position: fixed;
     bottom: 0;
@@ -39,128 +199,199 @@ body {
     z-index: 1000;
 }
 
-
-.hero-header {
-    height: 350px;
-    background: linear-gradient(rgba(0, 51, 102, 0.50), rgba(0, 51, 102, 0.5)), url('../images/parking-bg.jpg');
-    background-size: cover;
-    background-position: center;
-    color: white;
-    border-bottom-left-radius: 30px;
-    border-bottom-right-radius: 30px;
-}
-
-    .hero-header h1 {
-        font-size: 3.5rem;
-        text-shadow: 2px 2px 8px rgba(0,0,0,0.5);
-    }
-
-.card {
-    border-radius: 15px;
-    transition: transform 0.3s ease;
-}
-
-    .card:hover {
-        transform: translateY(-5px);
-    }
-
-.btn {
-    transition: all 0.3s ease;
-    border-radius: 30px;
-    padding: 10px 25px;
-}
-
-    .btn:hover {
-        transform: scale(1.05);
-    }
-.slot-card {
-    border-radius: 10px;
-    transition: 0.3s;
-}
-
-    .slot-card:hover {
-        transform: scale(1.05);
-        background-color: #f8f9fa;
-    }
-
-.selected-slot {
-    background-color: #ffc107;
-    color: black;
-}
 .table {
     background: white;
-    border-radius: 10px;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.05);
 }
-.btn-secondary {
-    border-radius: 20px;
-}
+
 .dropdown-menu {
-    border-radius: 10px;
+    border-radius: 15px;
     min-width: 220px;
+    border: none;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
 }
 
 .dropdown-item:hover {
-    background-color: #f8f9fa;
+    background-color: var(--bg-color);
+    color: var(--primary-color);
 }
 
 .dropdown button:hover {
-    background-color: rgba(255,255,255,0.1);
-    border-radius: 8px;
+    background-color: rgba(255,255,255,0.15);
+    border-radius: 50px;
 }
+
+/* SLOT BOOKING CLASSES - Preserved */
 .slot-container {
-    background: #f8f9fa;
-    border-radius: 12px;
-    padding: 15px;
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 25px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.05);
 }
 
 .block-header {
-    background: #e9ecef;
-    padding: 12px;
-    border-radius: 8px;
+    background: var(--bg-color);
+    padding: 15px 20px;
+    border-radius: 12px;
     cursor: pointer;
-    font-weight: 600;
-    transition: 0.2s;
+    font-weight: 700;
+    transition: all 0.3s ease;
+    border-left: 5px solid var(--secondary-color);
 }
 
-    .block-header:hover {
-        background: #dee2e6;
-    }
+.block-header:hover {
+    background: #e2e8f0;
+    transform: translateX(5px);
+}
+
+.custom-input {
+    font-size: 0.95rem !important;
+}
+
+.custom-input::placeholder {
+    font-size: 0.85rem !important;
+    opacity: 0.7;
+}
+
+body.modal-open {
+    padding-right: 0 !important;
+}
+
+/* INFINITE MARQUEE CSS */
+.marquee-container {
+    overflow: hidden;
+    white-space: nowrap;
+    position: relative;
+    width: 100%;
+}
+
+.marquee-content {
+    display: inline-block;
+    animation: marquee 45s linear infinite;
+    /* Adjust width based on total image set width to prevent snappy jumping */
+}
+
+.marquee-content:hover {
+    animation-play-state: paused;
+}
+
+.marquee-item {
+    display: inline-block;
+    width: 320px;
+    height: 220px;
+    margin: 0 15px;
+    border-radius: 12px;
+    overflow: hidden;
+    position: relative;
+}
+
+.marquee-item::after {
+    content: '';
+    position: absolute;
+    top:0; left:0; right:0; bottom:0;
+    box-shadow: inset 0 0 20px rgba(0,0,0,0.1);
+    pointer-events: none;
+    border-radius: 12px;
+}
+
+.marquee-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.marquee-item:hover img {
+    transform: scale(1.05);
+}
+
+@keyframes marquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+}
 
 .slot-grid {
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
+    grid-template-columns: repeat(auto-fill, minmax(65px, 1fr));
     gap: 12px;
-    padding: 15px;
-    background: #fff;
-    border-radius: 10px;
-    margin-top: 10px;
+    padding: 15px 10px;
+    background: transparent;
+}
+
+.slot-card {
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+.slot-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 15px rgba(0,0,0,0.1);
 }
 
 .slot-btn {
-    border-radius: 20px;
-    font-weight: 500;
-    transition: 0.2s;
-    padding: 10px;
+    border-radius: 12px;
+    font-weight: 600;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    width: 100%;
 }
 
-    .slot-btn:hover {
-        transform: scale(1.05);
-    }
+.available-slot:hover {
+    transform: scale(1.08) translateY(-2px);
+    border-color: var(--secondary-color) !important;
+    background-color: #f0f8ff !important;
+}
+
+.selected-slot {
+    background-color: #28a745 !important;
+    color: white !important;
+    border: 2px solid white !important;
+    box-shadow: 0 5px 15px rgba(40, 167, 69, 0.4) !important;
+    transform: scale(1.1) !important;
+}
+
+.selected-slot span, .selected-slot small, .selected-slot .timer-text, .selected-slot .custom-slot-text {
+    color: white !important;
+}
+
+.selected-slot::after {
+    content: '\2713';
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: #1e7e34;
+    color: white;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    font-size: 14px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
 
 .disabled-slot {
-    opacity: 0.4;
+    opacity: 0.5;
     cursor: not-allowed;
+    background-color: #e2e8f0;
+    border: none;
 }
 
 .legend-box span {
-    margin-right: 15px;
+    margin-right: 20px;
     font-size: 14px;
+    font-weight: 500;
 }
 
 .legend-color {
     display: inline-block;
-    width: 15px;
-    height: 15px;
-    border-radius: 4px;
-    margin-right: 5px;
+    width: 18px;
+    height: 18px;
+    border-radius: 6px;
+    margin-right: 8px;
+    vertical-align: text-bottom;
 }

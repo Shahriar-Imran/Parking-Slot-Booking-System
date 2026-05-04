@@ -1,52 +1,65 @@
-﻿@model ParkingSystem.ViewModels.LoginViewModel
+@model ParkingSystem.ViewModels.LoginViewModel
 
 @{
     ViewData["Title"] = "Login";
 }
 
-<div class="row justify-content-center mt-5">
-    <div class="col-md-5">
-        <div class="card shadow-lg">
-            <div class="card-header bg-dark text-white text-center">
-                <h4>🔐 Login</h4>
+<div class="row justify-content-center mt-4 mb-5 align-items-center" style="min-height: 65vh;">
+    <div class="col-md-6 col-lg-5 col-xl-4">
+        
+        <div class="text-center mb-4">
+            <h2 class="fw-bold" style="color: var(--primary-color);"><i class="fas fa-parking me-2 text-warning"></i>Parking System</h2>
+            <p class="text-muted mb-0">Smart, Easy & Secure</p>
+        </div>
+
+        <div class="card shadow-lg border-0 rounded-4 p-4 p-md-5" style="background: var(--surface-color);">
+            <div class="text-center mb-4">
+                <h4 class="fw-bold">Welcome Back</h4>
+                <p class="text-muted small">Please login to your account</p>
             </div>
-            <div class="card-body">
-
+            
+            <div class="card-body p-0">
                 <form asp-action="Login" method="post">
-                    <div asp-validation-summary="All" class="text-danger mb-3"></div>
+                    <div asp-validation-summary="All" class="text-danger mb-3 small fw-bold"></div>
 
-                    <div class="mb-3">
-                        <label asp-for="Email" class="form-label"></label>
-                        <input asp-for="Email" class="form-control" placeholder="Enter your email" />
-                        <span asp-validation-for="Email" class="text-danger"></span>
+                    <div class="mb-4">
+                        <label asp-for="Email" class="form-label text-secondary small fw-bold text-uppercase"><i class="fas fa-envelope text-primary me-2"></i>Email Address</label>
+                        <input asp-for="Email" class="form-control bg-light border-0 p-2 custom-input shadow-none" placeholder="name@example.com" />
+                        <span asp-validation-for="Email" class="text-danger small mt-2 d-block"></span>
                     </div>
 
-                    <div class="mb-3">
-                        <label asp-for="Password" class="form-label"></label>
-                        <input asp-for="Password" type="password" class="form-control" placeholder="Enter password" />
-                        <span asp-validation-for="Password" class="text-danger"></span>
-                    </div>
-                    <a asp-controller="Account" asp-action="ForgotPassword">
-                        Forgot Password?
-                    </a>
-
-                    <div class="form-check mb-3">
-                        <input asp-for="RememberMe" class="form-check-input" />
-                        <label asp-for="RememberMe" class="form-check-label"></label>
+                    <div class="mb-4">
+                        <label asp-for="Password" class="form-label text-secondary small fw-bold text-uppercase"><i class="fas fa-lock text-primary me-2"></i>Password</label>
+                        <div class="input-group bg-light rounded-3 overflow-hidden">
+                            <input asp-for="Password" type="password" class="form-control bg-light border-0 p-2 custom-input shadow-none" placeholder="Enter password" />
+                            <button class="btn bg-light border-0 text-muted shadow-none px-3" type="button" tabindex="-1" onclick="togglePassword('Password', this)">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                        <span asp-validation-for="Password" class="text-danger small mt-2 d-block"></span>
                     </div>
 
-                    <div class="d-grid">
-                        <button type="submit" class="btn btn-primary">
-                            Login
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <div class="form-check">
+                            <input asp-for="RememberMe" class="form-check-input bg-light border-secondary" id="rememberMeCheck" />
+                            <label asp-for="RememberMe" class="form-check-label text-muted small" for="rememberMeCheck">Remember Me</label>
+                        </div>
+                        <a asp-controller="Account" asp-action="ForgotPassword" class="text-primary small text-decoration-none fw-bold" style="transition: opacity 0.3s;" onmouseover="this.style.opacity=0.8" onmouseout="this.style.opacity=1">
+                            Forgot Password?
+                        </a>
+                    </div>
+
+                    <div class="d-grid mb-3 mt-4">
+                        <button type="submit" class="btn btn-primary rounded-pill shadow-sm py-2 fw-bold text-white d-flex justify-content-center align-items-center gap-2">
+                            Login <i class="fas fa-sign-in-alt"></i>
                         </button>
                     </div>
                 </form>
 
-                <hr />
-                <div class="text-center">
-                    <p>
-                        Don't have an account?
-                        <a asp-action="Register">Register here</a>
+                <div class="text-center mt-4">
+                    <p class="text-muted small mb-0">
+                        Don't have an account? 
+                        <a asp-action="Register" class="fw-bold text-primary text-decoration-none" style="transition: opacity 0.3s;" onmouseover="this.style.opacity=0.8" onmouseout="this.style.opacity=1">Create One</a>
                     </p>
                 </div>
 
@@ -54,3 +67,21 @@
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <script>
+        function togglePassword(id, btn) {
+            const el = document.getElementById(id);
+            const icon = btn.querySelector('i');
+            if (el.type === 'password') {
+                el.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                el.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        }
+    </script>
+}

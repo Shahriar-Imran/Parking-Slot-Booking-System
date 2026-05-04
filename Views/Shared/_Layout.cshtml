@@ -1,4 +1,4 @@
-﻿@using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.Identity
 @using ParkingSystem.Models
 @inject SignInManager<ParkingSystem.Models.ApplicationUser> SignInManager
 @inject UserManager<ParkingSystem.Models.ApplicationUser> UserManager
@@ -20,7 +20,7 @@
 
     <!-- NAVBAR START -->
     <header>
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
+        <nav class="navbar navbar-expand-lg navbar-dark glass-navbar sticky-top">
             <div class="container">
                 <a class="navbar-brand fw-bold" asp-controller="Home" asp-action="Index">
                     🚗 Parking System
@@ -164,14 +164,50 @@
 
 
     <!-- FOOTER -->
-    <footer class="bg-dark text-white text-center p-3 fixed-footer">
-        <p class="mb-0">
-            © @DateTime.Now.Year - Parking Slot Booking System | All Rights Reserved
-        </p>
+    <footer class="custom-footer text-white pt-5 pb-3 mt-auto">
+        <div class="container">
+            <div class="row text-center text-md-start g-4 mb-4">
+                <div class="col-md-4">
+                    <h5 class="fw-bold mb-3"><i class="fas fa-car-side text-warning me-2"></i>Parking System</h5>
+                    <p class="text-white-50 small pe-md-4">
+                        Providing seamless, secure, and smart 24/7 parking solutions. Book your spot in seconds and park with peace of mind.
+                    </p>
+                </div>
+                <div class="col-md-4">
+                    <h5 class="fw-bold mb-3">Quick Links</h5>
+                    <ul class="list-unstyled d-flex flex-column gap-2 small">
+                        <li><a asp-controller="Home" asp-action="Index" class="text-white-50 text-decoration-none">Home</a></li>
+                        <li><a asp-controller="Slot" asp-action="Availability" class="text-white-50 text-decoration-none">Slot Availability</a></li>
+                        <li><a asp-controller="Home" asp-action="About" class="text-white-50 text-decoration-none">About Us</a></li>
+                        <li><a asp-controller="Home" asp-action="Contact" class="text-white-50 text-decoration-none">Contact Us</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h5 class="fw-bold mb-3">Contact Info</h5>
+                    <ul class="list-unstyled d-flex flex-column gap-2 small text-white-50">
+                        <li><i class="fas fa-map-marker-alt me-2 text-warning"></i> E-14/X, ICT Tower, Agargaon, Dhaka-1207</li>
+                        <li><i class="fas fa-envelope me-2 text-warning"></i> support@parkingsystem.com</li>
+                        <li><i class="fas fa-phone me-2 text-warning"></i> +880 1890 065004</li>
+                    </ul>
+                    <div class="mt-3 d-flex gap-3 justify-content-center justify-content-md-start">
+                        <a href="javascript:void(0)" class="text-white-50 fs-5"><i class="fab fa-facebook"></i></a>
+                        <a href="javascript:void(0)" class="text-white-50 fs-5"><i class="fab fa-twitter"></i></a>
+                        <a href="javascript:void(0)" class="text-white-50 fs-5"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="border-top border-secondary pt-3 text-center">
+                <p class="mb-0 small text-white-50">
+                    © @DateTime.Now.Year - <span class="fw-bold text-white">Parking Slot Booking System</span> | All Rights Reserved
+                </p>
+            </div>
+        </div>
     </footer>
 
     
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="~/js/slot.js"></script>
     @RenderSection("Scripts", required: false)
 </body>

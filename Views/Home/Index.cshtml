@@ -1,107 +1,232 @@
-﻿@{
+@{
     ViewData["Title"] = "Home";
 }
 
-<!-- HERO HEADER -->
-<div class="hero-header d-flex align-items-center justify-content-center text-center">
-    <div class="text-white">
-        <h1 class="display-3 fw-bold">Parking Slot Booking System</h1>
-        <h3 class="fw-bold">Smart, Easy & Secure Parking Management</h3>
+<!-- NEW HERO HEADER -->
+<div class="hero-header d-flex align-items-center justify-content-center text-center mt-3 mx-2">
+    <div class="container text-white">
+        <h1 class="display-3 mb-3">Parking Slot Booking System</h1>
+        <h3 class="mb-5">Smart, Easy & Secure Parking Management</h3>
 
-        <a asp-controller="Slot" asp-action="Availability" class="btn btn-outline-light btn-lg mt-3">
-            Check Availability
-        </a>
+        <div class="d-flex gap-3 justify-content-center flex-wrap">
+            <a asp-controller="Slot" asp-action="Availability" class="btn btn-warning btn-lg">
+                <i class="fas fa-parking me-2"></i> Book a Slot
+            </a>
+            <a asp-controller="Home" asp-action="Privacy" class="btn btn-outline-light btn-lg">
+                View Policy
+            </a>
+        </div>
+    </div>
+</div>
 
-        <a asp-controller="Home" asp-action="Privacy" class="btn btn-outline-light btn-lg mt-3">
-            View Policy
-        </a>
+<!-- INFINITE IMAGE GALLERY -->
+<div class="container-fluid px-0 mt-5 pt-4">
+    <div class="text-center mb-4">
+        <h3 class="fw-bold text-dark"><i class="fas fa-camera-retro text-primary me-2"></i>State of the Art Facilities</h3>
+        <p class="text-muted">Explore our premium secure environments</p>
+    </div>
+    
+    <div id="homeCarousel" class="carousel slide mx-auto shadow-lg rounded-4 overflow-hidden mb-5" data-bs-ride="carousel" style="max-width: 900px;">
+        <div class="carousel-inner">
+            <div class="carousel-item active" data-bs-interval="3000">
+                <img src="~/images/car.png" class="d-block w-100" style="height: 500px; object-fit: cover;" alt="Secure Parking Facility">
+            </div>
+            <div class="carousel-item" data-bs-interval="3000">
+                <img src="~/images/bike.png" class="d-block w-100" style="height: 500px; object-fit: cover;" alt="Underground Garage">
+            </div>
+            <div class="carousel-item" data-bs-interval="3000">
+                <img src="~/images/Bus.png" class="d-block w-100" style="height: 500px; object-fit: cover;" alt="Modern Layouts">
+            </div>
+            <div class="carousel-item" data-bs-interval="3000">
+                <img src="~/images/payment.png" class="d-block w-100" style="height: 500px; object-fit: cover;" alt="High End Security">
+            </div>
+            <div class="carousel-item" data-bs-interval="3000">
+                <img src="~/images/cycle.png" class="d-block w-100" style="height: 500px; object-fit: cover;" alt="Vast Capabilities">
+            </div>
+            <div class="carousel-item" data-bs-interval="3000">
+                <img src="~/images/cng.png" class="d-block w-100" style="height: 500px; object-fit: cover;" alt="Vast Capabilities">
+            </div>
+            <div class="carousel-item" data-bs-interval="3000">
+                <img src="~/images/truck.png" class="d-block w-100" style="height: 500px; object-fit: cover;" alt="Vast Capabilities">
+            </div>
+            <div class="carousel-item" data-bs-interval="3000">
+                <img src="~/images/car2.png" class="d-block w-100" style="height: 500px; object-fit: cover;" alt="Vast Capabilities">
+            </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#homeCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#homeCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+        <div class="carousel-indicators">
+            <button type="button" data-bs-target="#homeCarousel" data-bs-slide-to="0" class="active" aria-current="true"></button>
+            <button type="button" data-bs-target="#homeCarousel" data-bs-slide-to="1"></button>
+            <button type="button" data-bs-target="#homeCarousel" data-bs-slide-to="2"></button>
+            <button type="button" data-bs-target="#homeCarousel" data-bs-slide-to="3"></button>
+            <button type="button" data-bs-target="#homeCarousel" data-bs-slide-to="4"></button>
+            <button type="button" data-bs-target="#homeCarousel" data-bs-slide-to="5"></button>
+            <button type="button" data-bs-target="#homeCarousel" data-bs-slide-to="6"></button>
+            <button type="button" data-bs-target="#homeCarousel" data-bs-slide-to="7"></button>
+        </div>
+    </div>
+</div>
+
+<!-- 24/7 SERVICE & SUPPORTED VEHICLES -->
+<div class="container mt-4 py-5 border-top">
+    <div class="row align-items-center g-5">
+        <div class="col-lg-6">
+            <div class="d-inline-flex align-items-center justify-content-center bg-success bg-opacity-10 text-success rounded-circle mb-3 shadow-sm border border-success border-opacity-25" style="width: 60px; height: 60px;">
+                <i class="fas fa-clock fs-3"></i>
+            </div>
+            <h2 class="fw-bold mb-4" style="color: var(--primary-color);">24/7 Dynamic Booking Service</h2>
+            <p class="text-muted fs-5 mb-4" style="line-height: 1.8;">Our advanced infrastructure operates around the clock. Whether it's a late-night run or an early morning commute, our parking slots can be booked seamlessly 24 hours a day, 7 days a week.</p>
+            <div class="d-flex align-items-center gap-3">
+                <div class="bg-primary bg-opacity-10 text-primary p-3 rounded-circle shadow-sm">
+                    <i class="fas fa-shield-alt fs-4"></i>
+                </div>
+                <div>
+                    <h5 class="fw-bold text-dark mb-0">Always Open & Secure</h5>
+                    <p class="text-muted small mb-0">Automated gates paired with 24/7 surveillance.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="card border-0 shadow-lg rounded-4 p-4 p-md-5 bg-white position-relative overflow-hidden">
+                <div class="position-absolute end-0 top-0 opacity-10 p-3">
+                    <i class="fas fa-car-side" style="font-size: 8rem;"></i>
+                </div>
+                
+                <h4 class="fw-bold mb-4 text-dark position-relative z-index-1"><i class="fas fa-tags text-warning me-2"></i>Supported Vehicles</h4>
+                <div class="row g-3 position-relative z-index-1">
+                    <div class="col-4 col-md-4">
+                        <div class="p-3 bg-light rounded-3 text-center border">
+                            <i class="fas fa-car-side fs-2 text-primary mb-2"></i>
+                            <h6 class="fw-bold mb-0 small text-uppercase">Car</h6>
+                        </div>
+                    </div>
+                    <div class="col-4 col-md-4">
+                        <div class="p-3 bg-light rounded-3 text-center border">
+                            <i class="fas fa-bus fs-2 text-info mb-2"></i>
+                            <h6 class="fw-bold mb-0 small text-uppercase">Bus</h6>
+                        </div>
+                    </div>
+                    <div class="col-4 col-md-4">
+                        <div class="p-3 bg-light rounded-3 text-center border">
+                            <i class="fas fa-truck-moving fs-2 text-warning mb-2"></i>
+                            <h6 class="fw-bold mb-0 small text-uppercase">Truck</h6>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-6">
+                        <div class="p-3 bg-light rounded-3 text-center border d-flex flex-column align-items-center justify-content-center">
+                            <i class="fas fa-shuttle-van fs-2 text-danger mb-2"></i>
+                            <h6 class="fw-bold mb-0 small text-uppercase w-100">Three Wheeler</h6>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-6">
+                        <div class="p-3 bg-light rounded-3 text-center border d-flex flex-column align-items-center justify-content-center">
+                            <i class="fas fa-motorcycle fs-2 text-dark mb-2"></i>
+                            <h6 class="fw-bold mb-0 small text-uppercase w-100">Two Wheeler</h6>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
 <!-- FEATURES SECTION -->
-<div class="container mt-5">
-    <div class="text-center mb-4">
-        <h2 class="fw-bold">Our Features</h2>
-        <p class="text-muted">Efficient and user-friendly parking system</p>
+<div class="container mt-5 py-5">
+    <div class="text-center mb-5">
+        <h2 class="fw-bold fs-1" style="color: var(--primary-color);">Why Choose Us?</h2>
+        <p class="text-muted fs-5">Experience an efficient and user-friendly parking ecosystem.</p>
     </div>
 
-    <div class="row text-center">
-
-        <div class="col-md-4 mb-4">
-            <div class="card shadow h-100">
+    <div class="row text-center g-4">
+        <div class="col-md-4">
+            <div class="card h-100 p-4">
+                <div class="icon-wrapper">
+                    <i class="fas fa-clock"></i>
+                </div>
                 <div class="card-body">
-                    <h2>🅿️</h2>
-                    <h5 class="card-title">Real-Time Availability</h5>
-                    <p class="card-text">
-                        Instantly check available parking slots and avoid unnecessary waiting time.
+                    <h4 class="card-title mb-3">Real-Time Availability</h4>
+                    <p class="card-text text-muted">
+                        Instantly check available parking slots and avoid unnecessary waiting time. Our system updates in real-time.
                     </p>
                 </div>
             </div>
         </div>
 
-        <div class="col-md-4 mb-4">
-            <div class="card shadow h-100">
+        <div class="col-md-4">
+            <div class="card h-100 p-4">
+                <div class="icon-wrapper">
+                    <i class="fas fa-credit-card"></i>
+                </div>
                 <div class="card-body">
-                    <h2>💳</h2>
-                    <h5 class="card-title">Online Payment</h5>
-                    <p class="card-text">
-                        Securely pay for parking using integrated payment gateway with instant confirmation.
+                    <h4 class="card-title mb-3">Seamless Online Payment</h4>
+                    <p class="card-text text-muted">
+                        Securely pay for parking using our integrated payment gateway with instant booking confirmation.
                     </p>
                 </div>
             </div>
         </div>
 
-        <div class="col-md-4 mb-4">
-            <div class="card shadow h-100">
+        <div class="col-md-4">
+            <div class="card h-100 p-4">
+                <div class="icon-wrapper">
+                    <i class="fas fa-calendar-alt"></i>
+                </div>
                 <div class="card-body">
-                    <h2>📅</h2>
-                    <h5 class="card-title">Advance Booking</h5>
-                    <p class="card-text">
-                        Reserve parking slots in advance and avoid last-minute inconvenience.
+                    <h4 class="card-title mb-3">Advance Booking</h4>
+                    <p class="card-text text-muted">
+                        Reserve parking slots days in advance. Guarantee your spot and avoid any last-minute inconvenience.
                     </p>
                 </div>
             </div>
         </div>
-
     </div>
 </div>
 
 <!-- HOW IT WORKS -->
-<div class="bg-light mt-5 p-5">
+<div class="mt-5 py-5" style="background-color: var(--surface-color); border-top: 1px solid #e1e5eb;">
     <div class="container text-center">
-        <h2 class="fw-bold mb-4">How It Works</h2>
+        <h2 class="fw-bold mb-5 fs-1" style="color: var(--primary-color);">How It Works</h2>
 
-        <div class="row">
-
-            <div class="col-md-3">
-                <h4>1️⃣</h4>
-                <p>Register an account</p>
+        <div class="row g-4 align-items-center">
+            <div class="col-md-3 step-item">
+                <div class="step-number">1</div>
+                <h5 class="step-title">Register</h5>
+                <p class="text-muted small">Create a free account in seconds</p>
             </div>
-
-            <div class="col-md-3">
-                <h4>2️⃣</h4>
-                <p>Select parking area</p>
+            
+            <div class="col-md-3 step-item">
+                <div class="step-number">2</div>
+                <h5 class="step-title">Select Area</h5>
+                <p class="text-muted small">Find your preferred parking zone</p>
             </div>
-
-            <div class="col-md-3">
-                <h4>3️⃣</h4>
-                <p>Choose slots & time</p>
+            
+            <div class="col-md-3 step-item">
+                <div class="step-number">3</div>
+                <h5 class="step-title">Pick a Slot</h5>
+                <p class="text-muted small">Choose your exact slot and time schedule</p>
             </div>
-
-            <div class="col-md-3">
-                <h4>4️⃣</h4>
-                <p>Make payment & confirm</p>
+            
+            <div class="col-md-3 step-item">
+                <div class="step-number"><i class="fas fa-check"></i></div>
+                <h5 class="step-title">Pay & Park</h5>
+                <p class="text-muted small">Confirm via payment and you're set</p>
             </div>
-
         </div>
     </div>
 </div>
 
 <!-- CALL TO ACTION -->
-<div class="text-center p-5">
-    <h3 class="fw-bold">Start Booking Your Parking Now!</h3>
-
-    <a asp-controller="Slot" asp-action="Availability" class="btn btn-warning btn-lg mt-3">
-        Book Now
+<div class="text-center py-5 mb-5" style="background: linear-gradient(135deg, #f8f9fa, #e9ecef); border-radius: 20px; margin: 0 15px;">
+    <h3 class="fw-bold mb-4" style="color: var(--primary-color);">Ready to Experience Seamless Parking?</h3>
+    <a asp-controller="Slot" asp-action="Availability" class="btn btn-warning btn-lg me-3">
+        <i class="fas fa-ticket-alt me-2"></i> Book Your First Slot
     </a>
 </div>

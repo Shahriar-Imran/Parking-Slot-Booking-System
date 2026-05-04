@@ -1,32 +1,51 @@
-﻿@model ParkingSystem.Models.ParkingArea
+@model ParkingSystem.Models.ParkingArea
 @using ParkingSystem.Models
 
-<div class="container mt-4">
-    <h2>Add Parking Area</h2>
+@{
+    ViewData["Title"] = "Add Parking Area";
+}
 
-    <form asp-action="CreateArea" method="post">
+<div class="row justify-content-center mt-4 mb-5 flex-grow-1 align-items-center" style="min-height: 50vh;">
+    <div class="col-md-7 col-lg-6 col-xl-5">
 
-        <!-- Block -->
-        <div class="mb-3">
-            <label>Block</label>
-            <input asp-for="BlockNumber" required class="form-control" placeholder="A / B / C" />
+        <div class="card shadow-lg border-0 rounded-4 p-4 p-md-5" style="background: var(--surface-color);">
+            <div class="text-center mb-4">
+                <div class="d-inline-flex justify-content-center align-items-center bg-info bg-opacity-10 rounded-circle text-info mb-3 shadow-sm" style="width: 65px; height: 65px;">
+                    <i class="fas fa-map-marked-alt fs-3"></i>
+                </div>
+                <h4 class="fw-bold text-dark">Add Parking Area</h4>
+                <p class="text-muted small">Create a new organizational block structure</p>
+            </div>
+
+            <div class="card-body p-0">
+                <form asp-action="CreateArea" method="post">
+
+                    <div class="mb-3">
+                        <label class="form-label text-secondary small fw-bold text-uppercase"><i class="fas fa-layer-group text-info me-2"></i>Block Designation</label>
+                        <input asp-for="BlockNumber" required class="form-control bg-light border-0 p-3 custom-input shadow-none rounded-3" placeholder="e.g. A, B, North Wing" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label text-secondary small fw-bold text-uppercase"><i class="fas fa-car-side text-warning me-2"></i>Vehicle Category</label>
+                        <select asp-for="VehicleType" class="form-select bg-light border-0 p-3 custom-input shadow-none rounded-3 fw-bold text-dark"
+                                asp-items="Html.GetEnumSelectList<VehicleType>()">
+                        </select>
+                    </div>
+
+                    <div class="mb-5">
+                        <label class="form-label text-secondary small fw-bold text-uppercase"><i class="fas fa-money-bill-wave text-success me-2"></i>Hourly Configuration (৳)</label>
+                        <input asp-for="HourlyRate" class="form-control bg-light border-0 p-3 custom-input shadow-none rounded-3" placeholder="0.00" type="number" step="0.01" />
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center mt-4 gap-3">
+                        <a asp-action="Areas" class="btn btn-light border rounded-pill fw-bold text-secondary flex-grow-1 py-3 shadow-sm">Cancel</a>
+                        <button type="submit" class="btn btn-success bg-gradient rounded-pill shadow-sm py-3 fw-bold text-white flex-grow-1">
+                            Save Area <i class="fas fa-check-circle ms-2"></i>
+                        </button>
+                    </div>
+
+                </form>
+            </div>
         </div>
-
-        <!-- Vehicle Type -->
-        <div class="mb-3">
-            <label>Vehicle Type</label>
-            <select asp-for="VehicleType" class="form-control"
-                    asp-items="Html.GetEnumSelectList<VehicleType>()">
-            </select>
-        </div>
-
-        <!-- Rate -->
-        <div class="mb-3">
-            <label>Hourly Rate</label>
-            <input asp-for="HourlyRate" class="form-control" />
-        </div>
-
-        <button class="btn btn-success">Save</button>
-
-    </form>
+    </div>
 </div>

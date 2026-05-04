@@ -1,203 +1,218 @@
-﻿@model List<ParkingSystem.Models.Booking>
+@model List<ParkingSystem.Models.Booking>
 
-<div class="container mt-4">
-    <h2>My Bookings</h2>
+@{
+    ViewData["Title"] = "My Bookings";
+}
 
-    <div class="alert alert-success d-flex justify-content-between align-items-center">
-        <span>
-            ⚠️ Please read the <strong>Refund Policy</strong> before cancelling your booking.
-        </span>
-        <button class="btn btn-link text-white" data-bs-toggle="modal" data-bs-target="#refundModal">
-            View
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold mb-0" style="color: var(--primary-color);">My Bookings</h2>
+    </div>
+
+    <div class="alert alert-light border-start border-3 border-warning shadow-sm d-flex flex-column flex-md-row justify-content-between align-items-md-center bg-white rounded-3 mb-4 p-3">
+        <div class="mb-2 mb-md-0 d-flex align-items-center text-dark">
+            <div class="bg-warning bg-opacity-10 text-warning rounded-circle p-2 me-3 d-flex justify-content-center align-items-center" style="width: 40px; height: 40px;">
+                <i class="fas fa-info-circle fs-5"></i>
+            </div>
+            <span>Please read our <strong>Refund Policy</strong> before requesting a cancellation to understand potential deductions.</span>
+        </div>
+        <button class="btn btn-warning btn-sm text-dark fw-bold px-4 py-2 rounded-pill shadow-sm" data-bs-toggle="modal" data-bs-target="#refundModal">
+            Read Policy
         </button>
     </div>
 
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Slots</th>
-                <th>Start</th>
-                <th>End</th>
-                <th>Amount</th>
-                <th>Status</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
+    <div class="card shadow-sm border-0 rounded-4 overflow-hidden bg-white">
+        <div class="table-responsive">
+            <table class="table table-hover table-borderless mb-0 align-middle">
+                <thead class="bg-light text-secondary small text-uppercase">
+                    <tr>
+                        <th class="ps-4">Booking ID</th>
+                        <th>Slots Assigned</th>
+                        <th>Timeline</th>
+                        <th>Amount</th>
+                        <th>Status</th>
+                        <th class="pe-4 text-end">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="border-top">
+                    @if (!Model.Any())
+                    {
+                        <tr>
+                            <td colspan="6" class="text-center py-5 text-muted">
+                                <i class="fas fa-calendar-times fs-1 mb-3 text-light"></i>
+                                <p class="mb-0">You don't have any bookings yet.</p>
+                            </td>
+                        </tr>
+                    }
+                    @foreach (var b in Model)
+                    {
+                        <tr>
+                            <td class="ps-4 fw-bold text-dark">#@b.BookingId</td>
 
-        <tbody>
-            @foreach (var b in Model)
-            {
-                <tr>
-                    <td>@b.BookingId</td>
-
-                    <td>
-                        @foreach (var s in b.BookingSlots)
-                        {
-                            <span>
-                                @s.Slot.SlotNumber (@s.Slot.ParkingArea.VehicleType)
-                            </span>
-                            <br />
-                        }
-                    </td>
-
-                    <td>@b.StartTime</td>
-                    <td>@b.EndTime</td>
-                    <td>৳ @b.TotalAmount</td>
-
-                    <!-- 🔥 STATUS COLUMN -->
-                    <td>
-                        @if (b.RefundStatus == "Pending")
-                        {
-                            <span class="badge bg-warning text-dark">Refund Pending</span>
-                        }
-                        else if (b.RefundStatus == "Success")
-                        {
-                            <span class="badge bg-success">Refunded</span>
-                        }
-                        else if (b.RefundStatus == "Failed")
-                        {
-                            <span class="badge bg-danger">Refund Failed</span>
-                        }
-                        else if (b.IsCancelled)
-                        {
-                            <span class="badge bg-secondary">Cancelled</span>
-                        }
-                        else
-                        {
-                            <span class="badge bg-primary">Active</span>
-                        }
-                    </td>
-
-                    <!-- 🔥 ACTIONS -->
-                    <td>
-                        <div class="d-flex flex-column gap-1">
-
-                            <!-- 🔴 REFUND LOGIC -->
-                            @if (b.RefundStatus == "None" && b.StartTime > DateTime.Now)
-                            {
-                                <!-- ✅ INVOICE -->
-                                <a asp-controller="Payment"
-                                   asp-action="Confirmation"
-                                   asp-route-id="@b.BookingId"
-                                   class="btn btn-sm btn-outline-primary">
-                                    📄 Invoice
-                                </a>
-                                <button class="btn btn-danger btn-sm"
-                                        data-bs-toggle="modal"
-                                        data-bs-target="#cancelModal-@b.BookingId">
-                                    Request Cancel
-                                </button>
-                            }
-                            else if (b.RefundStatus == "Pending")
-                            {
-                                <!-- ✅ INVOICE -->
-                                <a asp-controller="Payment"
-                                   asp-action="Confirmation"
-                                   asp-route-id="@b.BookingId"
-                                   class="btn btn-sm btn-outline-primary">
-                                    📄 Invoice
-                                </a>
-                                <button class="btn btn-warning btn-sm" disabled>
-                                    Waiting for Admin Approval
-                                </button>
-                            }
-                            else if (b.RefundStatus == "Success")
-                            {
-                                <button class="btn btn-success btn-sm" disabled>
-                                    Refund Completed
-                                </button>
-                            }
-                            else if (b.RefundStatus == "Failed")
-                            {
-                                <button class="btn btn-danger btn-sm" disabled>
-                                    Refund Failed
-                                </button>
-                            }
-                            else if (b.StartTime <= DateTime.Now)
-                            {
-                                <button class="btn btn-secondary btn-sm" disabled>
-                                    Expired
-                                </button>
-                            }
-
-                        </div>
-
-                        <!-- 🔥 CANCEL MODAL -->
-                        <div class="modal fade" id="cancelModal-@b.BookingId" tabindex="-1">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-
-                                    <div class="modal-header">
-                                        <h5 class="modal-title">Cancel Booking</h5>
-                                        <button class="btn-close" data-bs-dismiss="modal"></button>
-                                    </div>
-
-                                    <div class="modal-body">
-
-                                        <p><strong>Booking ID:</strong> @b.BookingId</p>
-
-                                        <p>
-                                            Estimated Refund:
-                                            <strong class="text-success">
-                                                ৳ @b.RefundPreview
-                                            </strong>
-                                        </p>
-
-                                        <hr />
-
-                                        <!-- 🔥 UPDATED ACTION -->
-                                        <form asp-controller="Booking"
-                                              asp-action="RequestCancel"
-                                              method="post">
-
-                                            <input type="hidden" name="bookingId" value="@b.BookingId" />
-
-                                            <div class="text-end">
-                                                <button class="btn btn-danger">
-                                                    Confirm Request
-                                                </button>
-                                            </div>
-                                        </form>
-
-                                    </div>
-
+                            <td>
+                                <div class="d-flex flex-wrap gap-1">
+                                    @foreach (var s in b.BookingSlots)
+                                    {
+                                        <span class="badge bg-secondary bg-opacity-10 text-secondary border shadow-sm">
+                                            @s.Slot.SlotNumber (@s.Slot.ParkingArea.VehicleType)
+                                        </span>
+                                    }
                                 </div>
-                            </div>
-                        </div>
+                            </td>
 
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
+                            <td>
+                                <div class="d-flex flex-column small text-muted">
+                                    <span class="fw-bold text-dark"><i class="fas fa-play-circle text-success me-1"></i>@b.StartTime.ToString("MMM dd, hh:mm tt")</span>
+                                    <span><i class="fas fa-stop-circle text-danger me-1"></i>@b.EndTime.ToString("MMM dd, hh:mm tt")</span>
+                                </div>
+                            </td>
+
+                            <td class="fw-bold text-dark">৳ @b.TotalAmount</td>
+
+                            <!-- 🔥 STATUS COLUMN -->
+                            <td>
+                                @if (b.RefundStatus == "Pending")
+                                {
+                                    <span class="badge rounded-pill bg-warning text-dark px-3 shadow-sm py-2"><i class="fas fa-clock me-1"></i>Refund Pending</span>
+                                }
+                                else if (b.RefundStatus == "Success")
+                                {
+                                    <span class="badge rounded-pill bg-success px-3 shadow-sm py-2"><i class="fas fa-check me-1"></i>Refunded</span>
+                                }
+                                else if (b.RefundStatus == "Failed")
+                                {
+                                    <span class="badge rounded-pill bg-danger px-3 shadow-sm py-2"><i class="fas fa-times me-1"></i>Refund Failed</span>
+                                }
+                                else if (b.IsCancelled)
+                                {
+                                    <span class="badge rounded-pill bg-secondary px-3 shadow-sm py-2"><i class="fas fa-ban me-1"></i>Cancelled</span>
+                                }
+                                else if (b.StartTime <= DateTime.Now && b.EndTime >= DateTime.Now)
+                                {
+                                    <span class="badge rounded-pill bg-primary px-3 shadow-sm py-2"><i class="fas fa-parking me-1"></i>Active</span>
+                                }
+                                else if (b.EndTime < DateTime.Now)
+                                {
+                                    <span class="badge rounded-pill bg-dark bg-opacity-50 px-3 shadow-sm py-2"><i class="fas fa-history me-1"></i>Completed</span>
+                                }
+                                else
+                                {
+                                    <span class="badge rounded-pill bg-info text-dark px-3 shadow-sm py-2"><i class="fas fa-calendar-check me-1"></i>Upcoming</span>
+                                }
+                            </td>
+
+                            <!-- 🔥 ACTIONS -->
+                            <td class="pe-4 text-end">
+                                <div class="d-flex flex-column flex-lg-row justify-content-end gap-2">
+                                    @if (b.StartTime > DateTime.Now && !b.IsCancelled)
+                                    {
+
+                                        <a asp-controller="Payment"
+                                        asp-action="Confirmation"
+                                        asp-route-id="@b.BookingId"
+                                        class="btn btn-sm btn-outline-primary rounded-pill shadow-sm px-3 fw-bold">
+                                            <i class="fas fa-file-invoice me-1"></i>Invoice
+                                        </a>
+
+                                    }
+                                    @if (b.RefundStatus == "None" && b.StartTime > DateTime.Now)
+                                    {
+                                        <button class="btn btn-danger btn-sm rounded-pill shadow-sm px-3 fw-bold"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#cancelModal-@b.BookingId">
+                                            <i class="fas fa-times-circle me-1"></i>Cancel
+                                        </button>
+                                    }
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
+
+<!-- 🔥 CANCEL MODALS GENERATED OUTSIDE OF THE TABLE -->
+@foreach (var b in Model)
+{
+    if (b.RefundStatus == "None" && b.StartTime > DateTime.Now)
+    {
+        <div class="modal fade" id="cancelModal-@b.BookingId" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden text-start">
+                    <div class="modal-header bg-danger text-white border-0 py-3">
+                        <h5 class="modal-title fw-bold"><i class="fas fa-exclamation-triangle me-2"></i>Cancel Booking</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body p-4">
+                        <div class="alert alert-light border shadow-sm rounded-3 mb-4">
+                            <p class="mb-1 text-muted small text-uppercase fw-bold">Booking Reference</p>
+                            <h5 class="fw-bold text-dark mb-0">#@b.BookingId</h5>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center bg-light p-3 rounded-3 mb-4 border">
+                            <span class="text-secondary fw-bold">Estimated Refund:</span>
+                            <h4 class="text-success fw-bold mb-0">৳ @b.RefundPreview</h4>
+                        </div>
+                        <form asp-controller="Booking" asp-action="RequestCancel" method="post">
+                            <input type="hidden" name="bookingId" value="@b.BookingId" />
+                            <p class="text-muted small">By clicking confirm, you agree to our refund conditions.</p>
+                            <div class="d-flex gap-2 justify-content-end mt-2">
+                                <button type="button" class="btn btn-light border rounded-pill fw-bold" data-bs-dismiss="modal">Keep Booking</button>
+                                <button type="submit" class="btn btn-danger rounded-pill fw-bold shadow-sm px-4">Confirm Cancel</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+}
 
 <!-- 🔥 REFUND POLICY MODAL -->
 <div class="modal fade" id="refundModal" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-
-            <div class="modal-header">
-                <h4 class="modal-title">Refund Policy</h4>
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
+            <div class="modal-header bg-warning border-0 py-3 text-dark">
+                <h5 class="modal-title fw-bold"><i class="fas fa-file-contract me-2"></i>Refund Policy</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
-
-            <div class="modal-body">
-                <ul>
-                    <li>Cancellation is allowed only before the booking start time.</li>
-                    <li>Refund is calculated based on time remaining before start:</li>
-                    <ul>
-                        <li>24h+: 10% deduction</li>
-                        <li>12–24h: 25% deduction</li>
-                        <li>6–12h: 50% deduction</li>
-                        <li>1–6h: 75% deduction</li>
-                        <li>&lt;1h: No refund</li>
-                    </ul>
-                    <li>Refunds are processed after admin approval.</li>
-                </ul>
+            <div class="modal-body p-4 text-start">
+                <div class="mb-3">
+                    <p class="text-muted mb-3"><i class="fas fa-info-circle text-primary me-2"></i>Cancellation is allowed only before the booking start time.</p>
+                    <h6 class="fw-bold text-dark mb-3">Deduction Schedule</h6>
+                    <div class="list-group list-group-flush border shadow-sm rounded-3 mb-3">
+                        <div class="list-group-item d-flex justify-content-between align-items-center bg-light py-2">
+                            <span class="fw-bold text-secondary small text-uppercase">Time Remaining</span>
+                            <span class="fw-bold text-secondary small text-uppercase">Deduction</span>
+                        </div>
+                        <div class="list-group-item d-flex justify-content-between align-items-center py-3">
+                            <span class="text-dark fw-medium"><i class="fas fa-clock text-success me-2"></i>24+ hours</span>
+                            <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 rounded-pill px-3">10%</span>
+                        </div>
+                        <div class="list-group-item d-flex justify-content-between align-items-center py-3">
+                            <span class="text-dark fw-medium"><i class="fas fa-clock text-info me-2"></i>12 – 24 hours</span>
+                            <span class="badge bg-info bg-opacity-10 text-info border border-info border-opacity-25 rounded-pill px-3">25%</span>
+                        </div>
+                        <div class="list-group-item d-flex justify-content-between align-items-center py-3">
+                            <span class="text-dark fw-medium"><i class="fas fa-clock text-warning me-2"></i>6 – 12 hours</span>
+                            <span class="badge bg-warning bg-opacity-10 text-warning border border-warning border-opacity-25 rounded-pill px-3">50%</span>
+                        </div>
+                        <div class="list-group-item d-flex justify-content-between align-items-center py-3">
+                            <span class="text-dark fw-medium"><i class="fas fa-clock text-danger me-2"></i>1 – 6 hours</span>
+                            <span class="badge bg-danger bg-opacity-10 text-danger border border-danger border-opacity-25 rounded-pill px-3">75%</span>
+                        </div>
+                        <div class="list-group-item d-flex justify-content-between align-items-center py-3">
+                            <span class="text-dark fw-medium"><i class="fas fa-times-circle text-danger me-2"></i>Less than 1 hour</span>
+                            <span class="badge bg-danger text-white rounded-pill px-3">No refund</span>
+                        </div>
+                    </div>
+                    <p class="text-muted small mb-0"><i class="fas fa-shield-alt text-success me-2"></i>Refunds are automatically processed to your original payment method after admin approval.</p>
+                </div>
             </div>
-
+            <div class="modal-footer border-0 p-3 bg-light">
+                <button type="button" class="btn btn-secondary rounded-pill fw-bold px-4" data-bs-dismiss="modal">Understood</button>
+            </div>
         </div>
     </div>
 </div>

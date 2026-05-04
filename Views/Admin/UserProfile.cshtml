@@ -1,10 +1,55 @@
-﻿@model ParkingSystem.Models.ApplicationUser
+@model ParkingSystem.Models.ApplicationUser
 
-<div class="container mt-4">
-    <h3>User Profile</h3>
+@{
+    ViewData["Title"] = "User Details";
+}
 
-    <img src="@Model.ProfileImage" width="120" height="120" class="mb-3" />
-    <p><strong>Name:</strong> @Model.FullName</p>
-    <p><strong>Email:</strong> @Model.Email</p>
-    <p><strong>Phone:</strong> @Model.PhoneNumber</p>
+<div class="row justify-content-center mt-4 mb-5 align-items-center" style="min-height: 60vh;">
+    <div class="col-md-6 col-lg-5 col-xl-4">
+        
+        <div class="d-flex align-items-center mb-4">
+            <a asp-action="Users" class="btn btn-light border shadow-sm rounded-circle p-2 me-3" style="width: 45px; height: 45px; line-height: 1;">
+                <i class="fas fa-arrow-left"></i>
+            </a>
+            <h3 class="fw-bold mb-0 text-dark">User Intelligence</h3>
+        </div>
+
+        <div class="card shadow-lg border-0 rounded-4 overflow-hidden" style="background: var(--surface-color);">
+            
+            <div class="card-header border-0 text-center text-white py-4" style="background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));">
+                <i class="fas fa-id-card position-absolute text-white opacity-25" style="font-size: 5rem; right: -10px; bottom: -10px;"></i>
+                <h5 class="fw-bold mb-0 text-uppercase tracking-wider">Target Profile</h5>
+            </div>
+
+            <div class="card-body p-4 text-center">
+                <div class="mb-4 position-relative d-inline-block mt-3">
+                    <img src="@Model.ProfileImage" class="rounded-circle shadow-sm border border-3 border-white object-fit-cover bg-light" style="width: 140px; height: 140px;" alt="Profile Picture" onerror="this.onerror=null;this.src='/images/default-avatar.png';" />
+                </div>
+
+                <h3 class="fw-bold text-dark mb-1">@Model.FullName</h3>
+                <p class="text-muted mb-4"><i class="fas fa-envelope text-primary me-2"></i>@Model.Email</p>
+
+                <div class="list-group list-group-flush text-start border-top mt-3">
+                    <div class="list-group-item bg-transparent px-0 py-3 d-flex align-items-center border-0">
+                        <div class="bg-primary bg-opacity-10 text-primary rounded-circle d-inline-flex justify-content-center align-items-center me-3 flex-shrink-0" style="width: 45px; height: 45px;">
+                            <i class="fas fa-phone-alt fs-5"></i>
+                        </div>
+                        <div>
+                            <small class="text-uppercase text-muted fw-bold d-block" style="font-size: 0.70rem;">Contact Information</small>
+                            <span class="text-dark fw-medium fs-5">@(string.IsNullOrEmpty(Model.PhoneNumber) ? "Not Provided" : Model.PhoneNumber)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-4 pt-3 border-top">
+                    <form asp-action="DeleteUser" method="post" class="m-0" onsubmit="return confirm('Permanently eradicate this user from the system?');">
+                        <input type="hidden" name="userId" value="@Model.Id" />
+                        <button class="btn btn-outline-danger rounded-pill shadow-sm px-4 py-2 fw-bold w-100">
+                            <i class="fas fa-ban me-2"></i>Terminate Account
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

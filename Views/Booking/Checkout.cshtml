@@ -1,49 +1,70 @@
-﻿@model List<ParkingSystem.Models.ParkingSlot>
+@model List<ParkingSystem.Models.ParkingSlot>
 
-<div class="container mt-4">
+<div class="container mt-5 d-flex justify-content-center">
 
-    <h2>Booking Confirmation</h2>
+    <div class="card shadow-lg p-5 rounded-4 border-0 w-100" style="max-width: 700px; background: var(--surface-color);">
+        
+        <div class="text-center mb-4">
+            <h2 class="fw-bold" style="color: var(--primary-color);">Booking Confirmation</h2>
+            <p class="text-muted">Review your selected slots before proceeding to payment.</p>
+        </div>
 
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th>Slot</th>
-                <th>Area</th>
-                <th>Rate</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var slot in Model)
-            {
-                <tr>
-                    <td>@slot.SlotNumber</td>
-                    <td>@slot.ParkingArea.VehicleType (Block @slot.ParkingArea.BlockNumber)</td>
-                    <td>৳ @slot.ParkingArea.HourlyRate</td>
-                </tr>
+        <div class="table-responsive mb-4">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th class="ps-3 border-0 rounded-start-3" style="width: 25%;">Slot No.</th>
+                        <th class="border-0">Block Area</th>
+                        <th class="text-end pe-3 border-0 rounded-end-3">Rate/Hr</th>
+                    </tr>
+                </thead>
+                <tbody class="border-top-0">
+                    @foreach (var slot in Model)
+                    {
+                        <tr>
+                            <td class="ps-3 fw-bold align-middle">
+                                <i class="fas fa-parking text-primary me-2"></i> @slot.SlotNumber
+                            </td>
+                            <td class="align-middle">
+                                <span class="badge bg-secondary rounded-pill me-2">Block @slot.ParkingArea.BlockNumber</span>
+                                <span class="text-muted">@slot.ParkingArea.VehicleType</span>
+                            </td>
+                            <td class="text-end pe-3 align-middle text-muted fw-bold">৳ @slot.ParkingArea.HourlyRate</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <div class="p-4 rounded-4 mb-4 text-center" style="background: linear-gradient(135deg, rgba(42, 42, 114, 0.05), rgba(0, 159, 253, 0.05)); border: 1px solid rgba(0,0,0,0.05);">
+            <div class="row">
+                <div class="col-6 border-end">
+                    <p class="text-muted small text-uppercase mb-1 fw-bold">Duration</p>
+                    <h4 class="mb-0 fw-bold" style="color: var(--primary-color);">@ViewBag.Duration hr(s)</h4>
+                </div>
+                <div class="col-6">
+                    <p class="text-muted small text-uppercase mb-1 fw-bold">Total Amount</p>
+                    <h3 class="mb-0 fw-bold text-success">৳ @ViewBag.Total</h3>
+                </div>
+            </div>
+        </div>
+
+        <form method="post" asp-controller="Payment" asp-action="ProcessPayment">
+            <input type="hidden" name="slots" value="@string.Join(",", Model.Select(s => s.SlotId))" />
+            <input type="hidden" name="duration" value="@ViewBag.Duration" />
+            <input type="hidden" name="total" value="@ViewBag.Total" />
+            
+            @{
+                var bookingDate = ViewBag.Date as DateTime?;
             }
-        </tbody>
-    </table>
+            <input type="hidden" name="date" value="@(bookingDate.HasValue ? bookingDate.Value.ToString("yyyy-MM-ddTHH:mm") : "")" />
+            
+            <p class="text-center text-muted small mb-3 opacity-50 fst-italic">DATE: @ViewBag.Date</p>
 
-    <h4>Duration: @ViewBag.Duration hour(s)</h4>
-    <h3>Total: ৳ @ViewBag.Total</h3>
+            <button class="btn btn-primary btn-lg w-100 rounded-pill shadow-sm d-flex justify-content-center align-items-center gap-2">
+                Proceed to Payment <i class="fas fa-arrow-right"></i>
+            </button>
+        </form>
 
-    <form method="post" asp-controller="Payment" asp-action="ProcessPayment">
-
-        <input type="hidden" name="slots" value="@string.Join(",", Model.Select(s => s.SlotId))" />
-        <input type="hidden" name="duration" value="@ViewBag.Duration" />
-        <input type="hidden" name="total" value="@ViewBag.Total" />
-        @{
-            var bookingDate = ViewBag.Date as DateTime?;
-        }
-        <input type="hidden"
-               name="date"
-               value="@(bookingDate.HasValue ? bookingDate.Value.ToString("yyyy-MM-ddTHH:mm") : "")" />
-        <p>DEBUG DATE: @ViewBag.Date</p>
-
-        <button class="btn btn-success">
-            Proceed to Payment
-        </button>
-
-    </form>
-
+    </div>
 </div>

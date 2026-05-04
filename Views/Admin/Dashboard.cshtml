@@ -1,55 +1,131 @@
-﻿@model ParkingSystem.ViewModels.AdminDashboardViewModel
+@model ParkingSystem.ViewModels.AdminDashboardViewModel
 
-<div class="container mt-4">
+@{
+    ViewData["Title"] = "Admin Dashboard";
+}
 
-    <h2 class="mb-4">Admin Dashboard</h2>
-
-    <div class="row">
-        <a asp-controller="Admin" asp-action="Users" class="btn btn-primary mt-3">
-            Manage Users
-        </a>
-
-        <a asp-controller="Admin" asp-action="Areas" class="btn btn-info mt-3">
-            Manage Parking Areas
-        </a>
-
-        <a asp-controller="Admin" asp-action="Slots" class="btn btn-warning mt-3">
-            Manage Slots
-        </a>
-
-        <a asp-controller="Admin" asp-action="BookingHistory" class="btn btn-primary mt-3">
-                View Booking History
-        </a>
-
-        <div class="col-md-3 mt-3">
-            <div class="card text-center bg-primary text-white p-3">
-                <h4>@Model.TotalUsers</h4>
-                <p>Users</p>
-            </div>
-        </div>
-
-        <div class="col-md-3 mt-3">
-            <div class="card text-center bg-success text-white p-3">
-                <h4>@Model.TotalBookings</h4>
-                <p>Bookings</p>
-            </div>
-        </div>
-
-        <div class="col-md-3 mt-3">
-            <div class="card text-center bg-warning text-dark p-3">
-                <h4>@Model.TotalSlots</h4>
-                <p>Slots</p>
-            </div>
-        </div>
-
-        <div class="col-md-3 mt-3">
-            <div class="card text-center bg-dark text-white p-3">
-                <h4>@Model.TotalRevenue</h4>
-                <p>Revenue</p>
-            </div>
-        </div>
-
+<div class="row align-items-center mb-4 mt-2">
+    <div class="col-12">
+        <h2 class="fw-bold mb-0 text-dark"><i class="fas fa-chart-line text-primary me-2"></i>Dashboard Overview</h2>
+        <p class="text-muted small mb-0 mt-1">Monitor parking metrics and manage system resources</p>
     </div>
-    @* <p>Total Areas: @((ViewBag.Areas as List<ParkingSystem.Models.ParkingArea>)?.Count)</p> *@
+</div>
+
+<!-- 🔥 METRICS ROW -->
+<div class="row g-4 mb-5">
+    <div class="col-sm-6 col-xl-3">
+        <div class="card border-0 shadow-sm rounded-4 overflow-hidden" style="background: linear-gradient(135deg, #0d6efd, #0dcaf0);">
+            <div class="card-body p-4 position-relative">
+                <i class="fas fa-users position-absolute text-white opacity-25" style="font-size: 5rem; right: -10px; bottom: -10px;"></i>
+                <h6 class="text-white text-uppercase fw-bold mb-1 opacity-75">Total Users</h6>
+                <h2 class="text-white fw-bold mb-0 display-5">@Model.TotalUsers</h2>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-sm-6 col-xl-3">
+        <div class="card border-0 shadow-sm rounded-4 overflow-hidden" style="background: linear-gradient(135deg, #198754, #20c997);">
+            <div class="card-body p-4 position-relative">
+                <i class="fas fa-calendar-check position-absolute text-white opacity-25" style="font-size: 5rem; right: -10px; bottom: -10px;"></i>
+                <h6 class="text-white text-uppercase fw-bold mb-1 opacity-75">Bookings</h6>
+                <h2 class="text-white fw-bold mb-0 display-5">@Model.TotalBookings</h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-6 col-xl-3">
+        <div class="card border-0 shadow-sm rounded-4 overflow-hidden" style="background: linear-gradient(135deg, #fd7e14, #ffc107);">
+            <div class="card-body p-4 position-relative">
+                <i class="fas fa-parking position-absolute text-white opacity-25" style="font-size: 5rem; right: -10px; bottom: -10px;"></i>
+                <h6 class="text-white text-uppercase fw-bold mb-1 opacity-75">Total Slots</h6>
+                <h2 class="text-white fw-bold mb-0 display-5">@Model.TotalSlots</h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-6 col-xl-3">
+        <div class="card border-0 shadow-sm rounded-4 overflow-hidden" style="background: linear-gradient(135deg, #6f42c1, #d63384);">
+            <div class="card-body p-4 position-relative">
+                <i class="fas fa-wallet position-absolute text-white opacity-25" style="font-size: 5rem; right: -10px; bottom: -10px;"></i>
+                <h6 class="text-white text-uppercase fw-bold mb-1 opacity-75">System Revenue</h6>
+                <h2 class="text-white fw-bold mb-0 display-5">৳@Model.TotalRevenue</h2>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 🔥 QUICK ACTIONS TITLE -->
+<div class="mb-4">
+    <h5 class="fw-bold text-dark"><i class="fas fa-bolt text-warning me-2"></i>Quick Actions</h5>
+</div>
+
+<!-- 🔥 QUICK ACTIONS GRID -->
+<div class="row g-4 mb-5">
+
+    <div class="col-sm-6 col-xl-3">
+        <a asp-controller="Admin" asp-action="Users" class="text-decoration-none h-100 d-block">
+            <div class="card border border-light shadow-sm rounded-4 h-100 hover-lift bg-white">
+                <div class="card-body p-4 text-center">
+                    <div class="d-inline-flex align-items-center justify-content-center bg-primary bg-opacity-10 text-primary rounded-circle mb-3" style="width: 60px; height: 60px;">
+                        <i class="fas fa-users-cog fs-4"></i>
+                    </div>
+                    <h6 class="fw-bold text-dark mb-1">Manage Users</h6>
+                    <p class="text-muted small mb-0">View user details and edit roles</p>
+                </div>
+            </div>
+        </a>
+    </div>
+
+    <div class="col-sm-6 col-xl-3">
+        <a asp-controller="Admin" asp-action="Areas" class="text-decoration-none h-100 d-block">
+            <div class="card border border-light shadow-sm rounded-4 h-100 hover-lift bg-white">
+                <div class="card-body p-4 text-center">
+                    <div class="d-inline-flex align-items-center justify-content-center bg-info bg-opacity-10 text-info rounded-circle mb-3" style="width: 60px; height: 60px;">
+                        <i class="fas fa-map-marked-alt fs-4"></i>
+                    </div>
+                    <h6 class="fw-bold text-dark mb-1">Parking Areas</h6>
+                    <p class="text-muted small mb-0">Create and coordinate zones</p>
+                </div>
+            </div>
+        </a>
+    </div>
+
+    <div class="col-sm-6 col-xl-3">
+        <a asp-controller="Admin" asp-action="Slots" class="text-decoration-none h-100 d-block">
+            <div class="card border border-light shadow-sm rounded-4 h-100 hover-lift bg-white">
+                <div class="card-body p-4 text-center">
+                    <div class="d-inline-flex align-items-center justify-content-center bg-warning bg-opacity-10 text-warning rounded-circle mb-3" style="width: 60px; height: 60px;">
+                        <i class="fas fa-car fs-4"></i>
+                    </div>
+                    <h6 class="fw-bold text-dark mb-1">Manage Slots</h6>
+                    <p class="text-muted small mb-0">Add, edit, or remove spaces</p>
+                </div>
+            </div>
+        </a>
+    </div>
+
+    <div class="col-sm-6 col-xl-3">
+        <a asp-controller="Admin" asp-action="BookingHistory" class="text-decoration-none h-100 d-block">
+            <div class="card border border-light shadow-sm rounded-4 h-100 hover-lift bg-white">
+                <div class="card-body p-4 text-center">
+                    <div class="d-inline-flex align-items-center justify-content-center bg-success bg-opacity-10 text-success rounded-circle mb-3" style="width: 60px; height: 60px;">
+                        <i class="fas fa-history fs-4"></i>
+                    </div>
+                    <h6 class="fw-bold text-dark mb-1">Booking History</h6>
+                    <p class="text-muted small mb-0">Review all reservations globally</p>
+                </div>
+            </div>
+        </a>
+    </div>
 
 </div>
+
+<style>
+    .hover-lift {
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .hover-lift:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 .5rem 1rem rgba(0,0,0,.15)!important;
+    }
+</style>

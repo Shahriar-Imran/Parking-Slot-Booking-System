@@ -29,6 +29,11 @@ public class PaymentController : Controller
     [HttpPost]
     public IActionResult ProcessPayment(string slots, int duration, decimal total, DateTime date)
     {
+        if(DateTime.Now > date)
+        {
+            ViewBag.Error = "❌ Invalid Start time. Please reselect slots.";
+            return View("DateExpired");
+        }
         var tranId = Guid.NewGuid().ToString();
 
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -71,29 +76,29 @@ public class PaymentController : Controller
         _context.SaveChanges();
 
         var postData = new Dictionary<string, string>
-    {
-        { "store_id", "perso69f6349142741" },
-        { "store_passwd", "perso69f6349142741@ssl" },
+        {
+            { "store_id", "perso69f6349142741" },
+            { "store_passwd", "perso69f6349142741@ssl" },
 
-        { "total_amount", total.ToString("F2") },
-        { "currency", "BDT" },
-        { "tran_id", tranId },
+            { "total_amount", total.ToString("F2") },
+            { "currency", "BDT" },
+            { "tran_id", tranId },
 
-        { "success_url", "https://localhost:7114/Payment/Success" },
-        { "fail_url", "https://localhost:7114/Payment/Fail" },
-        { "cancel_url", "https://localhost:7114/Booking/Checkout" },
+            { "success_url", "https://localhost:7114/Payment/Success" },
+            { "fail_url", "https://localhost:7114/Payment/Fail" },
+            { "cancel_url", "https://localhost:7114/Booking/Checkout" },
 
-        // 🔥 REAL USER DATA (FIXED)
-        { "cus_name", user?.FullName ?? "Customer" },
-        { "cus_email", user?.Email ?? "test@test.com" },
-        { "cus_add1", user?.Address ?? "Dhaka" },
-        { "cus_phone", user?.PhoneNumber ?? "01700000000" },
+            // 🔥 REAL USER DATA (FIXED)
+            { "cus_name", user?.FullName ?? "Customer" },
+            { "cus_email", user?.Email ?? "test@test.com" },
+            { "cus_add1", user?.Address ?? "Dhaka" },
+            { "cus_phone", user?.PhoneNumber ?? "01700000000" },
 
-        { "shipping_method", "NO" },
-        { "product_name", "Parking Booking" },
-        { "product_category", "Service" },
-        { "product_profile", "general" }
-    };
+            { "shipping_method", "NO" },
+            { "product_name", "Parking Booking" },
+            { "product_category", "Service" },
+            { "product_profile", "general" }
+        };
 
         using (var client = new HttpClient())
         {

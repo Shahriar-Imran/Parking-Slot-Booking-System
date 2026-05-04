@@ -63,7 +63,16 @@ C:\Users\shahr\OneDrive\Desktop\Practicum Project\ParkingSystem\ParkingSystem\ww
 C:\Users\shahr\OneDrive\Desktop\Practicum Project\ParkingSystem\ParkingSystem\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.rtl.css
 wwwroot\css\site.css
 wwwroot\favicon.ico
+wwwroot\images\bike.png
+wwwroot\images\Bus.png
+wwwroot\images\car.png
+wwwroot\images\car2.png
+wwwroot\images\cng.png
+wwwroot\images\cycle.png
 wwwroot\images\parking-bg.jpg
+wwwroot\images\parkingimage2.jpg
+wwwroot\images\payment.png
+wwwroot\images\truck.png
 wwwroot\images\users\9901e215-c662-42c5-97a4-ef22363f3731.jpeg
 wwwroot\images\users\b55954c8-0bef-400e-a4ea-16b54ccfd1a1.jpg
 wwwroot\js\site.js

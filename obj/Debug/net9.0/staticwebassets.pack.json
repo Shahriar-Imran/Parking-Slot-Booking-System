@@ -13,8 +13,44 @@
       "PackagePath": "staticwebassets\\favicon.ico"
     },
     {
+      "Id": "C:\\Users\\shahr\\OneDrive\\Desktop\\Practicum Project\\ParkingSystem\\ParkingSystem\\wwwroot\\images\\Bus.png",
+      "PackagePath": "staticwebassets\\images\\Bus.png"
+    },
+    {
+      "Id": "C:\\Users\\shahr\\OneDrive\\Desktop\\Practicum Project\\ParkingSystem\\ParkingSystem\\wwwroot\\images\\bike.png",
+      "PackagePath": "staticwebassets\\images\\bike.png"
+    },
+    {
+      "Id": "C:\\Users\\shahr\\OneDrive\\Desktop\\Practicum Project\\ParkingSystem\\ParkingSystem\\wwwroot\\images\\car.png",
+      "PackagePath": "staticwebassets\\images\\car.png"
+    },
+    {
+      "Id": "C:\\Users\\shahr\\OneDrive\\Desktop\\Practicum Project\\ParkingSystem\\ParkingSystem\\wwwroot\\images\\car2.png",
+      "PackagePath": "staticwebassets\\images\\car2.png"
+    },
+    {
+      "Id": "C:\\Users\\shahr\\OneDrive\\Desktop\\Practicum Project\\ParkingSystem\\ParkingSystem\\wwwroot\\images\\cng.png",
+      "PackagePath": "staticwebassets\\images\\cng.png"
+    },
+    {
+      "Id": "C:\\Users\\shahr\\OneDrive\\Desktop\\Practicum Project\\ParkingSystem\\ParkingSystem\\wwwroot\\images\\cycle.png",
+      "PackagePath": "staticwebassets\\images\\cycle.png"
+    },
+    {
       "Id": "C:\\Users\\shahr\\OneDrive\\Desktop\\Practicum Project\\ParkingSystem\\ParkingSystem\\wwwroot\\images\\parking-bg.jpg",
       "PackagePath": "staticwebassets\\images\\parking-bg.jpg"
+    },
+    {
+      "Id": "C:\\Users\\shahr\\OneDrive\\Desktop\\Practicum Project\\ParkingSystem\\ParkingSystem\\wwwroot\\images\\parkingimage2.jpg",
+      "PackagePath": "staticwebassets\\images\\parkingimage2.jpg"
+    },
+    {
+      "Id": "C:\\Users\\shahr\\OneDrive\\Desktop\\Practicum Project\\ParkingSystem\\ParkingSystem\\wwwroot\\images\\payment.png",
+      "PackagePath": "staticwebassets\\images\\payment.png"
+    },
+    {
+      "Id": "C:\\Users\\shahr\\OneDrive\\Desktop\\Practicum Project\\ParkingSystem\\ParkingSystem\\wwwroot\\images\\truck.png",
+      "PackagePath": "staticwebassets\\images\\truck.png"
     },
     {
       "Id": "C:\\Users\\shahr\\OneDrive\\Desktop\\Practicum Project\\ParkingSystem\\ParkingSystem\\wwwroot\\images\\users\\9901e215-c662-42c5-97a4-ef22363f3731.jpeg",

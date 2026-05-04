@@ -1,36 +1,87 @@
-﻿@model ApplicationUser
+@model ApplicationUser
 
-<form method="post" enctype="multipart/form-data">
+@{
+    ViewData["Title"] = "Edit Profile";
+}
 
-    <div class="mb-2">
-        <label>Full Name</label>
-        <input asp-for="FullName" class="form-control" />
+<div class="row justify-content-center mt-4 mb-5">
+    <div class="col-md-7 col-lg-6 col-xl-5">
+        
+        <div class="card shadow-lg border-0 rounded-4 p-4 p-md-5" style="background: var(--surface-color);">
+            <div class="text-center mb-4">
+                <div class="d-inline-flex justify-content-center align-items-center bg-primary bg-opacity-10 rounded-circle text-primary mb-3" style="width: 60px; height: 60px;">
+                    <i class="fas fa-user-edit fs-3"></i>
+                </div>
+                <h4 class="fw-bold">Edit Profile</h4>
+                <p class="text-muted small">Update your personal information</p>
+            </div>
+            
+            <div class="card-body p-0">
+                <form method="post" enctype="multipart/form-data">
+
+                    <div class="mb-3">
+                        <label class="form-label text-secondary small fw-bold text-uppercase"><i class="fas fa-user-circle text-primary me-2"></i>Full Name</label>
+                        <input asp-for="FullName" class="form-control bg-light border-0 p-2 custom-input shadow-none" placeholder="Enter full name" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label text-secondary small fw-bold text-uppercase"><i class="fas fa-envelope text-primary me-2"></i>Email Address</label>
+                        <input asp-for="Email" class="form-control bg-light border-0 p-2 custom-input shadow-none" placeholder="Enter email" />
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label text-secondary small fw-bold text-uppercase"><i class="fas fa-phone-alt text-primary me-2"></i>Phone</label>
+                            <input asp-for="PhoneNumber" class="form-control bg-light border-0 p-2 custom-input shadow-none" placeholder="Enter phone" />
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label text-secondary small fw-bold text-uppercase"><i class="fas fa-map-marker-alt text-primary me-2"></i>Address</label>
+                            <input asp-for="Address" class="form-control bg-light border-0 p-2 custom-input shadow-none" placeholder="Enter address" />
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label text-secondary small fw-bold text-uppercase"><i class="fas fa-image text-primary me-2"></i>Profile Image</label>
+                        <input type="file" name="imageFile" class="form-control bg-light border-0 custom-input shadow-none p-2" accept="image/*" />
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label text-secondary small fw-bold text-uppercase"><i class="fas fa-lock text-primary me-2"></i>New Password <span class="text-muted fw-normal text-lowercase">(optional)</span></label>
+                        <div class="input-group bg-light rounded-3 overflow-hidden">
+                            <input type="password" id="newPassword" name="newPassword" class="form-control bg-light border-0 p-2 custom-input shadow-none" placeholder="Leave blank to keep current" />
+                            <button class="btn bg-light border-0 text-muted shadow-none px-3" type="button" tabindex="-1" onclick="togglePassword('newPassword', this)">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center mt-2 mb-2 gap-3">
+                        <a asp-action="Profile" class="btn btn-light rounded-pill fw-bold text-secondary flex-grow-1 py-2 shadow-sm">Cancel</a>
+                        <button type="submit" class="btn btn-primary rounded-pill shadow-sm py-2 fw-bold text-white flex-grow-1">
+                            Save Changes <i class="fas fa-check ms-1"></i>
+                        </button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
     </div>
+</div>
 
-    <div class="mb-2">
-        <label>Email</label>
-        <input asp-for="Email" class="form-control" />
-    </div>
-
-    <div class="mb-2">
-        <label>Phone</label>
-        <input asp-for="PhoneNumber" class="form-control" />
-    </div>
-
-    <div class="mb-2">
-        <label>Address</label>
-        <input asp-for="Address" class="form-control" />
-    </div>
-
-    <div class="mb-2">
-        <label>Profile Image</label>
-        <input type="file" name="imageFile" class="form-control" />
-    </div>
-
-    <div class="mb-2">
-        <label>New Password</label>
-        <input type="password" name="newPassword" class="form-control" />
-    </div>
-
-    <button class="btn btn-success">Update</button>
-</form>
+@section Scripts {
+    <script>
+        function togglePassword(id, btn) {
+            const el = document.getElementById(id);
+            const icon = btn.querySelector('i');
+            if (el.type === 'password') {
+                el.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                el.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        }
+    </script>
+}
