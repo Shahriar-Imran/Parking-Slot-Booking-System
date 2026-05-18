@@ -149,21 +149,29 @@ namespace ParkingSystem.Controllers
             return View(model);
         }
 
-        // ================= PROFILE =================
+        // =========================
+        // View Profile
+        // =========================
 
         public async Task<IActionResult> Profile()
         {
-            var user = await _userManager.GetUserAsync(User);
+            var user = await _userManager.GetUserAsync(User);   //return current logged in user
             return View(user);
         }
 
-        // ================= EDIT PROFILE =================
+        // =========================
+        // Edit Profile View
+        // =========================
 
         public async Task<IActionResult> EditProfile()
         {
             var user = await _userManager.GetUserAsync(User);
             return View(user);
         }
+
+        // =========================
+        // Edit Profile logic
+        // =========================
 
         [HttpPost]
         public async Task<IActionResult> EditProfile(ApplicationUser model, IFormFile imageFile, string newPassword)
@@ -209,7 +217,9 @@ namespace ParkingSystem.Controllers
 
 
 
-        // Calculate Refund Amount
+        // =========================
+        // Calculate Refund Logic
+        // =========================
         private decimal CalculateRefund(decimal totalAmount, DateTime startTime)
         {
             var now = DateTime.Now;
@@ -230,7 +240,9 @@ namespace ParkingSystem.Controllers
             return 0; // no refund
         }
 
-        // ================= USER BOOKING HISTORY =================
+        // =========================
+        // User Booking history
+        // =========================
         public async Task<IActionResult> MyBookings()
         {
             var user = await _userManager.GetUserAsync(User);
@@ -270,11 +282,17 @@ namespace ParkingSystem.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+        // =========================
+        // Forgot Password View
+        // =========================
         public IActionResult ForgotPassword()
         {
             return View();
         }
 
+        // =========================
+        // Forgot Password Logic
+        // =========================
         [HttpPost]
         public async Task<IActionResult> ForgotPassword(ForgotPasswordViewModel model)
         {
@@ -299,52 +317,9 @@ namespace ParkingSystem.Controllers
             return RedirectToAction("ForgotPasswordConfirmation");
         }
 
-        public IActionResult ForgotPasswordConfirmation()
-        {
-            return View();
-        }
-
-        public IActionResult ResetPassword(string token, string email)
-        {
-            if (token == null || email == null)
-                return BadRequest();
-
-            return View(new ResetPasswordViewModel
-            {
-                Token = token,
-                Email = email
-            });
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> ResetPassword(ResetPasswordViewModel model)
-        {
-            
-
-            var user = await _userManager.FindByEmailAsync(model.Email);
-
-            if (user == null)
-                return RedirectToAction("ResetPasswordConfirmation");
-
-            var result = await _userManager.ResetPasswordAsync(
-                user, model.Token, model.Password);
-
-            if (result.Succeeded)
-                return RedirectToAction("ResetPasswordConfirmation");
-
-            foreach (var error in result.Errors)
-            {
-                ModelState.AddModelError("", error.Description);
-            }
-
-            return View(model);
-        }
-
-        public IActionResult ResetPasswordConfirmation()
-        {
-            return View();
-        }
-
+        // =========================
+        // SEND RESET EMAIL
+        // =========================
         private async Task SendResetEmail(string email, string link)
         {
             string fromEmail = "shahriarimran2002@gmail.com";          // 🔥 your email
@@ -381,5 +356,65 @@ namespace ParkingSystem.Controllers
 
             await smtp.SendMailAsync(mail);
         }
+
+
+        // ====================================
+        // Forgot Password Confirmation View
+        // ====================================
+        public IActionResult ForgotPasswordConfirmation()
+        {
+            return View();
+        }
+
+        // =========================
+        // Reset Password view
+        // =========================
+        public IActionResult ResetPassword(string token, string email)
+        {
+            if (token == null || email == null)
+                return BadRequest();
+
+            return View(new ResetPasswordViewModel
+            {
+                Token = token,
+                Email = email
+            });
+        }
+
+        // =========================
+        // Reset Password logic
+        // =========================
+        [HttpPost]
+        public async Task<IActionResult> ResetPassword(ResetPasswordViewModel model)
+        {
+            
+
+            var user = await _userManager.FindByEmailAsync(model.Email);
+
+            if (user == null)
+                return RedirectToAction("ResetPasswordConfirmation");
+
+            var result = await _userManager.ResetPasswordAsync(
+                user, model.Token, model.Password);
+
+            if (result.Succeeded)
+                return RedirectToAction("ResetPasswordConfirmation");
+
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError("", error.Description);
+            }
+
+            return View(model);
+        }
+
+        // =========================
+        // Reset Password Confirmation View
+        // =========================
+        public IActionResult ResetPasswordConfirmation()
+        {
+            return View();
+        }
+
     }
 }

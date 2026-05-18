@@ -25,7 +25,9 @@ public class PaymentController : Controller
     }
 
 
-    // STEP 1: REDIRECT TO SSL
+    // =========================
+    // SSL PAYMENT PROCESSOR
+    // =========================
     [HttpPost]
     public IActionResult ProcessPayment(string slots, int duration, decimal total, DateTime date)
     {
@@ -117,7 +119,9 @@ public class PaymentController : Controller
         }
     }
 
-    // STEP 2: SUCCESS → SAVE BOOKING
+    // =========================
+    // SSL RESPONSE HANDLER (SUCCESS)
+    // =========================
     [HttpPost]
     public async Task<IActionResult> Success()
     {
@@ -247,12 +251,18 @@ public class PaymentController : Controller
         }
     }
 
+    // =========================
+    // PAYMENT FAILED
+    // =========================
     public async Task<IActionResult> Fail()
     {
         ViewBag.Error = "❌ Payment Failed";
         return View("PaymentFailed");
     }
 
+    // =========================
+    // PAYMENT CANCELLED (BY SSL)
+    // =========================
     public async Task<IActionResult> Cancel(string userId)
     {
         var locks = _context.SlotLocks
@@ -276,6 +286,9 @@ public class PaymentController : Controller
         return RedirectToAction("Availability", "Slot");
     }
 
+    // =========================
+    // CONFIRMATION PAGE
+    // =========================
     public IActionResult Confirmation(int id)
     {
         var booking = _context.Bookings
@@ -302,7 +315,9 @@ public class PaymentController : Controller
         return View(booking);
     }
 
-
+    // =========================
+    // EMAIL SENDER WITH PDF ATTACHMENT
+    // =========================
     private async Task SendInvoiceEmailWithPdf(string email, byte[] pdfBytes, int bookingId)
     {
         string fromEmail = "shahriarimran2002@gmail.com";
@@ -334,7 +349,9 @@ public class PaymentController : Controller
     }
 
 
-    // ========== QR Code Generator =============
+    // =========================
+    // QR GENERATION HELPER METHOD
+    // =========================
     private byte[] GenerateQr(Booking booking, ApplicationUser user)
     {
         var slots = booking.BookingSlots.Select(bs => bs.Slot).ToList();

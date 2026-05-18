@@ -27,6 +27,10 @@ namespace ParkingSystem.Controllers
             _userManager = userManager;
         }
 
+        // =========================
+        // ADMIN DASHBOARD VIEW
+        // =========================
+
         public IActionResult Dashboard()
         {
             var model = new AdminDashboardViewModel
@@ -43,13 +47,19 @@ namespace ParkingSystem.Controllers
 
             return View(model);
         }
+
+        // =========================
+        // USER MANAGEMENT VIEW
+        // =========================
         public async Task<IActionResult> Users()
         {
             var users = _context.Users.ToList();
             return View(users);
         }
 
-        // ================ Make user admin =================
+        // =========================
+        // MAKE USER ADMIN
+        // =========================
         [HttpPost]
         public async Task<IActionResult> MakeAdmin(string userId)
         {
@@ -77,7 +87,9 @@ namespace ParkingSystem.Controllers
             return RedirectToAction("Users");
         }
 
-        // =================== Manage Slots ==================
+        // =========================
+        // MANAGE SLOTS VIEW
+        // =========================
         public IActionResult Slots()
         {
             var slots = _context.ParkingSlots
@@ -87,9 +99,8 @@ namespace ParkingSystem.Controllers
             return View(slots);
         }
 
-        // ================== Create Area ====================
         // =======================
-        // GET: Create Area Page
+        // CREATE AREA VIEW
         // =======================
         public IActionResult CreateArea()
         {
@@ -97,7 +108,7 @@ namespace ParkingSystem.Controllers
         }
 
         // =======================
-        // POST: Create Area
+        // POST: CREATE AREA
         // =======================
         [HttpPost]
         public async Task<IActionResult> CreateArea(ParkingArea area)
@@ -133,7 +144,7 @@ namespace ParkingSystem.Controllers
         }
 
         // =======================
-        // Edit Area
+        //  EDIT AREA VIEW
         // =======================
         public IActionResult EditArea(int id)
         {
@@ -145,6 +156,9 @@ namespace ParkingSystem.Controllers
             return View(area);
         }
 
+        // =======================
+        //  POST: EDIT AREA VIEW
+        // =======================
         [HttpPost]
         public async Task<IActionResult> EditArea(ParkingArea area)
         {
@@ -175,7 +189,9 @@ namespace ParkingSystem.Controllers
             return RedirectToAction("Areas");
         }
 
-        // ================ View areas =============
+        // =======================
+        //  VIEW AREAS
+        // =======================
         public IActionResult Areas()
         {
             var areas = _context.ParkingAreas.ToList();
@@ -183,7 +199,7 @@ namespace ParkingSystem.Controllers
         }
 
         // =======================
-        // Delete Area
+        // DELETE AREA
         // =======================
         public async Task<IActionResult> DeleteArea(int id)
         {
@@ -198,13 +214,18 @@ namespace ParkingSystem.Controllers
             return RedirectToAction("Areas");
         }
 
-        // ========================= Create Slot =========================
+        // =======================
+        // CREATE SLOT
+        // =======================
         public IActionResult CreateSlot()
         {
             ViewBag.Areas = _context.ParkingAreas.ToList();  // Load areas
             return View();
         }
 
+        // =======================
+        // POST: CREATE SLOT
+        // =======================
         [HttpPost]
         public async Task<IActionResult> CreateSlot(int AreaId)
         {
@@ -233,13 +254,18 @@ namespace ParkingSystem.Controllers
             return RedirectToAction("Slots");
         }
 
-        // ================ Edit Slot ================
+        // =======================
+        // EDIT SLOT
+        // =======================
         public async Task<IActionResult> EditSlot(int id)
         {
             var slot = await _context.ParkingSlots.FindAsync(id);
             return View(slot);
         }
 
+        // =======================
+        // POST: EDIT SLOT
+        // =======================
         [HttpPost]
         public async Task<IActionResult> EditSlot(ParkingSlot slot)
         {
@@ -247,7 +273,9 @@ namespace ParkingSystem.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction("Slots");
         }
-        // =============== Delete Slot ==============
+        // =======================
+        // DELETE SLOT
+        // =======================
         [HttpPost]
         public async Task<IActionResult> DeleteSlot(int id)
         {
@@ -262,7 +290,9 @@ namespace ParkingSystem.Controllers
             return RedirectToAction("Slots");
         }
 
-        // ================ Delete User ================
+        // =======================
+        // DELETE USER
+        // =======================
         [HttpPost]
         public async Task<IActionResult> DeleteUser(string userId)
         {
@@ -302,7 +332,12 @@ namespace ParkingSystem.Controllers
             return RedirectToAction("Users");
         }
 
-        //============= Booking history ===============
+
+        // =============================
+        // =============================
+        // GLOBAL BOOKING HISTORY VIEW
+        // =============================
+        // =============================
         public IActionResult BookingHistory()
         {
             var bookings = _context.Bookings
@@ -316,7 +351,9 @@ namespace ParkingSystem.Controllers
             return View(bookings);
         }
 
-        // ======================== Cancel Booking ================
+        // =============================
+        // CANCEL BOOKING (ADMIN)
+        // =============================
         [HttpPost]
         public async Task<IActionResult> CancelBooking(int id)
         {
@@ -353,8 +390,10 @@ namespace ParkingSystem.Controllers
 
             return RedirectToAction("BookingHistory");
         }
-        
-        // ================= Admin Cancellation Email ==============
+
+        // =============================
+        // SENDING ADMIN CANCELLATION EMAIL
+        // =============================
         private async Task SendAdminCancellationEmail(Booking booking)
         {
             var user = _context.Users.FirstOrDefault(u => u.Id == booking.UserId);
@@ -395,7 +434,9 @@ namespace ParkingSystem.Controllers
             await smtp.SendMailAsync(mail);
         }
 
-        //========= View User Profile ========//
+        // =============================
+        // VIEW USER PROFILE (ADMIN)
+        // =============================
         public async Task<IActionResult> UserProfile(string id)
         {
             var user = await _userManager.FindByIdAsync(id);
@@ -406,7 +447,9 @@ namespace ParkingSystem.Controllers
             return View(user);
         }
 
-        // ========== Remove Admin ===========
+        // =============================
+        // REMOVE USER FROM ADMIN ROLE
+        // =============================
         [HttpPost]
         public async Task<IActionResult> RemoveAdmin(string userId)
         {
@@ -425,7 +468,9 @@ namespace ParkingSystem.Controllers
             return RedirectToAction("Users");
         }
 
-        //========================= Approve Refund =========================
+        // =============================
+        // CANCELLATION APPROVAL (CALL SSL API)
+        // =============================
         [HttpPost]
         public async Task<IActionResult> ApproveRefund(int bookingId)
         {
@@ -458,7 +503,9 @@ namespace ParkingSystem.Controllers
             return RedirectToAction("BookingHistory");
         }
 
-        // ========================= Refund Process =========================
+        // =============================
+        // PROCESS REFUND WITH SSL API
+        // =============================
         private async Task<bool> ProcessSslRefund(Booking booking)
         {
             var baseUrl = "https://sandbox.sslcommerz.com/validator/api/merchantTransIDvalidationAPI.php";
@@ -514,7 +561,9 @@ namespace ParkingSystem.Controllers
             return false;
         }
 
-        // ========================= Send Refund Email =========================
+        // =============================
+        // SEND REFUND EMAIL TO USER
+        // =============================
         private async Task SendRefundEmail(Booking booking)
         {
             var subject = "Refund Approved";
@@ -549,9 +598,11 @@ namespace ParkingSystem.Controllers
             await smtp.SendMailAsync(mail);
         }
 
-        
 
-        // ========================= Reject Refund =========================
+
+        // =============================
+        // REFUND REJECTION (MARK AS FAILED)
+        // =============================
         [HttpPost]
         public async Task<IActionResult> RejectRefund(int bookingId)
         {

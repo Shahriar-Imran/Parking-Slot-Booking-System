@@ -16,6 +16,9 @@ public class BookingController : Controller
         _context = context;
     }
 
+    // =========================
+    // CHECKOUT PAGE
+    // =========================
     public IActionResult Checkout(string slots, string duration, DateTime date)
     {
         ViewBag.Date = date;
@@ -143,7 +146,9 @@ public class BookingController : Controller
         return 0; // no refund
     }
 
-    // ============ Request Cancellation ============
+    // =========================
+    // REQUEST CANCEL (sets refund status to pending and calculates preview)
+    // =========================
     [HttpPost]
     public async Task<IActionResult> RequestCancel(int bookingId)
     {

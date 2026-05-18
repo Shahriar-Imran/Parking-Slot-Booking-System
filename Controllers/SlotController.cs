@@ -119,7 +119,7 @@ namespace ParkingSystem.Controllers
             var locks = _context.SlotLocks
                 .Where(l => l.ExpireTime > DateTime.Now)
                 .Select(l => new {
-                    slotId = l.SlotId,        // 🔥 force lowercase
+                    slotId = l.SlotId,        
                     expireTime = l.ExpireTime,
                     userId = l.UserId
                 })
@@ -135,7 +135,9 @@ namespace ParkingSystem.Controllers
             return View(model);
         }
 
-        //======== Lock Slot =========
+        // =========================
+        // LOCK SLOT
+        // =========================
         [Authorize]
         [HttpPost]
         public async Task<IActionResult> LockSlot([FromBody] LockRequest model)
@@ -208,6 +210,9 @@ namespace ParkingSystem.Controllers
             }
         }
 
+        // =========================
+        // CHECK MY LOCKS
+        // =========================
         [HttpGet]
         public IActionResult CheckMyLocks()
         {

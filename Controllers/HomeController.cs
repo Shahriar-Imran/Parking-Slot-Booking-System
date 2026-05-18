@@ -13,21 +13,33 @@ namespace ParkingSystem.Controllers
             _logger = logger;
         }
 
+        // =========================
+        // HOME PAGE
+        // =========================
         public IActionResult Index()
         {
             return View();
         }
 
+        // =========================
+        // ABOUT PAGE
+        // =========================
         public IActionResult About()
         {
             return View();
         }
 
+        // =========================
+        // CONTACT US PAGE
+        // =========================
         public IActionResult Contact()
         {
             return View();
         }
 
+        // =========================
+        // PRIVACY PAGE
+        // =========================
         public IActionResult Privacy()
         {
             return View();

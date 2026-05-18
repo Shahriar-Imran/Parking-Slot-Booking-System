@@ -241,6 +241,9 @@ setInterval(async () => {
 
 }, 1000);
 
+// =========================
+// UPDATE AVAILABLE COUNT
+// =========================
 function updateCount(area, change) {
 
     const el = document.getElementById("count-" + area);
