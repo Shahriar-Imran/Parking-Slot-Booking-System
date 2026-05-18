@@ -7,6 +7,25 @@
 <div class="container py-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2 class="fw-bold mb-0 text-dark"><i class="fas fa-history text-success me-2"></i>Global Booking History</h2>
+        
+        <form method="get" asp-action="BookingHistory" id="filterForm" class="d-flex gap-3 bg-white p-2 rounded-pill shadow-sm border">
+            <select name="filter" class="form-select form-select-sm border-0 bg-light text-secondary rounded-pill fw-bold px-3 py-2" onchange="document.getElementById('filterForm').submit();" style="width: 200px;">
+                <option value="all" selected="@(ViewBag.CurrentFilter == "all")">All Bookings</option>
+                <option value="cancellation_pending" selected="@(ViewBag.CurrentFilter == "cancellation_pending")">Pending Cancellation</option>
+                <option value="refunded" selected="@(ViewBag.CurrentFilter == "refunded")">Refunded</option>
+                <option value="expired" selected="@(ViewBag.CurrentFilter == "expired")">Expired</option>
+            </select>
+            
+            <select name="sort" class="form-select form-select-sm border-0 bg-light text-secondary rounded-pill fw-bold px-3 py-2" onchange="document.getElementById('filterForm').submit();" style="width: 220px;">
+                <option value="created_desc" selected="@(ViewBag.CurrentSort == "created_desc")">Newest Booking First</option>
+                <option value="created_asc" selected="@(ViewBag.CurrentSort == "created_asc")">Oldest Booking First</option>
+                <option value="start_desc" selected="@(ViewBag.CurrentSort == "start_desc")">Latest Start Time</option>
+                <option value="start_asc" selected="@(ViewBag.CurrentSort == "start_asc")">Earliest Start Time</option>
+                <option value="end_desc" selected="@(ViewBag.CurrentSort == "end_desc")">Latest End Time</option>
+                <option value="end_asc" selected="@(ViewBag.CurrentSort == "end_asc")">Earliest End Time</option>
+            </select>
+            <noscript><button type="submit" class="btn btn-primary btn-sm rounded-pill px-3">Apply</button></noscript>
+        </form>
     </div>
 
     <div class="card shadow-sm border-0 rounded-4 overflow-hidden bg-white">
@@ -57,6 +76,7 @@
                             </td>
                             <td>
                                 <div class="d-flex flex-column small text-muted gap-1">
+                                    <span class="bg-light px-2 py-1 rounded d-inline-block shadow-sm w-auto mb-1 border"><i class="fas fa-clock text-primary me-1"></i>Booked: @b.CreatedAt.ToString("MMM dd, yyyy")</span>
                                     <span class="fw-bold text-dark bg-light px-2 py-1 rounded d-inline-block shadow-sm w-auto"><i class="fas fa-play-circle text-success me-1"></i>@b.StartTime.ToString("MMM dd, hh:mm tt")</span>
                                     <span class="bg-light px-2 py-1 rounded d-inline-block shadow-sm w-auto"><i class="fas fa-stop-circle text-danger me-1"></i>@b.EndTime.ToString("MMM dd, hh:mm tt")</span>
                                 </div>

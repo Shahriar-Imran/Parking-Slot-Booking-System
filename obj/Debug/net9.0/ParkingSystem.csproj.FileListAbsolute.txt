@@ -227,7 +227,6 @@ C:\Users\shahr\OneDrive\Desktop\Practicum Project\ParkingSystem\ParkingSystem\ob
 C:\Users\shahr\OneDrive\Desktop\Practicum Project\ParkingSystem\ParkingSystem\obj\Debug\net9.0\staticwebassets\msbuild.buildMultiTargeting.ParkingSystem.props
 C:\Users\shahr\OneDrive\Desktop\Practicum Project\ParkingSystem\ParkingSystem\obj\Debug\net9.0\staticwebassets\msbuild.buildTransitive.ParkingSystem.props
 C:\Users\shahr\OneDrive\Desktop\Practicum Project\ParkingSystem\ParkingSystem\obj\Debug\net9.0\staticwebassets.pack.json
-C:\Users\shahr\OneDrive\Desktop\Practicum Project\ParkingSystem\ParkingSystem\obj\Debug\net9.0\staticwebassets.upToDateCheck.txt
 C:\Users\shahr\OneDrive\Desktop\Practicum Project\ParkingSystem\ParkingSystem\obj\Debug\net9.0\ParkingS.C007D370.Up2Date
 C:\Users\shahr\OneDrive\Desktop\Practicum Project\ParkingSystem\ParkingSystem\obj\Debug\net9.0\ParkingSystem.dll
 C:\Users\shahr\OneDrive\Desktop\Practicum Project\ParkingSystem\ParkingSystem\obj\Debug\net9.0\refint\ParkingSystem.dll

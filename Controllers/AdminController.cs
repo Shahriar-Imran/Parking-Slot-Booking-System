@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using ParkingSystem.Data;
 using ParkingSystem.ViewModels;
 using Microsoft.AspNetCore.Authorization;
@@ -39,10 +39,16 @@ namespace ParkingSystem.Controllers
                 TotalBookings = _context.Bookings.Count(),
                 TotalSlots = _context.ParkingSlots.Count(),
 
-                // 🔥 FIXED
-                TotalRevenue = _context.Bookings
-                    .Where(b => !b.IsCancelled)
-                    .Sum(b => b.TotalAmount - b.RefundPreview?? 0)
+                // 🔥 FIXED MATHEMATICAL NULL COERCION
+                TotalRevenue = _context.Bookings.Sum(b => b.TotalAmount)
+                             - _context.Bookings.Where(b => b.RefundStatus == "Success" || (b.IsCancelled && b.RefundAmount > 0))
+                                               .Sum(b => b.RefundAmount ?? b.RefundPreview ?? 0),
+                
+                RecentBookings = _context.Bookings
+                                    .Include(b => b.User)
+                                    .OrderByDescending(b => b.CreatedAt)
+                                    .Take(5)
+                                    .ToList()
             };
 
             return View(model);
@@ -93,7 +99,7 @@ namespace ParkingSystem.Controllers
         public IActionResult Slots()
         {
             var slots = _context.ParkingSlots
-                                .Include(s => s.ParkingArea) // VERY IMPORTANT
+                                .Include(s => s.ParkingArea)
                                 .ToList();
 
             return View(slots);
@@ -334,20 +340,59 @@ namespace ParkingSystem.Controllers
 
 
         // =============================
-        // =============================
         // GLOBAL BOOKING HISTORY VIEW
         // =============================
-        // =============================
-        public IActionResult BookingHistory()
+        public IActionResult BookingHistory(string filter = "all", string sort = "created_desc")
         {
-            var bookings = _context.Bookings
+            var query = _context.Bookings
                 .Include(b => b.BookingSlots)
                     .ThenInclude(bs => bs.Slot)
                         .ThenInclude(s => s.ParkingArea)
-                .Include(b => b.User)   // if navigation exists
-                .OrderByDescending(b => b.StartTime)
-                .ToList();
+                .Include(b => b.User)
+                .AsQueryable();
 
+            // 1) FILTERING logic
+            if (filter == "refunded")
+            {
+                query = query.Where(b => b.RefundStatus == "Success" || (b.IsCancelled && b.RefundAmount > 0));
+            }
+            else if (filter == "cancellation_pending")
+            {
+                query = query.Where(b => b.RefundStatus == "Pending");
+            }
+            else if (filter == "expired")
+            {
+                query = query.Where(b => !b.IsCancelled && b.EndTime <= DateTime.Now);
+            }
+
+            // 2) SORTING logic
+            switch (sort)
+            {
+                case "created_asc":
+                    query = query.OrderBy(b => b.CreatedAt);
+                    break;
+                case "start_asc":
+                    query = query.OrderBy(b => b.StartTime);
+                    break;
+                case "start_desc":
+                    query = query.OrderByDescending(b => b.StartTime);
+                    break;
+                case "end_asc":
+                    query = query.OrderBy(b => b.EndTime);
+                    break;
+                case "end_desc":
+                    query = query.OrderByDescending(b => b.EndTime);
+                    break;
+                case "created_desc":
+                default:
+                    query = query.OrderByDescending(b => b.CreatedAt);
+                    break;
+            }
+
+            ViewBag.CurrentFilter = filter;
+            ViewBag.CurrentSort = sort;
+
+            var bookings = query.ToList();
             return View(bookings);
         }
 
@@ -616,6 +661,72 @@ namespace ParkingSystem.Controllers
             await _context.SaveChangesAsync();
 
             return RedirectToAction("ManageBookings");
+        }
+
+        // =============================
+        // REVENUE REPORT GENERATOR
+        // =============================
+        [AllowAnonymous]
+        public IActionResult RevenueReport(DateTime? startDate, DateTime? endDate)
+        {
+            DateTime start = startDate ?? DateTime.Now.AddMonths(-1);
+            DateTime end = endDate.HasValue ? endDate.Value.AddDays(1).AddSeconds(-1) : DateTime.Now;
+
+            var query = _context.Bookings
+                .Include(b => b.BookingSlots)
+                    .ThenInclude(bs => bs.Slot)
+                        .ThenInclude(s => s.ParkingArea)
+                .Include(b => b.User)
+                .Where(b => b.CreatedAt >= start && b.CreatedAt <= end);
+
+            var bookingsInRange = query.ToList();
+
+            // Total revenue = Sum of TotalAmount - Sum of strict RefundAmount (only for successful/processed refunds)
+            decimal grossRevenue = bookingsInRange.Sum(b => b.TotalAmount);
+            decimal totalRefunds = bookingsInRange
+                .Where(b => b.RefundStatus == "Success" || (b.IsCancelled && b.RefundAmount > 0))
+                .Sum(b => b.RefundAmount ?? b.RefundPreview ?? 0);
+            
+            decimal netRevenue = grossRevenue - totalRefunds;
+
+            // Separate arrays for report visibility
+            var successfulBookings = bookingsInRange.Where(b => !b.IsCancelled).ToList();
+            var cancelledBookings = bookingsInRange.Where(b => b.IsCancelled).ToList();
+
+            var model = new RevenueReportViewModel
+            {
+                PeriodType = "Custom Date-Range",
+                DateRange = $"{start:MMM dd, yyyy} - {end:MMM dd, yyyy}",
+                TotalRevenue = netRevenue,
+                TotalCompletedBookings = successfulBookings.Count,
+                SuccessfulBookings = successfulBookings,
+                CancelledBookings = cancelledBookings,
+                AreaRevenues = new List<AreaRevenue>()
+            };
+
+            // Dynamically share revenue per-slot mapped back to the Block ID
+            var areaGroupings = successfulBookings
+                .SelectMany(b => b.BookingSlots.Select(bs => new { 
+                    BlockNumber = bs.Slot.ParkingArea.BlockNumber, 
+                    VehicleType = bs.Slot.ParkingArea.VehicleType,
+                    RevenuveShare = b.TotalAmount / b.BookingSlots.Count
+                }))
+                .GroupBy(x => new { x.BlockNumber, x.VehicleType })
+                .AsEnumerable() // Pull into memory to allow enum .ToString() evaluation
+                .Select(g => new AreaRevenue
+                {
+                    BlockNumber = g.Key.BlockNumber,
+                    VehicleType = g.Key.VehicleType.ToString(), // cast enum to string securely
+                    Revenue = g.Sum(x => x.RevenuveShare),
+                    CompletedBookings = g.Count() // Metric is total slots booked in this area
+                })
+                .OrderByDescending(a => a.Revenue)
+                .ToList();
+
+            model.AreaRevenues = areaGroupings;
+
+            // Use Layout = null inside the view to keep it clean for PDF
+            return View(model);
         }
 
     }
